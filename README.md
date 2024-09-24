@@ -1,2 +1,2 @@
-# MP6-_TBB
+# mp6_tbb
 Codebase for the Throttle Body Board microcontroller
