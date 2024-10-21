@@ -57,23 +57,24 @@ ADC_HandleTypeDef hadc1;
 FDCAN_HandleTypeDef hfdcan1;
 
 TIM_HandleTypeDef htim1;
-TIM_OC_InitTypeDef pwm_config = {0};
-
+TIM_HandleTypeDef htim2;
 
 /* USER CODE BEGIN PV */
-static uint16_t throttle_position = 0;			// Variable to keep throttle position from ADC output for TPS sensor
-static const float MAX_ADC_OUTPUT = 0xFFF - 1.0;
-static const float MAX_DUTY_CYCLE = 100.0;
-static const float MIN_DUTY_CYCLE = 0.0;
+static uint16_t measured_value = 0;			// Variable to keep throttle position from ADC output for TPS sensor
+static const float MAX_ADC_OUTPUT = (4095.0f);
+static const float MAX_DUTY_CYCLE = 100.0f;
+static const float MIN_DUTY_CYCLE = 0.0f;
+static const float TPS_MIN = 0.0f;
+static const float TPS_MAX = 3.3;
 
 // Global variables for PID
-static float integral = 0;
+static int32_t integral = 0;
 static float prev_error = 0;
 
 // PID constants - Change for tuning
-static const float KP = 0.50;
-static const float KI = 0.20;
-static const float KD = 0.10;
+static const float KP = 0.50f;
+static const float KI = 0.1;
+static const float KD = 0.05f;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -82,6 +83,7 @@ static void MX_GPIO_Init(void);
 static void MX_FDCAN1_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_ADC1_Init(void);
+static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 static uint8_t PID_Controller(uint16_t set_point, uint16_t throttle_position);
 static void Update_PWM(uint8_t duty_cycle);
@@ -125,9 +127,11 @@ int main(void)
   MX_FDCAN1_Init();
   MX_TIM1_Init();
   MX_ADC1_Init();
+  MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-  HAL_ADC_Start(&hadc1);						  // Start ADC
+  HAL_ADC_Start_IT(&hadc1);						  // Start ADC
   HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);		  // Start PWM
+  HAL_TIM_Base_Start(&htim2);
 
   /* USER CODE END 2 */
 
@@ -152,6 +156,18 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+
+	  uint16_t act_throttle = measured_value;	// TPS value
+	  uint16_t inc_throttle = 4096 >> 1;   		// incoming is 50% throttle
+	  	  	  	  	  	  	  	  	  	  	  	// this will need to be converted once we get CAN working
+
+	  float duty = PID_Controller(inc_throttle, act_throttle);
+
+
+      // Clamp to ARR counts 0 - 99
+      Update_PWM(roundf((duty / MAX_DUTY_CYCLE) * (htim1.Init.Period + 1)) - 1);
+
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -234,7 +250,7 @@ static void MX_ADC1_Init(void)
   hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
   hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
   hadc1.Init.LowPowerAutoWait = DISABLE;
-  hadc1.Init.ContinuousConvMode = DISABLE;
+  hadc1.Init.ContinuousConvMode = ENABLE;
   hadc1.Init.NbrOfConversion = 1;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
   hadc1.Init.ExternalTrigConv = ADC_SOFTWARE_START;
@@ -402,6 +418,51 @@ static void MX_TIM1_Init(void)
 }
 
 /**
+  * @brief TIM2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM2_Init(void)
+{
+
+  /* USER CODE BEGIN TIM2_Init 0 */
+
+  /* USER CODE END TIM2_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+
+  /* USER CODE BEGIN TIM2_Init 1 */
+
+  /* USER CODE END TIM2_Init 1 */
+  htim2.Instance = TIM2;
+  htim2.Init.Prescaler = 169;
+  htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim2.Init.Period = 4294967295;
+  htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim2, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM2_Init 2 */
+
+  /* USER CODE END TIM2_Init 2 */
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -436,13 +497,8 @@ static void MX_GPIO_Init(void)
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
 {
 	if(hadc->Instance == ADC1)
-	{
 		// Get 12-bit ADC value from TPS sensor. 2^12 - 1 = 4095 max value
-		throttle_position = HAL_ADC_GetValue(hadc);
-
-		// Make sure to start ADC interrupt again
-		HAL_ADC_Start(hadc);
-	}
+        measured_value = HAL_ADC_GetValue(hadc);
 }
 
 /**
@@ -480,10 +536,10 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 	            uint8_t throttle_position_percentage = rxData[0];
 
 	            // Get position in terms of ADC levels based on percent.
-	            uint8_t set_point = roundf(((float)throttle_position_percentage / MAX_DUTY_CYCLE) * MAX_ADC_OUTPUT);
+	            uint16_t set_point = roundf(((float)throttle_position_percentage / MAX_DUTY_CYCLE) * MAX_ADC_OUTPUT);
 
 	            // Get duty cycle percentage 0 - 100
-	            uint8_t duty_cycle_percentage = PID_Controller(set_point, throttle_position);
+	            uint8_t duty_cycle_percentage = PID_Controller(set_point, measured_value);
 
 	            // Clamp to ARR counts 0 - 99
 	            Update_PWM(roundf((duty_cycle_percentage / MAX_DUTY_CYCLE) * (htim1.Init.Period + 1)) - 1);
@@ -515,15 +571,23 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
  * 7. Converts the PID output to a PWM duty cycle percentage.
  * 8. Clamps the PWM duty cycle to the range of 0-100%.
  */
+
+static int32_t integral_prev = 0;
+static uint32_t t_prev = 0;
+static int32_t e_prev = 0;
 static uint8_t PID_Controller(uint16_t set_point, uint16_t throttle_position)
 {
-    // Calculate the error
-    float error = set_point - throttle_position;
+	uint32_t t = __HAL_TIM_GET_COUNTER(&htim2);
 
-    // Calculate the integral
-     integral += error;
+	uint32_t dt = t - t_prev;
 
-    // Prevent integral windup by clamping the integral term
+    int32_t error = ((int32_t)set_point) - ((int32_t)throttle_position);
+
+     // Calculate the integral
+     integral = integral_prev + ((error + e_prev)/2)*dt;
+     int32_t derivative = (error - e_prev)/dt;
+
+     // Prevent integral windup by clamping the integral term
      if (integral > MAX_ADC_OUTPUT)
      {
          integral = MAX_ADC_OUTPUT;
@@ -532,10 +596,6 @@ static uint8_t PID_Controller(uint16_t set_point, uint16_t throttle_position)
      {
          integral = -MAX_ADC_OUTPUT;
      }
- 
-
-    // Calculate the derivative
-    float derivative = error - prev_error;
 
     // Calculate the PID output
     float output = (KP * error) + (KI * integral) + (KD * derivative);
@@ -550,11 +610,19 @@ static uint8_t PID_Controller(uint16_t set_point, uint16_t throttle_position)
     if (pwm_duty_cycle > MAX_DUTY_CYCLE)
     {
         pwm_duty_cycle = MAX_DUTY_CYCLE;
+        integral = integral_prev;
     }
     else if (pwm_duty_cycle < MIN_DUTY_CYCLE)
     {
         pwm_duty_cycle = MIN_DUTY_CYCLE;
+        integral = integral_prev;
+
     }
+
+    integral_prev = integral;
+    t_prev = t;
+    e_prev = error;
+
 
     return (uint8_t)pwm_duty_cycle;
 }

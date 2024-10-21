@@ -1,0 +1,110 @@
+17:28:05 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  28560	     32	   2080	  30672	   77d0	PID Controller.elf
+Finished building: default.size.stdout
+ 
+17:29:49 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  28560	     32	   2080	  30672	   77d0	PID Controller.elf
+Finished building: default.size.stdout
+ 
+17:30:45 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c:67:20: warning: 'TPS_MAX' defined but not used [-Wunused-const-variable=]
+   67 | static const float TPS_MAX = 3.3;
+      |                    ^~~~~~~
+../Core/Src/main.c:66:20: warning: 'TPS_MIN' defined but not used [-Wunused-const-variable=]
+   66 | static const float TPS_MIN = 0.0f;
+      |                    ^~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  28560	     32	   2080	  30672	   77d0	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
+17:31:40 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  28560	     32	   2080	  30672	   77d0	PID Controller.elf
+Finished building: default.size.stdout
+ 
+17:37:20 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/main.c:67:20: warning: 'TPS_MAX' defined but not used [-Wunused-const-variable=]
+   67 | static const float TPS_MAX = 3.3;
+      |                    ^~~~~~~
+../Core/Src/main.c:66:20: warning: 'TPS_MIN' defined but not used [-Wunused-const-variable=]
+   66 | static const float TPS_MIN = 0.0f;
+      |                    ^~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  28564	     32	   2080	  30676	   77d4	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
+17:38:10 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  28564	     32	   2080	  30676	   77d4	PID Controller.elf
+Finished building: default.size.stdout
+ 
+17:38:22 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  28564	     32	   2080	  30676	   77d4	PID Controller.elf
+Finished building: default.size.stdout
+ 
+17:38:29 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  28564	     32	   2080	  30676	   77d4	PID Controller.elf
+Finished building: default.size.stdout
+ 
+17:39:16 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  28564	     32	   2080	  30676	   77d4	PID Controller.elf
+Finished building: default.size.stdout
+ 
+17:52:19 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/stm32g4xx_hal_msp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32g4xx_hal_msp.d" -MT"Core/Src/stm32g4xx_hal_msp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32g4xx_hal_msp.o"
+../Core/Src/main.c:68:20: warning: 'TPS_MAX' defined but not used [-Wunused-const-variable=]
+   68 | static const float TPS_MAX = 3.3;
+      |                    ^~~~~~~
+../Core/Src/main.c:67:20: warning: 'TPS_MIN' defined but not used [-Wunused-const-variable=]
+   67 | static const float TPS_MIN = 0.0f;
+      |                    ^~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  28984	     32	   2152	  31168	   79c0	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
