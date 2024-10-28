@@ -61,20 +61,10 @@ TIM_HandleTypeDef htim2;
 
 /* USER CODE BEGIN PV */
 static uint16_t measured_value = 0;			// Variable to keep throttle position from ADC output for TPS sensor
-static const float MAX_ADC_OUTPUT = (4095.0f);
+static const uint16_t  MAX_ADC_OUTPUT = 0xFFF;
 static const float MAX_DUTY_CYCLE = 100.0f;
 static const float MIN_DUTY_CYCLE = 0.0f;
-static const float TPS_MIN = 0.0f;
-static const float TPS_MAX = 3.3;
 
-// Global variables for PID
-static int32_t integral = 0;
-static float prev_error = 0;
-
-// PID constants - Change for tuning
-static const float KP = 0.50f;
-static const float KI = 0.1;
-static const float KD = 0.05f;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -85,8 +75,7 @@ static void MX_TIM1_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
-static uint8_t PID_Controller(uint16_t set_point, uint16_t throttle_position);
-static void Update_PWM(uint8_t duty_cycle);
+static float PID_Controller(uint16_t set_point, uint16_t throttle_position);
 
 /* USER CODE END PFP */
 
@@ -129,9 +118,7 @@ int main(void)
   MX_ADC1_Init();
   MX_TIM2_Init();
   /* USER CODE BEGIN 2 */
-  HAL_ADC_Start_IT(&hadc1);						  // Start ADC
-  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);		  // Start PWM
-  HAL_TIM_Base_Start(&htim2);
+
 
   /* USER CODE END 2 */
 
@@ -157,15 +144,41 @@ int main(void)
   while (1)
   {
 
-	  uint16_t act_throttle = measured_value;	// TPS value
-	  uint16_t inc_throttle = 4096 >> 1;   		// incoming is 50% throttle
-	  	  	  	  	  	  	  	  	  	  	  	// this will need to be converted once we get CAN working
+	  // @TODO: Remove the following
+	  static int start_tim1 = 0;
 
-	  float duty = PID_Controller(inc_throttle, act_throttle);
+	  uint16_t act_throttle = measured_value;				// TPS value
+	  uint16_t inc_throttle = MAX_ADC_OUTPUT >> 1;   		// incoming is 50% throttle
+	  	  	  	  	  	  	  	  	  	  	  				// this will need to be converted once we get CAN working
+	  float delta = PID_Controller(inc_throttle, act_throttle);		// As a percentage in terms of MAX adc levels, need to convert to a nuumber between 0 - 99
+	  float new_pwm = (int32_t)__HAL_TIM_GET_COMPARE(&htim1, TIM_CHANNEL_1) + delta;
+	  if(new_pwm > 99) {
+		  new_pwm = 99;
+	  }
+
+	  if(new_pwm < 0) {
+		  new_pwm = 0;
+	  }
+	  //uint8_t duty_numerical = (uint8_t)((delta / MAX_DUTY_CYCLE) * htim1.Init.Period);
+//	  // Ensure it stays within bounds
+//	  if (duty_numerical > htim1.Init.Period)
+//		  duty_numerical = htim1.Init.Period;
+//	  else if (duty_numerical < 0)
+//		  duty_numerical = 0;
+
 
 
       // Clamp to ARR counts 0 - 99
-      Update_PWM(roundf((duty / MAX_DUTY_CYCLE) * (htim1.Init.Period + 1)) - 1);
+
+	    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, new_pwm);
+	    if(!start_tim1)
+	    {
+	    	  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+	    	  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+	    	  start_tim1++;
+	    }
+
+
 
 
     /* USER CODE END WHILE */
@@ -284,6 +297,7 @@ static void MX_ADC1_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN ADC1_Init 2 */
+  HAL_ADC_Start_IT(&hadc1);						  // Start ADC
 
   /* USER CODE END ADC1_Init 2 */
 
@@ -396,7 +410,7 @@ static void MX_TIM1_Init(void)
   sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
   sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
   sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
-  sBreakDeadTimeConfig.DeadTime = 0;
+  sBreakDeadTimeConfig.DeadTime = 20;
   sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
   sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
   sBreakDeadTimeConfig.BreakFilter = 0;
@@ -411,7 +425,7 @@ static void MX_TIM1_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN TIM1_Init 2 */
-
+  HAL_TIM_Base_Start(&htim1);
   /* USER CODE END TIM1_Init 2 */
   HAL_TIM_MspPostInit(&htim1);
 
@@ -457,6 +471,7 @@ static void MX_TIM2_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN TIM2_Init 2 */
+  HAL_TIM_Base_Start(&htim2);
 
   /* USER CODE END TIM2_Init 2 */
 
@@ -542,7 +557,8 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 	            uint8_t duty_cycle_percentage = PID_Controller(set_point, measured_value);
 
 	            // Clamp to ARR counts 0 - 99
-	            Update_PWM(roundf((duty_cycle_percentage / MAX_DUTY_CYCLE) * (htim1.Init.Period + 1)) - 1);
+	    	    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, roundf((duty_cycle_percentage / MAX_DUTY_CYCLE) * (htim1.Init.Period + 1)) - 1);
+
 	        }
 	    }
 	}
@@ -572,20 +588,38 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
  * 8. Clamps the PWM duty cycle to the range of 0-100%.
  */
 
-static int32_t integral_prev = 0;
-static uint32_t t_prev = 0;
-static int32_t e_prev = 0;
-static uint8_t PID_Controller(uint16_t set_point, uint16_t throttle_position)
-{
-	uint32_t t = __HAL_TIM_GET_COUNTER(&htim2);
+static float integral_prev = 0.0f;
+static uint32_t time_prev = 0;
+static int32_t error_prev = 0;
 
-	uint32_t dt = t - t_prev;
+// PID constants - Change for tuning
+static const float KP = 1.0f;
+static const float KI = 0.0f;
+static const float KD = 0.00f;
+static const float MICRO_TO_S = 0.000001f;
+
+static float PID_Controller(uint16_t set_point, uint16_t throttle_position)
+{
+    uint32_t current_tick = __HAL_TIM_GET_COUNTER(&htim2);
+
+	// Convert timer ticks into seconds
+	// Each tick is 1 microsecond (1e-6 seconds)
+	float dt;
+
+	// IF current_tick >= time_prev -> set dt in terms of seconds, ELSE, Handle timer overflow
+    dt = (float)(current_tick - time_prev) * MICRO_TO_S;  // Convert microseconds to seconds
+    													  // maybe remove this?
+
+	// Make sure there is no 0 dt
+	if(!dt)
+		dt = 1;
 
     int32_t error = ((int32_t)set_point) - ((int32_t)throttle_position);
 
      // Calculate the integral
-     integral = integral_prev + ((error + e_prev)/2)*dt;
-     int32_t derivative = (error - e_prev)/dt;
+     float integral = integral_prev + ((error + error_prev) / 2.0f) * dt;
+
+     float derivative = (error - error_prev) / dt;
 
      // Prevent integral windup by clamping the integral term
      if (integral > MAX_ADC_OUTPUT)
@@ -600,73 +634,18 @@ static uint8_t PID_Controller(uint16_t set_point, uint16_t throttle_position)
     // Calculate the PID output
     float output = (KP * error) + (KI * integral) + (KD * derivative);
 
-    // Update the previous error
-    prev_error = error;
-
     // Convert the PID output to a PWM duty cycle percentage
-    float pwm_duty_cycle = (output / MAX_ADC_OUTPUT) * MAX_DUTY_CYCLE;
-
-    // Clamp the duty cycle to 0-100%
-    if (pwm_duty_cycle > MAX_DUTY_CYCLE)
-    {
-        pwm_duty_cycle = MAX_DUTY_CYCLE;
-        integral = integral_prev;
-    }
-    else if (pwm_duty_cycle < MIN_DUTY_CYCLE)
-    {
-        pwm_duty_cycle = MIN_DUTY_CYCLE;
-        integral = integral_prev;
-
-    }
+    int32_t pwm_delta = (output / MAX_ADC_OUTPUT) * MAX_DUTY_CYCLE;
 
     integral_prev = integral;
-    t_prev = t;
-    e_prev = error;
+    time_prev = current_tick;
+    error_prev = error;
 
 
-    return (uint8_t)pwm_duty_cycle;
+    // Return duty cycle percentage
+    return pwm_delta;
 }
 
-/**
- * @brief Update the PWM duty cycle.
- *
- * This function updates the PWM duty cycle for TIM_CHANNEL_1. It initializes
- * the TIM_OC_InitTypeDef structure only once and retains the configuration
- * for subsequent calls. The pulse width is updated based on the provided
- * duty cycle.
- *
- * @param duty_cycle The desired duty cycle for the PWM signal.
- *                   This value determines the pulse width.
- *
- * @note This function uses the HAL_TIM_PWM_ConfigChannel and HAL_TIM_PWM_Start
- *       functions from the HAL library. Ensure that the timer (htim1) is
- *       properly initialized before calling this function.
- *
- * @return None
- */
-static void Update_PWM(uint8_t duty_cycle)
-{
-    static TIM_OC_InitTypeDef sConfigOC = {0}; // Static to retain configuration
-
-    // Only set the configuration once
-    if (!sConfigOC.OCMode)
-    {
-        sConfigOC.OCMode = TIM_OCMODE_PWM1;
-        sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-        sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
-        sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-        sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
-        sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
-    }
-
-    // Update the pulse width
-    sConfigOC.Pulse = duty_cycle;
-
-    if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
-    	Error_Handler();
-
-    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-}
 
 /* USER CODE END 4 */
 
