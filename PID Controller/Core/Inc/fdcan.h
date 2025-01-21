@@ -26,12 +26,12 @@
 
 /* Enum for Module field for custom CAN packet (inside of the 11b ID) */
 typedef enum {
-	SafteySystem = 0,
-	Broadcast = 1,
-	ThrottleControlBoard = 2,
-	PedalBox = 3,
-	SteeringWheel = 4,
-	ThermoControlBoard = 5
+	saftey_system = 0,
+	broadcast = 1,
+	throttle_control_board = 2,
+	pedal_box = 3,
+	steering_wheel = 4,
+	thermo_control_board = 5
 
 } Module;
 

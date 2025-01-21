@@ -7,6 +7,7 @@
 
 
 #include "fdcan_queue.h"
+#include <string.h>
 
 void queueInit(Queue* queue)
 {

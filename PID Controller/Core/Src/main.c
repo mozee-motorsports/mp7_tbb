@@ -182,7 +182,7 @@ static uint8_t handleError(uint8_t code)
 	// All codes need to be sent to ETC
 	// Send error code - TODO verify error codes
 	tx_data[0] = code;
-	fdcanWrite(&hfdcan1, tx_header, tx_data, DLC_ERROR, ThrottleControlBoard, from, DEFAULT_ETC_PRIORITY, error);
+	fdcanWrite(&hfdcan1, tx_header, tx_data, DLC_ERROR, throttle_control_board, from, DEFAULT_ETC_PRIORITY, error);
 
 	// Always return ERROR
 	return GENERIC_ERROR_CODE;
@@ -215,6 +215,11 @@ static uint8_t handleStatusReport(void)
 	tx_data[0] = 0xFF;
 	tx_data[1] = 0xFF;
 	tx_data[2] = error_code;		// Report any errors
+
+	// Write status report
+	fdcanWrite(&hfdcan1, tx_header, tx_data, DLC_STATUS_REPORT, throttle_control_board, from, DEFAULT_ETC_PRIORITY, status_report);
+
+
 	return 0;
 }
 
