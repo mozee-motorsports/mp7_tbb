@@ -69,6 +69,14 @@ void Error_Handler(void);
 #define RCC_OSC_IN_GPIO_Port GPIOF
 #define RCC_OSC_OUT_Pin GPIO_PIN_1
 #define RCC_OSC_OUT_GPIO_Port GPIOF
+#define Motor1PWM_Pin GPIO_PIN_0
+#define Motor1PWM_GPIO_Port GPIOC
+#define Tps_Pin GPIO_PIN_0
+#define Tps_GPIO_Port GPIOA
+#define Motor1pin1_Pin GPIO_PIN_4
+#define Motor1pin1_GPIO_Port GPIOA
+#define Motor1pin2_Pin GPIO_PIN_0
+#define Motor1pin2_GPIO_Port GPIOB
 #define T_SWDIO_Pin GPIO_PIN_13
 #define T_SWDIO_GPIO_Port GPIOA
 #define T_SWCLK_Pin GPIO_PIN_14
