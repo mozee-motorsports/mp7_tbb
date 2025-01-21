@@ -43,9 +43,8 @@ typedef enum {
 	shutdown = 0,
 	status_report = 1,
 	error = 2,
-	position = 3,
-	throttle_percentage = 4,
-	calibrate = 5
+	throttle_percentage = 3,
+	calibrate = 4
 } Command;
 typedef struct{
 	FDCAN_RxHeaderTypeDef rx_header;

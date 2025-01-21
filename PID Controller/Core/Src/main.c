@@ -217,10 +217,7 @@ static uint8_t handleStatusReport(void)
 	tx_data[2] = error_code;		// Report any errors
 
 	// Write status report
-	fdcanWrite(&hfdcan1, tx_header, tx_data, DLC_STATUS_REPORT, throttle_control_board, from, DEFAULT_ETC_PRIORITY, status_report);
-
-
-	return 0;
+	return fdcanWrite(&hfdcan1, tx_header, tx_data, DLC_STATUS_REPORT, throttle_control_board, from, DEFAULT_ETC_PRIORITY, status_report);
 }
 
 /**
