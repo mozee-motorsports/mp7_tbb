@@ -51,8 +51,6 @@ extern "C" {
 
 /* USER CODE END EM */
 
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -69,8 +67,10 @@ void Error_Handler(void);
 #define RCC_OSC_IN_GPIO_Port GPIOF
 #define RCC_OSC_OUT_Pin GPIO_PIN_1
 #define RCC_OSC_OUT_GPIO_Port GPIOF
-#define Motor1PWM_Pin GPIO_PIN_0
-#define Motor1PWM_GPIO_Port GPIOC
+#define PWM_HIGH_Pin GPIO_PIN_0
+#define PWM_HIGH_GPIO_Port GPIOC
+#define PWM_LOW_Pin GPIO_PIN_1
+#define PWM_LOW_GPIO_Port GPIOC
 #define Tps_Pin GPIO_PIN_0
 #define Tps_GPIO_Port GPIOA
 #define Motor1pin1_Pin GPIO_PIN_4

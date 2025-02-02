@@ -18,7 +18,7 @@
  * 		PSC: 170
  *
  * 		Fclk: 170 MHz/ 170 = 1MHz
- * 		Desired frequency: 10 kHz
+ * 		Desired frequency: 5 kHz
  * 		ARR: F_CLK / Desired frequency = 1 MHz/ 10kHz = 100 clock cycles
  * 		Duty = Period %: CRR/ARR * 100... TIMM11 ->CCR1 = ....
  *
@@ -26,7 +26,9 @@
  *		PA4 - Motor1Pin1 - Dir
  *		PB0 - Motor1Pin2 - Dir
  *		PA0 - TPS
- *		PC0 - PID PWM output
+ *		PC0 - PID PWM output pos
+ *		PA7 - PID PWM output comp
+ *		LPUART1 for USART
  *
  * ADC
  * 		Set to 3.3V max.
@@ -50,6 +52,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdarg.h>
 #include "pid.h"
 #include "fdcan_queue.h"
 #include "fdcan.h"
@@ -125,10 +128,23 @@ static uint8_t handleThrottle(CANMessage* msg);
 static uint8_t handleCalibration(void);
 static uint8_t handleStatusReport(void);
 static void processCANMessage(CANMessage* msg, Command command);
+static void myprintf(const char *fmt, ...);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+static void myprintf(const char *fmt, ...) {
+	static char buffer[256];
+	va_list args;
+	va_start(args, fmt);
+	vsnprintf(buffer, sizeof(buffer), fmt, args);
+	va_end(args);
+
+	int len = strlen(buffer);
+//	HAL_UART_Transmit(&huart1, (uint8_t*) buffer, len, -1);
+
+}
 
 static void processCANMessage(CANMessage* msg, Command command)
 {
@@ -305,7 +321,9 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	while (1) {
-		static bool start_tim1 = false;
+		set_point = MAX_ADC_OUTPUT;   			// incoming is 50% throttle
+		PID_Set_Setpoint(&pid, &set_point);
+
 		static double position_delta = 0.0;
 
 		if(error_code != 0)
@@ -331,22 +349,30 @@ int main(void)
 		// What is the distance to set point? In terms of ADC steps.
 		position_delta = set_point - tps_buffer[0];
 
-		// Set motor direction
-		if(position_delta < 0)
-		{
-			// Set CW by writing high in motor_in1 (PA4), and writing low to motor_in2 (PB0)
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
-			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);
-		}
-		else
-		{
-			// Set CCW by writing low to motor_in1 and writing high to motor_in2
-			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
-			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
-		}
+		// Amazon hbridge
+		// Set motor direction - Used with amazon hbridge
+//		if(position_delta < 0)
+//		{
+//			// Set CW by writing high in motor_in1 (PA4), and writing low to motor_in2 (PB0)
+//			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_SET);
+//			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);
+//		}
+//		else
+//		{
+//			// Set CCW by writing low to motor_in1 and writing high to motor_in2
+//			HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+//			HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_SET);
+//		}
+
+		// Print tps value
+		myprintf("TPS val: %i\n", tps_buffer[0]);
+
 
 		// Set point is expected to change very rapidly
 		PID_Compute(&pid);
+
+//		  PID(&TPID, &Temp, &PIDOut, &TempSetpoint, 2, 5, 1, _PID_P_ON_E, _PID_CD_DIRECT);
+
 
 		// Duty variable for PWM output - recall it goes 0 -> 99
 		static uint8_t duty_numerical = 0;
@@ -358,14 +384,39 @@ int main(void)
 		// Ensure duty cycle stays within limits
 		if (duty_numerical > 99) duty_numerical = 99;
 		if (duty_numerical < 0) duty_numerical = 0;
-		HAL_Delay(1000);
 
-		// Output PWM signal
-		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty_numerical);
-		if (!start_tim1) {
+//		HAL_Delay(1000);		// TODO Remove in production
+
+		// Determine which PID to output and which one to ground
+		if (position_delta < 0) {		// Set to backward by writing ground to PC0 and writing duty cycle to PC1
+
+			// Stop PC1
+			HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
+
+			// Set duty cycle for PC0
+			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_2, duty_numerical);
+
+			// Enable output for PC1
+			HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_2);
+		} else {						// Set forward by writing duty cycle to PC0 and setting PC1 to ground
+
+			// Stop PC0
+			HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_2);
+
+			// Set duty cycle for PC1
+			__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty_numerical);
+
+			// Enable output for PC0
 			HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-			start_tim1 = true;
 		}
+
+//		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty_numerical);
+//		if (!start_tim1) {
+//			HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+//			// For complementary
+//			HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
+//			start_tim1 = true;
+//		}
 
 		// Direction logic: CCW, CW... Don't need a time variable?
 
@@ -576,8 +627,6 @@ static void MX_TIM1_Init(void)
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
-  TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig = {0};
 
   /* USER CODE BEGIN TIM1_Init 1 */
 
@@ -585,7 +634,7 @@ static void MX_TIM1_Init(void)
   htim1.Instance = TIM1;
   htim1.Init.Prescaler = 170-1;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 99;
+  htim1.Init.Period = 199;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
@@ -598,10 +647,6 @@ static void MX_TIM1_Init(void)
   {
     Error_Handler();
   }
-  if (HAL_TIM_PWM_Init(&htim1) != HAL_OK)
-  {
-    Error_Handler();
-  }
   sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
   sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_RESET;
   sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
@@ -609,38 +654,9 @@ static void MX_TIM1_Init(void)
   {
     Error_Handler();
   }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 50;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
-  sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
-  if (HAL_TIM_PWM_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
-  sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
-  sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
-  sBreakDeadTimeConfig.DeadTime = 0;
-  sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
-  sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
-  sBreakDeadTimeConfig.BreakFilter = 0;
-  sBreakDeadTimeConfig.BreakAFMode = TIM_BREAK_AFMODE_INPUT;
-  sBreakDeadTimeConfig.Break2State = TIM_BREAK2_DISABLE;
-  sBreakDeadTimeConfig.Break2Polarity = TIM_BREAK2POLARITY_HIGH;
-  sBreakDeadTimeConfig.Break2Filter = 0;
-  sBreakDeadTimeConfig.Break2AFMode = TIM_BREAK_AFMODE_INPUT;
-  sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
-  if (HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
   /* USER CODE BEGIN TIM1_Init 2 */
 
   /* USER CODE END TIM1_Init 2 */
-  HAL_TIM_MspPostInit(&htim1);
 
 }
 

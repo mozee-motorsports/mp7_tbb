@@ -74,13 +74,13 @@ void PID_Set_Setpoint(PID_TypeDef *uPID, int32_t *setpoint)
 uint8_t PID_Compute(PID_TypeDef *uPID)
 {
 	
-	uint32_t now;
-	uint32_t timeChange;
+	int32_t now;
+	int32_t timeChange;
 	
-	uint16_t input;
-	uint16_t error;
-	uint16_t dInput;
-	uint16_t output;
+	int32_t input;
+	int32_t error;
+	int32_t dInput;
+	int32_t output;
 	
 	/* ~~~~~~~~~~ Check PID mode ~~~~~~~~~~ */
 	if (!uPID->InAuto)

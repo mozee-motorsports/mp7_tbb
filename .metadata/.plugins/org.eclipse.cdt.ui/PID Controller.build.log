@@ -1,10 +1,24 @@
-19:20:42 **** Incremental Build of configuration Debug for project PID Controller ****
+15:41:38 **** Incremental Build of configuration Debug for project PID Controller ****
 make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+In file included from ../Core/Src/main.c:56:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+../Core/Src/main.c:934:14: warning: 'PID_Controller' defined but not used [-Wunused-function]
+  934 | static float PID_Controller(uint16_t set_point, uint16_t throttle_position) {
+      |              ^~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
 arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
    text	   data	    bss	    dec	    hex	filename
-  29384	     32	   2120	  31536	   7b30	PID Controller.elf
+  46180	    492	   3664	  50336	   c4a0	PID Controller.elf
 Finished building: default.size.stdout
  
+Finished building: PID Controller.list
+ 
 
-19:20:42 Build Finished. 0 errors, 0 warnings. (took 521ms)
+15:41:40 Build Finished. 0 errors, 2 warnings. (took 1s.539ms)
 

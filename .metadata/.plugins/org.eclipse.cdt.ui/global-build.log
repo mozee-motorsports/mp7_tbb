@@ -47,3 +47,434 @@ arm-none-eabi-size  PID\ Controller.elf
   29384	     32	   2120	  31536	   7b30	PID Controller.elf
 Finished building: default.size.stdout
  
+12:16:17 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47332	    492	   3256	  51080	   c788	PID Controller.elf
+Finished building: default.size.stdout
+ 
+12:23:41 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+In file included from ../Core/Src/main.c:53:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+../Core/Src/main.c:866:14: warning: 'PID_Controller' defined but not used [-Wunused-function]
+  866 | static float PID_Controller(uint16_t set_point, uint16_t throttle_position) {
+      |              ^~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  47332	    492	   3256	  51080	   c788	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
+12:35:42 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/stm32g4xx_hal_msp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32g4xx_hal_msp.d" -MT"Core/Src/stm32g4xx_hal_msp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32g4xx_hal_msp.o"
+In file included from ../Core/Src/main.c:54:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+../Core/Src/main.c:869:14: warning: 'PID_Controller' defined but not used [-Wunused-function]
+  869 | static float PID_Controller(uint16_t set_point, uint16_t throttle_position) {
+      |              ^~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  47844	    492	   3256	  51592	   c988	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
+12:36:57 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47844	    492	   3256	  51592	   c988	PID Controller.elf
+Finished building: default.size.stdout
+ 
+12:41:04 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47844	    492	   3256	  51592	   c988	PID Controller.elf
+Finished building: default.size.stdout
+ 
+12:44:45 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47844	    492	   3256	  51592	   c988	PID Controller.elf
+Finished building: default.size.stdout
+ 
+12:45:38 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47844	    492	   3256	  51592	   c988	PID Controller.elf
+Finished building: default.size.stdout
+ 
+12:51:06 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/pid.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/pid.d" -MT"Core/Src/pid.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/pid.o"
+In file included from ../Core/Src/pid.c:21:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  47764	    492	   3256	  51512	   c938	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
+12:54:01 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+In file included from ../Core/Src/main.c:54:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+../Core/Src/main.c:870:14: warning: 'PID_Controller' defined but not used [-Wunused-function]
+  870 | static float PID_Controller(uint16_t set_point, uint16_t throttle_position) {
+      |              ^~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  47764	    492	   3256	  51512	   c938	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
+17:31:29 **** Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+In file included from ../Core/Src/main.c:54:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+../Core/Src/main.c:872:14: warning: 'PID_Controller' defined but not used [-Wunused-function]
+  872 | static float PID_Controller(uint16_t set_point, uint16_t throttle_position) {
+      |              ^~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  47772	    492	   3256	  51520	   c940	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
+17:31:40 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47772	    492	   3256	  51520	   c940	PID Controller.elf
+Finished building: default.size.stdout
+ 
+17:37:51 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47772	    492	   3256	  51520	   c940	PID Controller.elf
+Finished building: default.size.stdout
+ 
+12:01:37 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+In file included from ../Core/Src/main.c:54:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+../Core/Src/main.c:872:14: warning: 'PID_Controller' defined but not used [-Wunused-function]
+  872 | static float PID_Controller(uint16_t set_point, uint16_t throttle_position) {
+      |              ^~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  47772	    492	   3256	  51520	   c940	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
+12:10:15 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+In file included from ../Core/Src/main.c:54:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+../Core/Src/main.c:878:14: warning: 'PID_Controller' defined but not used [-Wunused-function]
+  878 | static float PID_Controller(uint16_t set_point, uint16_t throttle_position) {
+      |              ^~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  47772	    492	   3256	  51520	   c940	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
+12:22:27 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+In file included from ../Core/Src/main.c:54:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:312:31: warning: variable 'position_delta' set but not used [-Wunused-but-set-variable]
+  312 |                 static double position_delta = 0.0;
+      |                               ^~~~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:878:14: warning: 'PID_Controller' defined but not used [-Wunused-function]
+  878 | static float PID_Controller(uint16_t set_point, uint16_t throttle_position) {
+      |              ^~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  47700	    492	   3256	  51448	   c8f8	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
+12:56:57 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+In file included from ../Core/Src/main.c:54:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:312:31: warning: variable 'position_delta' set but not used [-Wunused-but-set-variable]
+  312 |                 static double position_delta = 0.0;
+      |                               ^~~~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:878:14: warning: 'PID_Controller' defined but not used [-Wunused-function]
+  878 | static float PID_Controller(uint16_t set_point, uint16_t throttle_position) {
+      |              ^~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  47628	    492	   3256	  51376	   c8b0	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
+13:09:24 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+In file included from ../Core/Src/main.c:54:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:312:31: warning: variable 'position_delta' set but not used [-Wunused-but-set-variable]
+  312 |                 static double position_delta = 0.0;
+      |                               ^~~~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:878:14: warning: 'PID_Controller' defined but not used [-Wunused-function]
+  878 | static float PID_Controller(uint16_t set_point, uint16_t throttle_position) {
+      |              ^~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  47628	    492	   3256	  51376	   c8b0	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
+13:10:01 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+In file included from ../Core/Src/main.c:54:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:312:31: warning: variable 'position_delta' set but not used [-Wunused-but-set-variable]
+  312 |                 static double position_delta = 0.0;
+      |                               ^~~~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:878:14: warning: 'PID_Controller' defined but not used [-Wunused-function]
+  878 | static float PID_Controller(uint16_t set_point, uint16_t throttle_position) {
+      |              ^~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  47628	    492	   3256	  51376	   c8b0	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
+13:17:46 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+In file included from ../Core/Src/main.c:54:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:314:31: warning: variable 'position_delta' set but not used [-Wunused-but-set-variable]
+  314 |                 static double position_delta = 0.0;
+      |                               ^~~~~~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:880:14: warning: 'PID_Controller' defined but not used [-Wunused-function]
+  880 | static float PID_Controller(uint16_t set_point, uint16_t throttle_position) {
+      |              ^~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  47636	    492	   3256	  51384	   c8b8	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
+15:09:17 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/pid.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/pid.d" -MT"Core/Src/pid.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/pid.o"
+arm-none-eabi-gcc "../Core/Src/stm32g4xx_hal_msp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32g4xx_hal_msp.d" -MT"Core/Src/stm32g4xx_hal_msp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32g4xx_hal_msp.o"
+arm-none-eabi-gcc "../Core/Src/stm32g4xx_it.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32g4xx_it.d" -MT"Core/Src/stm32g4xx_it.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32g4xx_it.o"
+In file included from ../Core/Src/pid.c:21:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+In file included from ../Core/Src/main.c:54:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:313:29: warning: unused variable 'start_tim1' [-Wunused-variable]
+  313 |                 static bool start_tim1 = false;
+      |                             ^~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:858:14: warning: 'PID_Controller' defined but not used [-Wunused-function]
+  858 | static float PID_Controller(uint16_t set_point, uint16_t throttle_position) {
+      |              ^~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  44268	    492	   3256	  48016	   bb90	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
+15:11:48 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+In file included from ../Core/Src/main.c:54:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+../Core/Src/main.c: In function 'main':
+../Core/Src/main.c:313:29: warning: unused variable 'start_tim1' [-Wunused-variable]
+  313 |                 static bool start_tim1 = false;
+      |                             ^~~~~~~~~~
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:866:14: warning: 'PID_Controller' defined but not used [-Wunused-function]
+  866 | static float PID_Controller(uint16_t set_point, uint16_t throttle_position) {
+      |              ^~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  44268	    492	   3256	  48016	   bb90	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
+15:39:32 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/stm32g4xx_hal_msp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32g4xx_hal_msp.d" -MT"Core/Src/stm32g4xx_hal_msp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32g4xx_hal_msp.o"
+In file included from ../Core/Src/main.c:55:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+../Core/Src/main.c: In function 'myprintf':
+../Core/Src/main.c:142:9: warning: implicit declaration of function 'va_start' [-Wimplicit-function-declaration]
+  142 |         va_start(args, fmt);
+      |         ^~~~~~~~
+../Core/Src/main.c:144:9: warning: implicit declaration of function 'va_end' [-Wimplicit-function-declaration]
+  144 |         va_end(args);
+      |         ^~~~~~
+../Core/Src/main.c:147:28: error: 'huart3' undeclared (first use in this function); did you mean 'huart1'?
+  147 |         HAL_UART_Transmit(&huart3, (uint8_t*) buffer, len, -1);
+      |                            ^~~~~~
+      |                            huart1
+../Core/Src/main.c:147:28: note: each undeclared identifier is reported only once for each function it appears in
+../Core/Src/main.c: At top level:
+../Core/Src/main.c:933:14: warning: 'PID_Controller' defined but not used [-Wunused-function]
+  933 | static float PID_Controller(uint16_t set_point, uint16_t throttle_position) {
+      |              ^~~~~~~~~~~~~~
+make: *** [Core/Src/subdir.mk:43: Core/Src/main.o] Error 1
+make: *** Waiting for unfinished jobs....
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+15:41:38 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_NUCLEO_64 -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/BSP/STM32G4xx_Nucleo -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+In file included from ../Core/Src/main.c:56:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+../Core/Src/main.c:934:14: warning: 'PID_Controller' defined but not used [-Wunused-function]
+  934 | static float PID_Controller(uint16_t set_point, uint16_t throttle_position) {
+      |              ^~~~~~~~~~~~~~
+arm-none-eabi-g++ -o "PID Controller.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\PID Controller\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="PID Controller.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -u _printf_float -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: PID Controller.elf
+ 
+arm-none-eabi-size  PID\ Controller.elf 
+arm-none-eabi-objdump -h -S PID\ Controller.elf  > "PID Controller.list"
+   text	   data	    bss	    dec	    hex	filename
+  46180	    492	   3664	  50336	   c4a0	PID Controller.elf
+Finished building: default.size.stdout
+ 
+Finished building: PID Controller.list
+ 
