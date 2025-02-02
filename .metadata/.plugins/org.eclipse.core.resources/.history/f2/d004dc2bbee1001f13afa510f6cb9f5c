@@ -365,11 +365,14 @@ int main(void)
 //		}
 
 		// Print tps value
-//		myprintf("TPS val: %i\n", tps_buffer[0]);
+		myprintf("TPS val: %i\n", tps_buffer[0]);
 
 
 		// Set point is expected to change very rapidly
 		PID_Compute(&pid);
+
+//		  PID(&TPID, &Temp, &PIDOut, &TempSetpoint, 2, 5, 1, _PID_P_ON_E, _PID_CD_DIRECT);
+
 
 		// Duty variable for PWM output - recall it goes 0 -> 99
 		static uint8_t duty_numerical = 0;
