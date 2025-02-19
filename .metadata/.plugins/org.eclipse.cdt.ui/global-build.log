@@ -9546,3 +9546,36 @@ arm-none-eabi-size  Throttle_Body_Board.elf
   52052	     96	   5120	  57268	   dfb4	Throttle_Body_Board.elf
 Finished building: default.size.stdout
  
+20:47:14 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+20:47:14 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:91:21: warning: unused variable 'delta' [-Wunused-variable]
+   91 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:219:1: warning: control reaches end of non-void function [-Wreturn-type]
+  219 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:64:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   64 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  52096	     96	   5120	  57312	   dfe0	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 

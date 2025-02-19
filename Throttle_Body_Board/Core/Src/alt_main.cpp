@@ -129,7 +129,8 @@ static Error processCANMessage(CANMessage *msg, Command command)
 	{
 	case shutdown: // Already handled in the ISR
 		// Shutdown command, exit program
-		exit(EXIT_SUCCESS);
+		my_shutdown();
+		shutdown_req = true; // Set shutdown request flag
 		break;
 	case throttle_percentage:
 		code = handleThrottle(msg);
@@ -312,7 +313,18 @@ int alt_main(void)
 			Error error = error_queue.front(); // Get error from queue
 			shutdown_req = handleError(error) == ok? false : true;				   // Process error
 			error_queue.pop();				   // Remove error from queue
+			
+			if(shutdown_req == true) // If shutdown requested, break out of loop
+			{
+				break;
+			}
 		}
+
+		if(shutdown_req == true) // If shutdown requested, break out of loop
+		{
+			break;
+		}
+
 
 		// Process FDCAN messages in queue
 		if (!fdcan_queue.empty())
@@ -329,6 +341,11 @@ int alt_main(void)
 			{
 				shutdown_req = handleError(error) == ok? false : true; // Process error
 			}
+		}
+
+		if(shutdown_req == true) // If shutdown requested, break out of loop
+		{
+			break;
 		}
 
 		if ((pid_ready) && tps_ready)
