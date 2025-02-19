@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "dma.h": "c",
+        "fdcan_queue.h": "c"
+    }
+}

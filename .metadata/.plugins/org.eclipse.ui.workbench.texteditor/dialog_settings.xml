@@ -4,16 +4,16 @@
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="isRegEx" value="false"/>
-		<item key="selection" value="KP"/>
+		<item key="selection" value=""/>
 		<list key="findhistory">
-			<item value="KP"/>
-			<item value="PID_CONTROLLER"/>
-			<item value="PID_Cont"/>
-			<item value="PID_CON"/>
-			<item value="HAL_TIM_MspPostInit"/>
-			<item value="MX_TIM1"/>
-			<item value="PID_Con"/>
-			<item value="while (1"/>
+			<item value="processC"/>
+			<item value="HBRID"/>
+			<item value="interval"/>
+			<item value="i++"/>
+			<item value="_PID_CD_DIRECT"/>
+			<item value="PID"/>
+			<item value="INTERVAL"/>
+			<item value="pid_ready"/>
 		</list>
 		<list key="replacehistory">
 		</list>

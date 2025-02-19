@@ -53,14 +53,20 @@ extern "C" {
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
-
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define PWM_HIGH_Pin GPIO_PIN_0
+#define PWM_HIGH_GPIO_Port GPIOC
 #define HBRIDGE_EN_Pin GPIO_PIN_1
 #define HBRIDGE_EN_GPIO_Port GPIOC
+#define TPS_IN_Pin GPIO_PIN_0
+#define TPS_IN_GPIO_Port GPIOA
+#define PWM_LOW_Pin GPIO_PIN_7
+#define PWM_LOW_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
+#define USING_PID2			// Using PID2 library
 
 /* USER CODE END Private defines */
 

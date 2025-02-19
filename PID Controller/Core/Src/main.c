@@ -32,6 +32,13 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <math.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdarg.h>
+#include "pid.h"
+#include "fdcan_queue.h"
+#include "fdcan.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -41,7 +48,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
+#define MAX_ADC_OUTPUT 0xFFF			// MAX is 4095 = 3V3
+#define MAX_DUTY_CYCLE 100.0f
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -53,35 +61,170 @@
 
 COM_InitTypeDef BspCOMInit;
 ADC_HandleTypeDef hadc1;
+DMA_HandleTypeDef hdma_adc1;
 
 FDCAN_HandleTypeDef hfdcan1;
 
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
+TIM_HandleTypeDef htim3;
 
 /* USER CODE BEGIN PV */
-static uint16_t measured_value = 0;			// Variable to keep throttle position from ADC output for TPS sensor
-static const uint16_t  MAX_ADC_OUTPUT = 0xFFF;
-static const float MAX_DUTY_CYCLE = 100.0f;
-static const float MIN_DUTY_CYCLE = 0.0f;
+static int32_t set_point = MAX_ADC_OUTPUT;				// Store set point, set in FDCAN ISR
+int32_t tps_buffer[1];
+
+static PID_TypeDef pid;
+static int32_t pid_out;
+#define KP 1.0f
+#define KI 1.0f
+#define KD 1.0f
+
+// FDCAN Defines
+FDCAN_TxHeaderTypeDef   tx_header;
+FDCAN_RxHeaderTypeDef   rx_header;
+uint8_t               tx_data[8];
+uint8_t               rx_data[8];
+
+// Queue to process non-critical tasks
+Queue fdcan_queue;
+
+// State variable to keep track of state
+uint8_t error_code = 0x00;	// 0 = OK, anything else = error
+
+volatile bool adc_dma_processed = false;
 
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
+static void MX_DMA_Init(void);
 static void MX_FDCAN1_Init(void);
 static void MX_TIM1_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_TIM2_Init(void);
+static void MX_TIM3_Init(void);
 /* USER CODE BEGIN PFP */
 static float PID_Controller(uint16_t set_point, uint16_t throttle_position);
-
+static uint8_t handleError(uint8_t code);
+static uint8_t handleThrottle(CANMessage* msg);
+static uint8_t handleCalibration(void);
+static uint8_t handleStatusReport(void);
+static void processCANMessage(CANMessage* msg, Command command);
+static void myprintf(const char *fmt, ...);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+static void myprintf(const char *fmt, ...) {
+	static char buffer[256];
+	va_list args;
+	va_start(args, fmt);
+	vsnprintf(buffer, sizeof(buffer), fmt, args);
+	va_end(args);
 
+	int len = strlen(buffer);
+//	HAL_UART_Transmit(&huart1, (uint8_t*) buffer, len, -1);
+
+}
+
+static void processCANMessage(CANMessage* msg, Command command)
+{
+	// Execute sent command
+	switch(command)
+	{
+		case shutdown:				// Already handled in ISR - here also to remove warning
+			exit(EXIT_SUCCESS);
+			break;
+		case throttle_percentage:
+			if(rx_header.DataLength != DLC_THROTTLE)
+				error_code = handleError(GENERIC_ERROR_CODE);
+			else
+				error_code = handleThrottle(msg);
+
+			break;
+		case calibrate:
+			if(rx_header.DataLength != DLC_CALIBRATE)
+				error_code = handleError(GENERIC_ERROR_CODE);
+			else
+				error_code = handleCalibration();
+			break;
+		case status_report:
+			if(rx_header.DataLength != DLC_STATUS_REPORT)
+				error_code = handleError(GENERIC_ERROR_CODE);
+			else
+				error_code = handleStatusReport();
+			break;
+		default:	// Not a valid command, assume error
+			error_code = handleError(GENERIC_ERROR_CODE);
+			break;
+	}
+}
+
+/**
+ * Determines appropriate response given the error code. All error codes sent to control board master.
+ * Currently only 1 error code defined - GENERIC_ERROR_CODE = 0xFF.
+ */
+static uint8_t handleError(uint8_t code)
+{
+	// When there is an error determine response
+	switch(code)
+	{
+	case GENERIC_ERROR_CODE: // Set throttle to zero
+		// An invalid command was sent, reset set point
+		set_point = 0;
+		PID_Set_Setpoint(&pid, &set_point);
+		break;
+	}
+
+	// All codes need to be sent to ETC
+	// Send error code - TODO verify error codes
+	tx_data[0] = code;
+	fdcanWrite(&hfdcan1, tx_header, tx_data, DLC_ERROR, throttle_control_board, from, DEFAULT_ETC_PRIORITY, error);
+
+	// Always return ERROR
+	return GENERIC_ERROR_CODE;
+}
+
+/**
+ * Gets the throttle position percentage from the current message in the queue, calculates the set point,
+ * and sets it.
+ */
+static uint8_t handleThrottle(CANMessage* msg)
+{
+	// Process received data - Only 1 byte for throttle percentage
+	uint8_t throttle_position_percentage = msg->data[0];
+
+	// Get position in terms of ADC levels based on percent.
+	set_point = roundf(((float) throttle_position_percentage / MAX_DUTY_CYCLE) * MAX_ADC_OUTPUT);
+
+	// Set PID structure set point from incoming data
+	PID_Set_Setpoint(&pid, &set_point);
+
+	return 0;
+}
+
+/*
+ * Returns battery level of Throttle Control board by sampling with ADC - 0xFF if not implemented
+ */
+static uint8_t handleStatusReport(void)
+{
+	// Assuming not implemented for the time being
+	tx_data[0] = 0xFF;
+	tx_data[1] = 0xFF;
+	tx_data[2] = error_code;		// Report any errors
+
+	// Write status report
+	return fdcanWrite(&hfdcan1, tx_header, tx_data, DLC_STATUS_REPORT, throttle_control_board, from, DEFAULT_ETC_PRIORITY, status_report);
+}
+
+/**
+ * Currently not implemented, always return OK
+ */
+static uint8_t handleCalibration(void)
+{
+	return 0;
+}
 /* USER CODE END 0 */
 
 /**
@@ -113,12 +256,29 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_DMA_Init();
   MX_FDCAN1_Init();
   MX_TIM1_Init();
   MX_ADC1_Init();
   MX_TIM2_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
+  // Init canfd instance
+  if (fdcanInit(&hfdcan1) != HAL_OK)
+	  Error_Handler();
 
+  // Sets up the CANFD filter
+  if (fdcanFilterInit(&hfdcan1, &tx_header) != HAL_OK)
+	  Error_Handler();
+
+  // Init queue
+  queueInit(&fdcan_queue);
+
+  // Init PID structure - tps buffer in terms of adc steps, and so is set_point. pid_out also in terms of adc steps
+  PID(&pid, &tps_buffer[0], &pid_out, &set_point, KP, KI, KD, _PID_P_ON_E, _PID_CD_DIRECT);
+  PID_SetMode(&pid, _PID_MODE_AUTOMATIC);
+  PID_SetSampleTime(&pid, 100);
+  PID_SetOutputLimits(&pid, 0, MAX_ADC_OUTPUT);
 
   /* USER CODE END 2 */
 
@@ -143,42 +303,86 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+		set_point = MAX_ADC_OUTPUT;   			// incoming is 50% throttle
+		PID_Set_Setpoint(&pid, &set_point);
 
-	  // @TODO: Remove the following
-	  static int start_tim1 = 0;
+		static double position_delta = 0.0;
 
-	  uint16_t act_throttle = measured_value;				// TPS value
-	  uint16_t inc_throttle = MAX_ADC_OUTPUT >> 1;   		// incoming is 50% throttle
-	  	  	  	  	  	  	  	  	  	  	  				// this will need to be converted once we get CAN working
-	  float delta = PID_Controller(inc_throttle, act_throttle);		// As a percentage in terms of MAX adc levels, need to convert to a nuumber between 0 - 99
-	  float new_pwm = (int32_t)__HAL_TIM_GET_COMPARE(&htim1, TIM_CHANNEL_1) + delta;
-	  if(new_pwm > 99) {
-		  new_pwm = 99;
-	  }
+		if(error_code != 0)
+		{
+			// Shutdown
+		    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_4, GPIO_PIN_RESET);
+		    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0, GPIO_PIN_RESET);
+		    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
+		}
 
-	  if(new_pwm < 0) {
-		  new_pwm = 0;
-	  }
+		// While the queue isn't empty, perform command
+		if(!isEmpty(&fdcan_queue))
+		{
+			// Get head element, and extract command
+			CANMessage msg = peek(&fdcan_queue);
+			Command command = msg.rx_header.Identifier & 0x0F;
+			processCANMessage(&msg, command);
+
+			// Remove element
+			dequeue(&fdcan_queue);
+		}
+
+		// Perform pid only if there is a tps value
+		if(!adc_dma_processed)
+		{
+
+			// What is the distance to set point? In terms of ADC steps.
+			position_delta = set_point - tps_buffer[0];
+
+			// Set point is expected to change very rapidly
+			PID_Compute(&pid);
+
+			// Duty variable for PWM output - recall it goes 0 -> 99
+			static uint8_t duty_numerical = 0;
+
+			// PWM_HIGH = PC0 = TIM1_CH1
+			// PWM_LOW = PA7 = TIM3_CH2
+			if (pid_out < 0) {// Set to backward by stopping PC0 and writing duty cycle to PA7
+
+				// Stop PC0
+				HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
+
+			    // Convert absolute value of pid_out to duty cycle
+			    double duty_cycle = ((fabs(pid_out) / MAX_ADC_OUTPUT) * MAX_DUTY_CYCLE);
+			    if (duty_cycle > 99) duty_cycle = 99;
+			    uint8_t duty_numerical = (uint8_t)duty_cycle;
+
+				// Set duty cycle for PA7
+				__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, duty_numerical);
+
+				// Enable output for PA7
+				HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
+			} else {// Set forward by writing duty cycle to PC0 and setting PA7 to ground
+
+				// Stop PA7
+				HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_2);
+
+			    double duty_cycle = ((pid_out/ MAX_ADC_OUTPUT) * MAX_DUTY_CYCLE);
+			    if (duty_cycle > 99) duty_cycle = 99;
+			    uint8_t duty_numerical = (uint8_t)duty_cycle;
+
+				// Set duty cycle for PC0
+				__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty_numerical);
+
+				// Enable output for PC0
+				HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+			}
+			adc_dma_processed = true;
+		}
+
+
 	  //uint8_t duty_numerical = (uint8_t)((delta / MAX_DUTY_CYCLE) * htim1.Init.Period);
 //	  // Ensure it stays within bounds
 //	  if (duty_numerical > htim1.Init.Period)
 //		  duty_numerical = htim1.Init.Period;
 //	  else if (duty_numerical < 0)
 //		  duty_numerical = 0;
-
-
-
-      // Clamp to ARR counts 0 - 99
-
-	    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, new_pwm);
-	    if(!start_tim1)
-	    {
-	    	  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-	    	  HAL_TIMEx_PWMN_Start(&htim1, TIM_CHANNEL_1);
-	    	  start_tim1++;
-	    }
-
-
 
 
     /* USER CODE END WHILE */
@@ -297,7 +501,7 @@ static void MX_ADC1_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN ADC1_Init 2 */
-  HAL_ADC_Start_IT(&hadc1);						  // Start ADC
+  HAL_ADC_Start_DMA(&hadc1, (uint32_t*)tps_buffer, 1);
 
   /* USER CODE END ADC1_Init 2 */
 
@@ -330,8 +534,8 @@ static void MX_FDCAN1_Init(void)
   hfdcan1.Init.ProtocolException = DISABLE;
   hfdcan1.Init.NominalPrescaler = 16;
   hfdcan1.Init.NominalSyncJumpWidth = 1;
-  hfdcan1.Init.NominalTimeSeg1 = 2;
-  hfdcan1.Init.NominalTimeSeg2 = 2;
+  hfdcan1.Init.NominalTimeSeg1 = 1;
+  hfdcan1.Init.NominalTimeSeg2 = 1;
   hfdcan1.Init.DataPrescaler = 1;
   hfdcan1.Init.DataSyncJumpWidth = 1;
   hfdcan1.Init.DataTimeSeg1 = 1;
@@ -372,7 +576,7 @@ static void MX_TIM1_Init(void)
   htim1.Instance = TIM1;
   htim1.Init.Prescaler = 170-1;
   htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 99;
+  htim1.Init.Period = 199;
   htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim1.Init.RepetitionCounter = 0;
   htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
@@ -397,7 +601,7 @@ static void MX_TIM1_Init(void)
     Error_Handler();
   }
   sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 50;
+  sConfigOC.Pulse = 0;
   sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
   sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
   sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
@@ -410,7 +614,7 @@ static void MX_TIM1_Init(void)
   sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
   sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
   sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
-  sBreakDeadTimeConfig.DeadTime = 20;
+  sBreakDeadTimeConfig.DeadTime = 0;
   sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
   sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
   sBreakDeadTimeConfig.BreakFilter = 0;
@@ -478,6 +682,82 @@ static void MX_TIM2_Init(void)
 }
 
 /**
+  * @brief TIM3 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM3_Init(void)
+{
+
+  /* USER CODE BEGIN TIM3_Init 0 */
+
+  /* USER CODE END TIM3_Init 0 */
+
+  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  TIM_MasterConfigTypeDef sMasterConfig = {0};
+  TIM_OC_InitTypeDef sConfigOC = {0};
+
+  /* USER CODE BEGIN TIM3_Init 1 */
+
+  /* USER CODE END TIM3_Init 1 */
+  htim3.Instance = TIM3;
+  htim3.Init.Prescaler = 170-1;
+  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim3.Init.Period = 199;
+  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_ENABLE;
+  if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+  if (HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+  if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.OCMode = TIM_OCMODE_PWM1;
+  sConfigOC.Pulse = 0;
+  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+  if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM3_Init 2 */
+
+  /* USER CODE END TIM3_Init 2 */
+  HAL_TIM_MspPostInit(&htim3);
+
+}
+
+/**
+  * Enable DMA controller clock
+  */
+static void MX_DMA_Init(void)
+{
+
+  /* DMA controller clock enable */
+  __HAL_RCC_DMAMUX1_CLK_ENABLE();
+  __HAL_RCC_DMA1_CLK_ENABLE();
+
+  /* DMA interrupt init */
+  /* DMA1_Channel1_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
+
+}
+
+/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -509,11 +789,14 @@ static void MX_GPIO_Init(void)
  *
  * @param hadc Pointer to the ADC handle.
  */
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
-{
-	if(hadc->Instance == ADC1)
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
+	if (hadc->Instance == ADC1)
+	{
 		// Get 12-bit ADC value from TPS sensor. 2^12 - 1 = 4095 max value
-        measured_value = HAL_ADC_GetValue(hadc);
+		// Reset flag variable
+		adc_dma_processed = false;
+		HAL_ADC_Start_DMA(&hadc1, (uint32_t*)tps_buffer, 1);
+	}
 }
 
 /**
@@ -526,6 +809,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
  * It processes the received data, calculates the throttle position percentage,
  * determines the set point in terms of ADC levels, computes the duty cycle percentage
  * using a PID controller, and updates the PWM duty cycle accordingly.
+ * At this stage, all messages are filtered to have a direction bit = 0 (To Module)
  *
  * The function performs the following steps:
  * 1. Checks if the FDCAN instance is FDCAN1.
@@ -538,32 +822,40 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)
  */
 void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 {
-	if(hfdcan->Instance == FDCAN1)
-	{
-	    if ((RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE) != RESET)
-	    {
-	        FDCAN_RxHeaderTypeDef rxHeader;
-	        uint8_t rxData[8];		// 8 bit number expressed as a percentage -> 0 - 100%
+  if (hfdcan->Instance == FDCAN1)
+  {
+    // If we are receiving a CAN signal and its NOT in reset, then get message
+    if ((RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE) != RESET)
+    {
+      FDCAN_RxHeaderTypeDef rxHeader; // Struct to place data
+      uint8_t rxData[8];              // 8 bit number expressed as a percentage -> 0 - 100%
 
-	        if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &rxHeader, rxData) == HAL_OK)
-	        {
-	            // Process received data
-	            uint8_t throttle_position_percentage = rxData[0];
+      // Get Rx messages from RX FIFO0
+      if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &rxHeader, rxData) != HAL_OK)
+        Error_Handler(); // Reception Error
 
-	            // Get position in terms of ADC levels based on percent.
-	            uint16_t set_point = roundf(((float)throttle_position_percentage / MAX_DUTY_CYCLE) * MAX_ADC_OUTPUT);
+      // Activate notification again in case HAL deactivates interrupt
+      if (HAL_FDCAN_ActivateNotification(hfdcan, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0) != HAL_OK)
+        Error_Handler(); // Notification Error
 
-	            // Get duty cycle percentage 0 - 100
-	            uint8_t duty_cycle_percentage = PID_Controller(set_point, measured_value);
+      // Extract command
+      Command command = (Command)(rx_header.Identifier & 0x0F);
 
-	            // Clamp to ARR counts 0 - 99
-	    	    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, roundf((duty_cycle_percentage / MAX_DUTY_CYCLE) * (htim1.Init.Period + 1)) - 1);
+      // Process critical commands
+      if (command == shutdown)
+        exit(EXIT_SUCCESS);
 
-	        }
-	    }
-	}
+      // Queue non-critical commands
+      CANMessage msg = {rx_header, {0}};
+
+      // Make deep copy of payload
+      memcpy(msg.data, rx_data, sizeof(rx_data));
+
+      // Add message to queue
+      enqueue(&fdcan_queue, &msg);
+    }
+  }
 }
-
 
 /**
  * @brief PID Controller function to calculate the PWM duty cycle.
@@ -593,59 +885,53 @@ static uint32_t time_prev = 0;
 static int32_t error_prev = 0;
 
 // PID constants - Change for tuning
-static const float KP = 1.0f;
-static const float KI = 0.0f;
-static const float KD = 0.00f;
+//static const float KP = 1.0f;
+//static const float KI = 0.0f;
+//static const float KD = 0.00f;
 static const float MICRO_TO_S = 0.000001f;
 
-static float PID_Controller(uint16_t set_point, uint16_t throttle_position)
-{
-    uint32_t current_tick = __HAL_TIM_GET_COUNTER(&htim2);
+static float PID_Controller(uint16_t set_point, uint16_t throttle_position) {
+	uint32_t current_tick = __HAL_TIM_GET_COUNTER(&htim2);
 
 	// Convert timer ticks into seconds
 	// Each tick is 1 microsecond (1e-6 seconds)
 	float dt;
 
 	// IF current_tick >= time_prev -> set dt in terms of seconds, ELSE, Handle timer overflow
-    dt = (float)(current_tick - time_prev) * MICRO_TO_S;  // Convert microseconds to seconds
-    													  // maybe remove this?
+	dt = (float) (current_tick - time_prev) * MICRO_TO_S; // Convert microseconds to seconds
+														  // maybe remove this?
 
 	// Make sure there is no 0 dt
-	if(!dt)
+	if (!dt)
 		dt = 1;
 
-    int32_t error = ((int32_t)set_point) - ((int32_t)throttle_position);
+	int32_t error = ((int32_t) set_point) - ((int32_t) throttle_position);
 
-     // Calculate the integral
-     float integral = integral_prev + ((error + error_prev) / 2.0f) * dt;
+	// Calculate the integral
+	float integral = integral_prev + ((error + error_prev) / 2.0f) * dt;
 
-     float derivative = (error - error_prev) / dt;
+	float derivative = (error - error_prev) / dt;
 
-     // Prevent integral windup by clamping the integral term
-     if (integral > MAX_ADC_OUTPUT)
-     {
-         integral = MAX_ADC_OUTPUT;
-     }
-     else if (integral < -MAX_ADC_OUTPUT)
-     {
-         integral = -MAX_ADC_OUTPUT;
-     }
+	// Prevent integral windup by clamping the integral term
+	if (integral > MAX_ADC_OUTPUT) {
+		integral = MAX_ADC_OUTPUT;
+	} else if (integral < -MAX_ADC_OUTPUT) {
+		integral = -MAX_ADC_OUTPUT;
+	}
 
-    // Calculate the PID output
-    float output = (KP * error) + (KI * integral) + (KD * derivative);
+	// Calculate the PID output
+	float output = (KP * error) + (KI * integral) + (KD * derivative);
 
-    // Convert the PID output to a PWM duty cycle percentage
-    int32_t pwm_delta = (output / MAX_ADC_OUTPUT) * MAX_DUTY_CYCLE;
+	// Convert the PID output to a PWM duty cycle percentage
+	int32_t pwm_delta = (output / MAX_ADC_OUTPUT) * MAX_DUTY_CYCLE;
 
-    integral_prev = integral;
-    time_prev = current_tick;
-    error_prev = error;
+	integral_prev = integral;
+	time_prev = current_tick;
+	error_prev = error;
 
-
-    // Return duty cycle percentage
-    return pwm_delta;
+	// Return duty cycle percentage
+	return pwm_delta;
 }
-
 
 /* USER CODE END 4 */
 
