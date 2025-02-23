@@ -40,7 +40,6 @@
         * EXTI
         * Free pins are configured automatically as Analog (this feature is enabled through
         * the Code Generation settings)
-     PA4   ------> COMP_DAC11_group
 */
 void MX_GPIO_Init(void)
 {
@@ -84,10 +83,10 @@ void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(H_NSLEEP_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : ECU_OUT_Pin PA5 PA6 PA8
-                           PA9 PA10 */
-  GPIO_InitStruct.Pin = ECU_OUT_Pin|GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_8
-                          |GPIO_PIN_9|GPIO_PIN_10;
+  /*Configure GPIO pins : PA5 PA6 PA8 PA9
+                           PA10 */
+  GPIO_InitStruct.Pin = GPIO_PIN_5|GPIO_PIN_6|GPIO_PIN_8|GPIO_PIN_9
+                          |GPIO_PIN_10;
   GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
