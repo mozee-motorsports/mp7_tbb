@@ -56,14 +56,32 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define PWM_HIGH_Pin GPIO_PIN_0
-#define PWM_HIGH_GPIO_Port GPIOC
-#define HBRIDGE_EN_Pin GPIO_PIN_1
-#define HBRIDGE_EN_GPIO_Port GPIOC
-#define TPS_IN_Pin GPIO_PIN_0
-#define TPS_IN_GPIO_Port GPIOA
-#define PWM_LOW_Pin GPIO_PIN_7
-#define PWM_LOW_GPIO_Port GPIOA
+#define H_IN1_Pin GPIO_PIN_0
+#define H_IN1_GPIO_Port GPIOC
+#define H_NSLEEP_Pin GPIO_PIN_1
+#define H_NSLEEP_GPIO_Port GPIOC
+#define TRIM_1_Pin GPIO_PIN_2
+#define TRIM_1_GPIO_Port GPIOC
+#define TRIM_2_Pin GPIO_PIN_3
+#define TRIM_2_GPIO_Port GPIOC
+#define TPS_POT1_Pin GPIO_PIN_0
+#define TPS_POT1_GPIO_Port GPIOA
+#define TPS_POT2_Pin GPIO_PIN_1
+#define TPS_POT2_GPIO_Port GPIOA
+#define ECU_OUT_Pin GPIO_PIN_4
+#define ECU_OUT_GPIO_Port GPIOA
+#define H_IN2_Pin GPIO_PIN_7
+#define H_IN2_GPIO_Port GPIOA
+#define H_NFAULT_Pin GPIO_PIN_5
+#define H_NFAULT_GPIO_Port GPIOC
+#define H_DECAY_Pin GPIO_PIN_0
+#define H_DECAY_GPIO_Port GPIOB
+#define H_OCPM_Pin GPIO_PIN_1
+#define H_OCPM_GPIO_Port GPIOB
+#define H_MODE2_Pin GPIO_PIN_2
+#define H_MODE2_GPIO_Port GPIOB
+#define H_IPROPI_Pin GPIO_PIN_11
+#define H_IPROPI_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 #define USING_PID2			// Using PID2 library
