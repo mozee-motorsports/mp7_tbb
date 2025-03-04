@@ -414,7 +414,7 @@ int alt_main(void)
 				HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 #endif
 			}
-			else if (position_delta > 0)
+			else if (pid_out > 0)
 			{ // Set forward by writing duty cycle to PC0 and setting PA7 to ground
 #ifndef CHINESEIUM
 				// Stop PA7
