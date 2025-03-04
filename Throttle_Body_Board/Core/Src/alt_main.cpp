@@ -3,6 +3,13 @@
  *
  *  Created on: Feb 4, 2025
  *      Author: kohlmanz
+ *
+ *  Pinout:
+ *		PC0: PWM_HIGH -> pot+
+ *		PC1: HBRIDGE_EN
+ *		PA0: TPS - adc (DMA) -> pot2
+ *		PA7: PWM_LOW -> pot-
+ *
  */
 
 #include "alt_main.h"
@@ -23,12 +30,16 @@
 #include <stdint.h>
 #include <queue>
 #include <string.h>
+
+#define USING_PID2			// Using PID2 library
+#define CHINESEIUM			// Using chineseium h-bridge (L298N), uses Motor1Pin1 (PA4) -> IN1, Motor1Pin2 (PA5) -> IN2, PWM_High (PC0, TIM1 CH1) -> ENA
+
 #ifdef USING_PID2
 #include "pid2.h"
 #else
 #include "pid.h"
 #endif
-#include "fdcan_queue.h"
+
 
 #define MAX_ADC_OUTPUT 0xFFF // MAX is 4095 = 3V3
 #define MAX_DUTY_CYCLE 100.0f
@@ -368,50 +379,72 @@ int alt_main(void)
 
 			// PWM_HIGH = PC0 = TIM1_CH1
 			// PWM_LOW = PA7 = TIM3_CH2
-			if (position_delta < 0)
+			if (pid_out < 0)
 			{									   // Set to backward by stopping PC0 and writing duty cycle to PA7
 				if ((tps_buffer[0] + pid_out) < 0) // If the tps_value (in adc steps) + negative pid output is less than 0, the min value that the etc can be, then is an error
 				{
 					// Negative bounds error, set to to 0
 					pid_out = 0;
 				}
+#ifndef CHINESEIUM
 				// Stop PC0
 				HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
-
+#else
+				// Set Motor1Pin1 to ground and Motor1Pin2 to high
+				HAL_GPIO_WritePin(GPIOA, Motor1Pin1_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(GPIOA, Motor1Pin2_Pin, GPIO_PIN_SET);
+#endif
 				// Convert absolute value of pid_out to duty cycle
 				double duty_cycle = ((fabs(pid_out) / MAX_ADC_OUTPUT) * MAX_DUTY_CYCLE);
 				if (duty_cycle > 99)
 					duty_cycle = 99;
 				duty_numerical = (uint8_t)duty_cycle;
 
+#ifndef CHINESEIUM
 				// Set duty cycle for PA7
 				__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, duty_numerical);
 
 				// Enable output for PA7
 				HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
-			}
-			else if (position_delta > 0)
-			{ // Set forward by writing duty cycle to PC0 and setting PA7 to ground
+#else
+				// Set duty cycle for Motor1Pin2
+				__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty_numerical);
 
+				// Enable output for Motor1Pin2
+				HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+#endif
+			}
+			else if (pid_out > 0)
+			{ // Set forward by writing duty cycle to PC0 and setting PA7 to ground
+#ifndef CHINESEIUM
 				// Stop PA7
 				HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_2);
-
+#else
+				HAL_GPIO_WritePin(GPIOA, Motor1Pin1_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(GPIOA, Motor1Pin2_Pin, GPIO_PIN_RESET);
+#endif
 				double duty_cycle = (((double)pid_out / MAX_ADC_OUTPUT) * MAX_DUTY_CYCLE);
 				if (duty_cycle > 99)
 					duty_cycle = 99;
 				duty_numerical = (duty_cycle);
 
-				// Set duty cycle for PC0
+				// Set duty cycle for PC0 - Chineseium H-Bridge uses TIM1_CH1
 				__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty_cycle);
 
 				// Enable output for PC0
 				HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+
+
 			}
 			else
 			{ // An error has happend, turn off etc
 				HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
 				HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_2);
 				HAL_GPIO_WritePin(HBRIDGE_EN_GPIO_Port, HBRIDGE_EN_Pin, GPIO_PIN_RESET);
+#ifdef CHINESEIUM
+				HAL_GPIO_WritePin(GPIOA, Motor1Pin1_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(GPIOA, Motor1Pin2_Pin, GPIO_PIN_RESET);
+#endif
 			}
 
 			// For debugging only
