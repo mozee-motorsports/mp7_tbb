@@ -379,7 +379,7 @@ int alt_main(void)
 
 			// PWM_HIGH = PC0 = TIM1_CH1
 			// PWM_LOW = PA7 = TIM3_CH2
-			if (duty_numerical < 0)
+			if (pid_out < 0)
 			{									   // Set to backward by stopping PC0 and writing duty cycle to PA7
 				if ((tps_buffer[0] + pid_out) < 0) // If the tps_value (in adc steps) + negative pid output is less than 0, the min value that the etc can be, then is an error
 				{
