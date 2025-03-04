@@ -62,11 +62,14 @@ void Error_Handler(void);
 #define HBRIDGE_EN_GPIO_Port GPIOC
 #define TPS_IN_Pin GPIO_PIN_0
 #define TPS_IN_GPIO_Port GPIOA
+#define Motor1Pin1_Pin GPIO_PIN_4
+#define Motor1Pin1_GPIO_Port GPIOA
+#define Motor1Pin2_Pin GPIO_PIN_5
+#define Motor1Pin2_GPIO_Port GPIOA
 #define PWM_LOW_Pin GPIO_PIN_7
 #define PWM_LOW_GPIO_Port GPIOA
 
 /* USER CODE BEGIN Private defines */
-#define USING_PID2			// Using PID2 library
 
 /* USER CODE END Private defines */
 
