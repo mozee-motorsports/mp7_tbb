@@ -9778,3 +9778,1798 @@ arm-none-eabi-size  Throttle_Body_Board.elf
   52200	     96	   5120	  57416	   e048	Throttle_Body_Board.elf
 Finished building: default.size.stdout
  
+13:12:15 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  52200	     96	   5120	  57416	   e048	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+13:16:00 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  52200	     96	   5120	  57416	   e048	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+13:22:40 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:102:21: warning: unused variable 'delta' [-Wunused-variable]
+  102 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:230:1: warning: control reaches end of non-void function [-Wreturn-type]
+  230 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:75:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   75 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  52200	     96	   5120	  57416	   e048	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+13:25:41 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  52200	     96	   5120	  57416	   e048	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+15:53:17 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:102:21: warning: unused variable 'delta' [-Wunused-variable]
+  102 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:230:1: warning: control reaches end of non-void function [-Wreturn-type]
+  230 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:75:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   75 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  52200	     96	   5120	  57416	   e048	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+16:34:00 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  52200	     96	   5120	  57416	   e048	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+16:37:50 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:102:21: warning: unused variable 'delta' [-Wunused-variable]
+  102 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:230:1: warning: control reaches end of non-void function [-Wreturn-type]
+  230 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:75:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   75 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  52224	     96	   5120	  57440	   e060	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+16:38:19 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  52224	     96	   5120	  57440	   e060	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+16:41:04 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  52224	     96	   5120	  57440	   e060	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+16:48:51 **** Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+16:48:51 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:102:21: warning: unused variable 'delta' [-Wunused-variable]
+  102 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:230:1: warning: control reaches end of non-void function [-Wreturn-type]
+  230 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:75:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   75 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  52224	     96	   5120	  57440	   e060	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+16:52:11 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  52224	     96	   5120	  57440	   e060	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+16:55:44 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  52224	     96	   5120	  57440	   e060	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+16:56:13 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  52224	     96	   5120	  57440	   e060	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+16:56:55 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:102:21: warning: unused variable 'delta' [-Wunused-variable]
+  102 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:230:1: warning: control reaches end of non-void function [-Wreturn-type]
+  230 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:135:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  135 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:75:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   75 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  48936	     96	   5120	  54152	   d388	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+16:57:34 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:102:21: warning: unused variable 'delta' [-Wunused-variable]
+  102 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:230:1: warning: control reaches end of non-void function [-Wreturn-type]
+  230 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:135:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  135 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:75:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   75 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47200	     96	   5120	  52416	   ccc0	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+16:58:33 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47200	     96	   5120	  52416	   ccc0	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+16:59:30 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:102:21: warning: unused variable 'delta' [-Wunused-variable]
+  102 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'int alt_main()':
+../Core/Src/alt_main.cpp:453:29: error: 'i' was not declared in this scope
+  453 |                         if (i == 500)
+      |                             ^
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:230:1: warning: control reaches end of non-void function [-Wreturn-type]
+  230 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:135:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  135 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:75:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   75 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:54:16: warning: 'out' defined but not used [-Wunused-variable]
+   54 | static int32_t out[500]; // For debugging only
+      |                ^~~
+make: *** [Core/Src/subdir.mk:73: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+16:59:43 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:102:21: warning: unused variable 'delta' [-Wunused-variable]
+  102 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:230:1: warning: control reaches end of non-void function [-Wreturn-type]
+  230 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:135:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  135 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:75:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   75 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:54:16: warning: 'out' defined but not used [-Wunused-variable]
+   54 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47112	     96	   3112	  50320	   c490	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+18:05:46 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+18:05:49 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/adc.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/adc.d" -MT"Core/Src/adc.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/adc.o"
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+arm-none-eabi-gcc "../Core/Src/dma.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/dma.d" -MT"Core/Src/dma.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/dma.o"
+arm-none-eabi-gcc "../Core/Src/fdcan.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/fdcan.d" -MT"Core/Src/fdcan.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/fdcan.o"
+arm-none-eabi-gcc "../Core/Src/fdcan_queue.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/fdcan_queue.d" -MT"Core/Src/fdcan_queue.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/fdcan_queue.o"
+arm-none-eabi-gcc "../Core/Src/gpio.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/gpio.d" -MT"Core/Src/gpio.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/gpio.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/pid.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/pid.d" -MT"Core/Src/pid.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/pid.o"
+arm-none-eabi-gcc "../Core/Src/rtc.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/rtc.d" -MT"Core/Src/rtc.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/rtc.o"
+arm-none-eabi-gcc "../Core/Src/stm32g4xx_hal_msp.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32g4xx_hal_msp.d" -MT"Core/Src/stm32g4xx_hal_msp.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32g4xx_hal_msp.o"
+arm-none-eabi-gcc "../Core/Src/stm32g4xx_it.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/stm32g4xx_it.d" -MT"Core/Src/stm32g4xx_it.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/stm32g4xx_it.o"
+arm-none-eabi-gcc "../Core/Src/tim.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/tim.d" -MT"Core/Src/tim.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/tim.o"
+arm-none-eabi-gcc "../Core/Src/usart.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/usart.d" -MT"Core/Src/usart.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/usart.o"
+In file included from ../Core/Src/pid.c:21:
+../Core/Inc/pid.h:95: warning: ignoring '#pragma diag_suppress ' [-Wunknown-pragmas]
+   95 |         #pragma diag_suppress 177     /* Disable 'unused function' warning */
+      | 
+../Core/Src/pid.c: In function 'PID_Compute':
+../Core/Src/pid.c:77:17: warning: variable 'timeChange' set but not used [-Wunused-but-set-variable]
+   77 |         int32_t timeChange;
+      |                 ^~~~~~~~~~
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:106:21: warning: unused variable 'delta' [-Wunused-variable]
+  106 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47144	     96	   3128	  50368	   c4c0	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+18:12:06 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47144	     96	   3128	  50368	   c4c0	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+18:12:36 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47144	     96	   3128	  50368	   c4c0	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+18:16:30 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47144	     96	   3128	  50368	   c4c0	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+18:18:48 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:106:21: warning: unused variable 'delta' [-Wunused-variable]
+  106 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:235:1: error: 'f' does not name a type
+  235 | f
+      | ^
+../Core/Src/alt_main.cpp:85:14: warning: 'Error handleThrottle(CANMessage*)' declared 'static' but never defined [-Wunused-function]
+   85 | static Error handleThrottle(CANMessage *msg);
+      |              ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:85:14: warning: 'Error handleThrottle(CANMessage*)' used but never defined
+   85 | static Error handleThrottle(CANMessage *msg);
+      |              ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+make: *** [Core/Src/subdir.mk:73: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+18:18:55 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+18:18:57 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:106:21: warning: unused variable 'delta' [-Wunused-variable]
+  106 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:235:1: error: 'f' does not name a type
+  235 | f
+      | ^
+../Core/Src/alt_main.cpp:85:14: warning: 'Error handleThrottle(CANMessage*)' declared 'static' but never defined [-Wunused-function]
+   85 | static Error handleThrottle(CANMessage *msg);
+      |              ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:85:14: warning: 'Error handleThrottle(CANMessage*)' used but never defined
+   85 | static Error handleThrottle(CANMessage *msg);
+      |              ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+make: *** [Core/Src/subdir.mk:73: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+18:19:19 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+18:19:21 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:106:21: warning: unused variable 'delta' [-Wunused-variable]
+  106 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47152	     96	   3128	  50376	   c4c8	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+18:19:26 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47152	     96	   3128	  50376	   c4c8	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+18:21:17 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:106:21: warning: unused variable 'delta' [-Wunused-variable]
+  106 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47144	     96	   3128	  50368	   c4c0	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+15:43:22 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+15:43:25 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/adc.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/adc.d" -MT"Core/Src/adc.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/adc.o"
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47212	     96	   3128	  50436	   c504	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+15:02:43 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+15:02:45 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'int alt_main()':
+../Core/Src/alt_main.cpp:469:29: error: 'i' was not declared in this scope
+  469 |                         if (i == 500)
+      |                             ^
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+make: *** [Core/Src/subdir.mk:73: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+15:25:38 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+15:25:39 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'int alt_main()':
+../Core/Src/alt_main.cpp:469:29: error: 'i' was not declared in this scope
+  469 |                         if (i == 500)
+      |                             ^
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+make: *** [Core/Src/subdir.mk:73: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+15:26:51 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47228	     96	   3128	  50452	   c514	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+15:40:46 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+15:40:48 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/adc.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/adc.d" -MT"Core/Src/adc.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/adc.o"
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47252	     96	   3128	  50476	   c52c	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+15:40:56 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+15:40:57 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47252	     96	   3128	  50476	   c52c	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+15:41:27 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47252	     96	   3128	  50476	   c52c	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+16:38:12 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47252	     96	   3128	  50476	   c52c	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+16:48:36 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+16:48:38 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47368	     96	   5128	  52592	   cd70	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+16:48:47 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47368	     96	   5128	  52592	   cd70	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+16:56:14 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47368	     96	   5128	  52592	   cd70	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+16:56:58 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47368	     96	   5128	  52592	   cd70	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+16:58:15 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47252	     96	   3128	  50476	   c52c	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+16:58:29 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47252	     96	   3128	  50476	   c52c	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+16:59:46 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'int alt_main()':
+../Core/Src/alt_main.cpp:473:36: error: 'INTERVAL' was not declared in this scope; did you mean 'INTERVAL_MS'?
+  473 |                         HAL_Delay (INTERVAL);
+      |                                    ^~~~~~~~
+      |                                    INTERVAL_MS
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+make: *** [Core/Src/subdir.mk:73: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+17:00:01 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47368	     96	   5128	  52592	   cd70	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:01:11 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47368	     96	   5128	  52592	   cd70	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+17:02:02 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47368	     96	   5128	  52592	   cd70	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:03:35 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+17:03:35 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47368	     96	   5128	  52592	   cd70	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+17:03:52 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47368	     96	   5128	  52592	   cd70	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+17:05:09 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47312	     96	   5128	  52536	   cd38	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:21:36 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/adc.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/adc.d" -MT"Core/Src/adc.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/adc.o"
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47424	     96	   7168	  54688	   d5a0	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:24:13 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-gcc "../Core/Src/adc.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/adc.d" -MT"Core/Src/adc.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/adc.o"
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47424	     96	   7168	  54688	   d5a0	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:25:17 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47408	     96	   7168	  54672	   d590	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:27:30 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47408	     96	   7168	  54672	   d590	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:29:07 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47440	     96	   7176	  54712	   d5b8	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:47:08 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47440	     96	   7176	  54712	   d5b8	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+17:48:02 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47440	     96	   7176	  54712	   d5b8	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+17:48:36 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47440	     96	   7176	  54712	   d5b8	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+17:49:36 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+17:49:38 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47352	     96	   5176	  52624	   cd90	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:49:47 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47352	     96	   5176	  52624	   cd90	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+17:51:36 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47408	     96	   5176	  52680	   cdc8	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+18:04:26 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+18:04:29 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'int alt_main()':
+../Core/Src/alt_main.cpp:378:76: error: 'tps_buffer1' was not declared in this scope; did you mean 'tps_buffer'?
+  378 |                         myprintf("POT1 : %i POT2 : %i\r\n", tps_buffer[0], tps_buffer1[1]);
+      |                                                                            ^~~~~~~~~~~
+      |                                                                            tps_buffer
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+make: *** [Core/Src/subdir.mk:73: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+18:04:34 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'int alt_main()':
+../Core/Src/alt_main.cpp:378:76: error: 'tps_buffer1' was not declared in this scope; did you mean 'tps_buffer'?
+  378 |                         myprintf("POT1 : %i POT2 : %i\r\n", tps_buffer[0], tps_buffer1[1]);
+      |                                                                            ^~~~~~~~~~~
+      |                                                                            tps_buffer
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+make: *** [Core/Src/subdir.mk:73: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+18:04:51 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47276	     96	   5176	  52548	   cd44	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+18:16:05 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'int alt_main()':
+../Core/Src/alt_main.cpp:367:40: warning: unused variable 'pot1_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                        ^~~~~~~~
+../Core/Src/alt_main.cpp:367:54: warning: unused variable 'pot2_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                                      ^~~~~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47248	     96	   5160	  52504	   cd18	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+18:21:30 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'int alt_main()':
+../Core/Src/alt_main.cpp:367:40: warning: unused variable 'pot1_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                        ^~~~~~~~
+../Core/Src/alt_main.cpp:367:54: warning: unused variable 'pot2_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                                      ^~~~~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47220	     96	   5160	  52476	   ccfc	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+18:23:20 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'int alt_main()':
+../Core/Src/alt_main.cpp:367:40: warning: unused variable 'pot1_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                        ^~~~~~~~
+../Core/Src/alt_main.cpp:367:54: warning: unused variable 'pot2_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                                      ^~~~~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47220	     96	   3120	  50436	   c504	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+18:25:48 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'int alt_main()':
+../Core/Src/alt_main.cpp:367:40: warning: unused variable 'pot1_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                        ^~~~~~~~
+../Core/Src/alt_main.cpp:367:54: warning: unused variable 'pot2_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                                      ^~~~~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47228	     96	   3120	  50444	   c50c	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+18:28:25 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'int alt_main()':
+../Core/Src/alt_main.cpp:367:40: warning: unused variable 'pot1_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                        ^~~~~~~~
+../Core/Src/alt_main.cpp:367:54: warning: unused variable 'pot2_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                                      ^~~~~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47248	     96	   3120	  50464	   c520	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+18:33:10 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'int alt_main()':
+../Core/Src/alt_main.cpp:367:40: warning: unused variable 'pot1_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                        ^~~~~~~~
+../Core/Src/alt_main.cpp:367:54: warning: unused variable 'pot2_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                                      ^~~~~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47360	     96	   3120	  50576	   c590	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+19:00:48 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+19:00:50 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+arm-none-eabi-gcc "../Core/Src/gpio.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/gpio.d" -MT"Core/Src/gpio.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/gpio.o"
+arm-none-eabi-gcc "../Core/Src/main.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/main.d" -MT"Core/Src/main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/main.o"
+arm-none-eabi-gcc "../Core/Src/tim.c" -mcpu=cortex-m4 -std=gnu11 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/tim.d" -MT"Core/Src/tim.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/tim.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'int alt_main()':
+../Core/Src/alt_main.cpp:367:40: warning: unused variable 'pot1_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                        ^~~~~~~~
+../Core/Src/alt_main.cpp:367:54: warning: unused variable 'pot2_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                                      ^~~~~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47884	     96	   3200	  51180	   c7ec	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+19:01:02 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+  47884	     96	   3200	  51180	   c7ec	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+19:05:40 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'int alt_main()':
+../Core/Src/alt_main.cpp:367:40: warning: unused variable 'pot1_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                        ^~~~~~~~
+../Core/Src/alt_main.cpp:367:54: warning: unused variable 'pot2_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                                      ^~~~~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47884	     96	   3200	  51180	   c7ec	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+19:07:10 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:103:21: warning: unused variable 'delta' [-Wunused-variable]
+  103 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'int alt_main()':
+../Core/Src/alt_main.cpp:367:40: warning: unused variable 'pot1_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                        ^~~~~~~~
+../Core/Src/alt_main.cpp:367:54: warning: unused variable 'pot2_avg' [-Wunused-variable]
+  367 |                         static int32_t pot1_avg = 0, pot2_avg = 0;
+      |                                                      ^~~~~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:234:1: warning: control reaches end of non-void function [-Wreturn-type]
+  234 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:139:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  139 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:78:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+   78 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:57:16: warning: 'out' defined but not used [-Wunused-variable]
+   57 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47884	     96	   3200	  51180	   c7ec	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+12:18:07 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+12:18:09 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:169:21: warning: unused variable 'delta' [-Wunused-variable]
+  169 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:300:1: warning: control reaches end of non-void function [-Wreturn-type]
+  300 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:205:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  205 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:144:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  144 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+../Core/Src/alt_main.cpp:123:16: warning: 'out' defined but not used [-Wunused-variable]
+  123 | static int32_t out[500]; // For debugging only
+      |                ^~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47844	     96	   3192	  51132	   c7bc	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+12:18:31 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+12:18:31 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:168:21: warning: unused variable 'delta' [-Wunused-variable]
+  168 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:299:1: warning: control reaches end of non-void function [-Wreturn-type]
+  299 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:204:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  204 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:143:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  143 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47844	     96	   3192	  51132	   c7bc	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+12:32:50 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+12:32:52 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:168:21: warning: unused variable 'delta' [-Wunused-variable]
+  168 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:299:1: warning: control reaches end of non-void function [-Wreturn-type]
+  299 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:204:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  204 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:143:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  143 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47800	     96	   3192	  51088	   c790	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+12:41:40 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+12:41:41 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++14 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o" --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:168:21: warning: unused variable 'delta' [-Wunused-variable]
+  168 |                 int delta = current - last;
+      |                     ^~~~~
+../Core/Src/alt_main.cpp: In function 'Error handleError(Error)':
+../Core/Src/alt_main.cpp:299:1: warning: control reaches end of non-void function [-Wreturn-type]
+  299 | }
+      | ^
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:204:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  204 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:143:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  143 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+  47796	     96	   3192	  51084	   c78c	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 

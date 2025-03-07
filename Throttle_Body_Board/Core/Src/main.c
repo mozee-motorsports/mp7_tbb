@@ -110,8 +110,9 @@ int main(void)
   MX_TIM1_Init();
   MX_RTC_Init();
   MX_TIM2_Init();
+  MX_TIM17_Init();
   /* USER CODE BEGIN 2 */
-alt_main();
+  alt_main();
 
   /* USER CODE END 2 */
 
