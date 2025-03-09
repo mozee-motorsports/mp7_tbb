@@ -440,13 +440,13 @@ int alt_main(void)
 #else
 
 				// GPIO_Output
-//				HAL_GPIO_WritePin(GPIOA, Motor1Pin1_Pin, GPIO_PIN_RESET);
-//				HAL_GPIO_WritePin(GPIOA, Motor1Pin2_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_SET);
 #endif
 				// Convert absolute value of pid_out to duty cycle
 				double duty_cycle = ((fabs(pid_out) / MAX_ADC_OUTPUT) * MAX_DUTY_CYCLE);
-				if (duty_cycle > 99)
-					duty_cycle = 99;
+				if (duty_cycle > 100)
+					duty_cycle = 100;
 				duty_numerical = (uint8_t)duty_cycle;
 
 #ifndef CHINESEIUM
@@ -458,19 +458,19 @@ int alt_main(void)
 #else
 				// Not using ENA, so send position as PWM
 				// Set Motor1Pin2 duty cycle
-				__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, duty_numerical);
-
-				// Enable output for Motor1Pin2
-				HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-
-				// Stop Motor1Pin1
-				HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_2);
-
-//				// Set duty cycle for ENA
-//				__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty_numerical);
+//				__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, duty_numerical);
 //
-//				// Enable output for ENA
-//				HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+//				// Enable output for Motor1Pin2
+//				HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+//
+//				// Stop Motor1Pin1
+//				HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_2);
+
+				// Set duty cycle for ENA
+				__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty_numerical);
+
+				// Enable output for ENA
+				HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 #endif
 			}
 			// If positon is positive, then we are below set point and need to go forward
@@ -480,40 +480,40 @@ int alt_main(void)
 			  // Stop PWM_LOW
 				HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1);
 #else
-//				HAL_GPIO_WritePin(GPIOA, Motor1Pin1_Pin, GPIO_PIN_SET);
-//				HAL_GPIO_WritePin(GPIOA, Motor1Pin2_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_SET);
+				HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_RESET);
 #endif
 				double duty_cycle = (((double)pid_out / MAX_ADC_OUTPUT) * MAX_DUTY_CYCLE);
-				if (duty_cycle > 99)
-					duty_cycle = 99;
+				if (duty_cycle > 100)
+					duty_cycle = 100;
 				duty_numerical = (duty_cycle);
 
 				// Set duty cycle for Motor1Pin1
-				__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, duty_numerical);
-
-				// Enable output for Motor1Pin1
-				HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
-
-				// Stop Motor1Pin2
-				HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_1);
-
-//				// Set duty cycle for PWM_HIGH - Chineseium H-Bridge uses TIM1_CH1
-//				__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty_cycle);
+//				__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, duty_numerical);
 //
-//				// Enable output for PWM_HIGH
-//				HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+//				// Enable output for Motor1Pin1
+//				HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
+//
+//				// Stop Motor1Pin2
+//				HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_1);
+
+				// Set duty cycle for PWM_HIGH - Chineseium H-Bridge uses TIM1_CH1
+				__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty_cycle);
+
+				// Enable output for PWM_HIGH
+				HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 			}
 			else
 			{ // An error has happend, turn off etc
 				HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
-				HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_2);
+				HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_2);
 				HAL_GPIO_WritePin(HBRIDGE_EN_GPIO_Port, HBRIDGE_EN_Pin, GPIO_PIN_RESET);
 #ifdef CHINESEIUM
-				HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_1);
-				HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_2);
+//				HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_1);
+//				HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_2);
 
-//				HAL_GPIO_WritePin(GPIOA, Motor1Pin1_Pin, GPIO_PIN_RESET);
-//				HAL_GPIO_WritePin(GPIOA, Motor1Pin2_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_RESET);
+				HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_RESET);
 #endif
 			}
 
