@@ -40,7 +40,7 @@ namespace Pid {
       @param *output The output in Q(DAC_resolution).0 format and is determinded by the ki, kp, kd
         parameters used in the multiplications. The encoding is Offset Binary, so it can be directly fed to most DACs.
   */
-  uint32_t PID::compute(const uint32_t input) {
+  int32_t PID::compute(const uint32_t input) {
       // Calcualte P term
       // Note: the calculation is (uint32_t)setpoint - (uint32_t)(input) = (int32_t)error (using signed math)
       // This is true for offset binary values!
@@ -91,9 +91,9 @@ namespace Pid {
           );
       }
 
-      output = clamp(output, outputMin, outputMax);
-      output ^= 0x80000000;   // Convert from 2s complement to offset Binary
-      return (uint32_t)output >> this->qn;
+      return clamp(output, outputMin, outputMax) >> this->qn;
+//      output ^= 0x80000000;   // Convert from 2s complement to offset Binary
+//      return (uint32_t)output >> this->qn;
   }
 
   /** Note: ki and kd must be normalized to the sampling time

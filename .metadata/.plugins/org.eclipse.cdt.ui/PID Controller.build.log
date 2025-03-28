@@ -1,4 +1,4 @@
-12:41:40 **** Incremental Build of configuration Debug for project PID Controller ****
+20:21:30 **** Incremental Build of configuration Debug for project PID Controller ****
 make -j16 all 
 arm-none-eabi-size  PID\ Controller.elf 
    text	   data	    bss	    dec	    hex	filename
@@ -6,5 +6,5 @@ arm-none-eabi-size  PID\ Controller.elf
 Finished building: default.size.stdout
  
 
-12:41:40 Build Finished. 0 errors, 0 warnings. (took 512ms)
+20:21:31 Build Finished. 0 errors, 0 warnings. (took 642ms)
 

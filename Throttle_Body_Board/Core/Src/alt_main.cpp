@@ -98,41 +98,60 @@
 #include <queue>
 #include <string.h>
 
-#define USING_PID2 // Using PID2 library
+#define DEADBAND_DIFF 10 // if (tps_buffer[0] - set_point > Deadband_diff) { ... determine direction, else we are at set point }
+
+static void setMotor(double pid_output, int32_t position_delta);
+static void setThrottleSetpoint(double setpoint);
+
+//#define USING_PID_INT // Using PID2 library
 #define CHINESEIUM // Using chineseium h-bridge (L298N), uses Motor1Pin1 (PA4) -> IN1, Motor1Pin2 (PA5) -> IN2, PWM_High (PC0, TIM1 CH1) -> ENA
 
-#ifdef USING_PID2
+#ifdef USING_PID_INT
 #include "pid2.h"
 #else
-#include "pid.h"
+#include "PID_V1.h"
 #endif
 
 #define MAX_ADC_OUTPUT 0xFFF // MAX is 4095 = 3V3
 #define MAX_DUTY_CYCLE 100.0f
-#define TPS_DELTA_MAX 50
 #define SAMPLES_PER_CHANNEL 256
 
-static int32_t set_point = 3071; // Store set point, set in FDCAN ISR
-static volatile int32_t tps_buffer[2];	// tps_buffer[0] << 2= POT1, tps_buffer[1] << 2= POT2
 static volatile bool tps_ready = false;
-static volatile int32_t tps_delta = 0;
 static volatile bool pid_ready = false;
 static volatile bool shutdown_req = false;
+static int32_t tps_buffer[2]; // tps_buffer[0] << 2= POT1, tps_buffer[1] << 2= POT2
 
-static int32_t pid_out;	 // Velocity of ETC, not position. Should not go negative.
 
-#ifdef USING_PID2
-#define KP (int32_t)100			// Proportional gain
-#define KI (int32_t)0			// Integral gain
-#define KD (int32_t)0			// Derivative gain
-#define QN (int32_t)5			// Fixed point precision
-#define MAX_ERROR_QUEUE_SIZE 10 // Define a max queue size
+#ifdef USING_PID_INT
+static int32_t set_point = 2048;	   // Store set point, set in FDCAN ISR, 3071 = 3/4
+static int32_t pid_out;				   // Velocity of ETC, not position. Should not go negative.
+
+// Scaling factor is 2^QN = 2^12 = 4096	... So do round(DESIRED_FRAC * 4096)
+static const int32_t QN = 12;
+static const int32_t SCALING = pow(2, QN);
+static const int32_t KP = round(1 * SCALING); //round(2 * SCALING);
+static const int32_t KI = 0;// round(0.01 * SCALING);
+static const int32_t KD = 0;
+
+//#define KP (int32_t)1				   // Proportional gain
+//#define KI (int32_t)1				   // Integral gain
+//#define KD (int32_t)1				   // Derivative gain
+//#define QN (int32_t)12				   // Number of fractional bits (32 total bits = 12 fractional + 20 integer)
+#define MAX_ERROR_QUEUE_SIZE 10		   // Define a max queue size
 Pid::PID pidController = Pid::PID(set_point, KP, KI, KD, QN, Pid::feedbackPositive, Pid::proportionalToError);
 #else
-#define KP 0.0f	 // Proportional gain
-#define KI 10.0f // Integral gain
-#define KD 0.0f	 // Derivative gain
-static PID_TypeDef pid;
+#define AGR_KP 1.8f
+#define AGR_KI 0.01f
+#define AGR_KD 0.002f
+double* tps_value = reinterpret_cast<double*>(tps_buffer);
+
+#define CONS_KP 0.008f
+#define CONS_KI 0.005f
+#define CONS_KD 0.01f
+
+double set_point, pid_out;
+PID myPID(tps_value, &pid_out, &set_point, AGR_KP, AGR_KI, AGR_KD, DIRECT);
+
 #endif
 
 #define INTERVAL_MS (int32_t)10
@@ -165,7 +184,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	if (htim->Instance == TIM2)
 	{
 		current = HAL_GetTick();
-		int delta = current - last;
 		pid_ready = true;
 		last = current;
 
@@ -310,11 +328,8 @@ static Error handleThrottle(CANMessage *msg)
 	// Get position in terms of ADC levels based on percent.
 	set_point = roundf(((float)throttle_position_percentage / MAX_DUTY_CYCLE) * MAX_ADC_OUTPUT);
 
-#ifdef USING_PID2
+#ifdef USING_PID_INT
 	pidController.setSetpoint(set_point); // Set set point in PID controller
-#else
-	// Set PID structure set point from incoming data
-	PID_Set_Setpoint(&pid, &set_point);
 #endif
 
 	return ok;
@@ -349,6 +364,120 @@ static Error handleStatusReport(void)
 	return ok;
 }
 
+// PWM LOW = TIM17 CH1
+// PWM HIGH = TIM1 CH1
+/**
+ * @brief Sets motor direction and speed based on PID output, respecting physical limits.
+ * @param pid_output PID controller output (positive for forward, negative for reverse).
+ */
+static void setMotor(double pid_output, int32_t position_delta)
+{
+	// Get current throttle position from POT1
+	const double current_position = tps_buffer[0];
+
+	// Prevent driving beyond physical limits
+	if ((current_position <= 0 && pid_output < 0) || // At min, trying to close further
+		(current_position >= MAX_ADC_OUTPUT && pid_output > 0))
+	{ // At max, trying to open further
+#ifdef CHINESEIUM
+		HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_RESET); // IN1 low
+		HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_RESET); // IN2 low
+		HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);								 // ENA off
+#else
+		HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);  // PWM_HIGH off
+		HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1); // PWM_LOW off
+#endif
+		return;
+	}
+
+	// Calculate duty cycle from PID output
+	const double abs_output = fabs(pid_output);
+	const double duty_cycle = (abs_output / MAX_ADC_OUTPUT) * MAX_DUTY_CYCLE;
+	const uint8_t duty = (duty_cycle > MAX_DUTY_CYCLE) ? MAX_DUTY_CYCLE : static_cast<uint8_t>(duty_cycle);
+
+#ifdef CHINESEIUM
+	// CHINESEIUM H-bridge (L298N): Uses IN1/IN2 for direction, ENA for PWM
+	if (pid_output > DEADBAND_DIFF)
+	{ // Forward (open throttle)
+#ifndef USING_PID_INT
+		// Set tuning to aggressive
+		myPID.SetTunings(AGR_KP, AGR_KI, AGR_KD);
+#endif
+		HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_SET);	 // IN1 high
+		HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_RESET); // IN2 low
+		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty);						 // ENA PWM
+		HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+	}
+	else if (pid_output < -DEADBAND_DIFF)
+	{ // Reverse (close throttle)
+#ifndef USING_PID_INT
+		// Set tuning to aggressive
+		myPID.SetTunings(AGR_KP, AGR_KI, AGR_KD);
+#endif
+		HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_RESET); // IN1 low
+		HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_SET);	 // IN2 high
+		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty);						 // ENA PWM
+		HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+	}
+	else
+	{																			 // Within deadband, stop
+		HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_RESET); // IN1 low
+		HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_RESET); // IN2 low
+		HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);								 // ENA off
+#ifndef USING_PID_INT
+		// Near set point, so set conservative tuning
+		myPID.SetTunings(CONS_KP, CONS_KI, CONS_KD);
+#endif
+	}
+#else
+	// Non-CHINESEIUM: Uses PWM_HIGH for forward, PWM_LOW for reverse
+	if (pid_output > DEADBAND_DIFF)
+	{ // Forward (open throttle)
+#ifndef USING_PID_INT
+		// Set aggressive tuning
+		myPID.SetTunings(AGR_KP, AGR_KI, AGR_KD);
+#endif
+		HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1);			// PWM_LOW off
+		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty); // PWM_HIGH duty
+		HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+	}
+	else if (pid_output < -DEADBAND_DIFF)
+	{ // Reverse (close throttle)
+#ifndef USING_PID_INT
+		// Set aggressive tuning
+		myPID.SetTunings(AGR_KP, AGR_KI, AGR_KD);
+#endif
+		HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);			 // PWM_HIGH off
+		__HAL_TIM_SET_COMPARE(&htim17, TIM_CHANNEL_1, duty); // PWM_LOW duty
+		HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1);
+	}
+	else
+	{ // Within deadband, stop
+#ifndef USING_PID_INT
+		// Near set point, so set conservative tuning
+		myPID.SetTunings(CONS_KP, CONS_KI, CONS_KD);
+#endif
+		HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);  // PWM_HIGH off
+		HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1); // PWM_LOW off
+	}
+#endif
+	myprintf("POT1 : %i POT2 : %i PID: %i DUTY: %f, position: %i, INA %i, INB %i\r\n", tps_buffer[0], tps_buffer[1], pid_out, duty_cycle, position_delta, HAL_GPIO_ReadPin(GPIOA, Motor1Pin1_Pin), HAL_GPIO_ReadPin(GPIOA, Motor1Pin2_Pin));
+
+}
+
+void setThrottleSetpoint(double setpoint)
+{
+	if (setpoint < 0)
+		setpoint = 0;
+	else if (setpoint > MAX_ADC_OUTPUT)
+		setpoint = MAX_ADC_OUTPUT;
+#ifdef USING_PID_INT
+	pidController.setSetpoint((uint32_t)setpoint);
+#else // Uses pointer to setpoint, so setter not needed
+	set_point = setpoint;
+#endif
+}
+
 int alt_main(void)
 {
 	/* Initialization */
@@ -365,18 +494,18 @@ int alt_main(void)
 	if (fdcanFilterInit(&hfdcan1, &tx_header) != HAL_OK)
 		error_queue.push(fdcan_init_failure); // FDCAN failure
 
-#ifdef USING_PID2
-	pidController.setOutputMin(0);				// 0
-	pidController.setOutputMax(MAX_ADC_OUTPUT); // 4095
+#ifdef USING_PID_INT
+	pidController.setOutputMin(-MAX_ADC_OUTPUT);				// 0
+	pidController.setOutputMax(MAX_ADC_OUTPUT); 				// 4095
 	pidController.init(tps_buffer[0]);
-#else
-	// Init PID structure - tps buffer in terms of adc steps, and so is set_point. pid_out also in terms of adc steps
-	PID(&pid, &tps_buffer[0], &pid_out, &set_point, KP, KI, KD, _PID_P_ON_E, _PID_CD_DIRECT); // We compare the current tps value (from the throttle body) with the setpoint from CANopen
-	PID_SetMode(&pid, _PID_MODE_AUTOMATIC);
-	PID_SetSampleTime(&pid, INTERVAL_MS);
-	PID_SetOutputLimits(&pid, 0, MAX_ADC_OUTPUT);
-#endif
 	static int32_t position_delta; // How close are we to the actual setpoint?
+#else
+	myPID.SetMode(AUTOMATIC);
+	myPID.SetSampleTime(INTERVAL_MS);
+	myPID.SetOutputLimits(-(double)MAX_ADC_OUTPUT, (double)MAX_ADC_OUTPUT);
+	static double position_delta; // How close are we to the actual setpoint?
+
+#endif
 	shutdown_req = false;
 	while (shutdown_req == false)
 	{
@@ -403,7 +532,6 @@ int alt_main(void)
 			break;
 		}
 
-
 		if (shutdown_req == true) // If shutdown requested, break out of loop
 		{
 			break;
@@ -411,115 +539,112 @@ int alt_main(void)
 
 		if (pid_ready && tps_ready)
 		{
-
-
 			position_delta = set_point - tps_buffer[0];
-#ifdef USING_PID2
+#ifdef USING_PID_INT
 			pid_out = pidController.compute(tps_buffer[0]);
-			myprintf("POT1 : %i POT2 : %i PID: %i position: %i, INA %i, INB %i\r\n", tps_buffer[0], tps_buffer[1], pid_out, position_delta, HAL_GPIO_ReadPin(GPIOA, Motor1Pin1_Pin), HAL_GPIO_ReadPin(GPIOA, Motor1Pin2_Pin));
 
 #else
-			PID_Compute(&pid);
+			myPID.Compute();
+//			myprintf("POT1 : %i POT2 : %i PID: %f position: %f, INA %i, INB %i\r\n", tps_buffer[0], tps_buffer[1], pid_out, position_delta, HAL_GPIO_ReadPin(GPIOA, Motor1Pin1_Pin), HAL_GPIO_ReadPin(GPIOA, Motor1Pin2_Pin));
 #endif
-			// Duty variable for PWM output - recall it goes 0 -> 99
-			static uint8_t duty_numerical = 0;
-
-			// PWM_HIGH = PC0 = TIM1_CH1
-			// PWM_LOW = PA7 = TIM17_CH1
-			// If position is negative, then we are overshooting setpoint and need to go in reverse
-			if (position_delta < 0)
-			{
-				if ((tps_buffer[0] + pid_out) < 0) // If the tps_value (in adc steps) + negative pid output is less than 0, the min value that the etc can be, then is an error
-				{
-					// Negative bounds error, set to to 0
-					pid_out = 0;
-				} // Set to backward by stopping Motor1Pin1 and writing duty cycle to Motor1Pin2
-#ifndef CHINESEIUM
-				// Stop PWM_HIGH
-				HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
-#else
-
-				// GPIO_Output
-				HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_RESET);
-				HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_SET);
-#endif
-				// Convert absolute value of pid_out to duty cycle
-				double duty_cycle = ((fabs(pid_out) / MAX_ADC_OUTPUT) * MAX_DUTY_CYCLE);
-				if (duty_cycle > 100)
-					duty_cycle = 100;
-				duty_numerical = (uint8_t)duty_cycle;
-
-#ifndef CHINESEIUM
-				// Set duty cycle for PWM_LOW
-				__HAL_TIM_SET_COMPARE(&htim17, TIM_CHANNEL_1, duty_numerical);
-
-				// Enable output for PWM_LOW
-				HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1);
-#else
-				// Not using ENA, so send position as PWM
-				// Set Motor1Pin2 duty cycle
-//				__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, duty_numerical);
-//
-//				// Enable output for Motor1Pin2
-//				HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
-//
-//				// Stop Motor1Pin1
-//				HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_2);
-
-				// Set duty cycle for ENA
-				__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty_numerical);
-
-				// Enable output for ENA
-				HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-#endif
-			}
-			// If positon is positive, then we are below set point and need to go forward
-			else if (position_delta > 0)
-			{ // Set forward by writing duty cycle to Motor1Pin1 to High and setting Motor1Pin2 to ground
-#ifndef CHINESEIUM
-			  // Stop PWM_LOW
-				HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1);
-#else
-				HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_SET);
-				HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_RESET);
-#endif
-				double duty_cycle = (((double)pid_out / MAX_ADC_OUTPUT) * MAX_DUTY_CYCLE);
-				if (duty_cycle > 100)
-					duty_cycle = 100;
-				duty_numerical = (duty_cycle);
-
-				// Set duty cycle for Motor1Pin1
-//				__HAL_TIM_SET_COMPARE(&htim3, TIM_CHANNEL_2, duty_numerical);
-//
-//				// Enable output for Motor1Pin1
-//				HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_2);
-//
-//				// Stop Motor1Pin2
-//				HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_1);
-
-				// Set duty cycle for PWM_HIGH - Chineseium H-Bridge uses TIM1_CH1
-				__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty_cycle);
-
-				// Enable output for PWM_HIGH
-				HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-			}
-			else
-			{ // An error has happend, turn off etc
-				HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
-				HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_2);
-				HAL_GPIO_WritePin(HBRIDGE_EN_GPIO_Port, HBRIDGE_EN_Pin, GPIO_PIN_RESET);
-#ifdef CHINESEIUM
-//				HAL_TIM_PWM_Stop(&htim2, TIM_CHANNEL_1);
-//				HAL_TIM_PWM_Stop(&htim3, TIM_CHANNEL_2);
-
-				HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_RESET);
-				HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_RESET);
-#endif
-			}
-
-
-			//			HAL_Delay (INTERVAL);
+			setMotor(pid_out, position_delta);
 		}
+		//		if (pid_ready && tps_ready)
+		//		{
+		//
+		//
+		//			position_delta = set_point - tps_buffer[0];
+		// #ifdef USING_PID_INT
+		//			pid_out = pidController.compute(tps_buffer[0]);
+		//			myprintf("POT1 : %i POT2 : %i PID: %i position: %i, INA %i, INB %i\r\n", tps_buffer[0], tps_buffer[1], pid_out, position_delta, HAL_GPIO_ReadPin(GPIOA, Motor1Pin1_Pin), HAL_GPIO_ReadPin(GPIOA, Motor1Pin2_Pin));
+		//
+		// #else
+		//			myPID.Compute();
+		//			myprintf("POT1 : %f POT2 : %f PID: %f position: %f, INA %i, INB %i\r\n", tps_buffer[0], tps_buffer[1], pid_out, position_delta, HAL_GPIO_ReadPin(GPIOA, Motor1Pin1_Pin), HAL_GPIO_ReadPin(GPIOA, Motor1Pin2_Pin));
+		// #endif
+		//			// Duty variable for PWM output - recall it goes 0 -> 99
+		//			static uint8_t duty_numerical = 0;
+		//
+		//			// PWM_HIGH = PC0 = TIM1_CH1
+		//			// PWM_LOW = PA7 = TIM17_CH1
+		//			// If position is negative, then we are overshooting set point and need to go in reverse
+		//			if (position_delta < 0)
+		////			if(pid_out < 0)
+		//			{
+		//				if ((tps_buffer[0] + pid_out) < 0) // If the tps_value (in adc steps) + negative pid output is less than 0, the min value that the etc can be, then is an error
+		//				{
+		//					// Negative bounds error, set to to 0
+		//					pid_out = 0;
+		//				} // Set to backward by stopping Motor1Pin1 and writing duty cycle to Motor1Pin2
+		// #ifndef CHINESEIUM
+		//				// Set PWM_HIGH LOW
+		//				HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
+		// #else
+		//				// Instead of two PWM Signals, we only use PWM_HIGH and set direction with M1P1 and M1P2
+		//				// GPIO_Output
+		//				HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_RESET);
+		//				HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_SET);
+		// #endif
+		//				// Convert absolute value of pid_out (in terms of ADC setps 0 - 4095) to duty cycle (0 - 100%)
+		//				double duty_cycle = ((fabs(pid_out) / MAX_ADC_OUTPUT) * MAX_DUTY_CYCLE);
+		//				if (duty_cycle > MAX_DUTY_CYCLE)
+		//					duty_cycle = MAX_DUTY_CYCLE;
+		//				duty_numerical = (uint8_t)duty_cycle;
+		//
+		// #ifndef CHINESEIUM
+		//				// Recall we use PWM_LOW/HIGH -> In rev, PWM_LOW is duty cycle and PWM_HIGH is LOW
+		//
+		//				// Set duty cycle for PWM_LOW
+		//				__HAL_TIM_SET_COMPARE(&htim17, TIM_CHANNEL_1, duty_numerical);
+		//
+		//				// Enable output for PWM_LOW
+		//				HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1);
+		// #else
+		//				// Chinesium hbridge uses direction bits and only 1 PWM signal (PWM_HIGH)
+		//				// PWM_HIGH should be duty cycle
+		//
+		//				// Set duty cycle for ENA
+		//				__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty_numerical);
+		//
+		//				// Enable output for ENA
+		//				HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+		// #endif
+		//			}
+		//			// If positon is positive, then we are below set point and need to go forward
+		//			else if (position_delta > 0)
+		//			{ // Set forward by writing duty cycle to Motor1Pin1 to High and setting Motor1Pin2 to ground
+		// #ifndef CHINESEIUM
+		//			  // In forward -> PWM_LOW = 0, PWM_HIGH = duty cycle
+		//				HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1);
+		// #else
+		//				// In forward, M1P1 = High, M1P2 = low
+		//				HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_SET);
+		//				HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_RESET);
+		// #endif
+		//				double duty_cycle = (((double)pid_out / MAX_ADC_OUTPUT) * MAX_DUTY_CYCLE);
+		//				if (duty_cycle > MAX_DUTY_CYCLE)
+		//					duty_cycle = MAX_DUTY_CYCLE;
+		//				duty_numerical = (duty_cycle);
+		//
+		//				// Set duty cycle for PWM_HIGH - Chineseium H-Bridge uses TIM1_CH1
+		//				// BOTH CHINESIUM AND REGULAR HBRIDGE ONLY USE THIS PWM IN FORWARD
+		//				__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty_cycle);
+		//
+		//				// Enable output for PWM_HIGH
+		//				HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+		//			}
+		//			else
+		//			{ 	// We are effectively at the setpoint
+		//				HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);
+		//				HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_2);
+		//				HAL_GPIO_WritePin(HBRIDGE_EN_GPIO_Port, HBRIDGE_EN_Pin, GPIO_PIN_RESET);
+		//				HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_RESET);
+		//				HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_RESET);
+		//			}
+		//
+		//
+		//			//			HAL_Delay (INTERVAL);
+		//		}
 	}
 	my_shutdown(); // Shutdown system
 	exit(0);	   // Exit program

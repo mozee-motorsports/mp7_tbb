@@ -113,7 +113,7 @@ namespace Pid {
           PID(const uint32_t setpoint, const int32_t kp, const int32_t ki, const int32_t kd, const uint8_t qn, const FeedbackDirection feedbackDirection);
           PID(const uint32_t setpoint, const int32_t kp, const int32_t ki, const int32_t kd, const uint8_t qn);
 
-          uint32_t compute(const uint32_t input);
+          int32_t compute(const uint32_t input);
 
           void setTunings(const int32_t kp, const int32_t ki, const int32_t kd);
           void setTunings(const int32_t kp, const int32_t ki, const int32_t kd, const ProportionalGain proportionalGain);
