@@ -7,7 +7,7 @@
 
 
 #include "PID_V1.h"
-#define MAX_ADC	0xFFF
+#define MAX_ADC		(double)(0xFFF)
 
 /*Constructor (...)*********************************************************
  *    The parameters specified here are those for for which we can't set up
@@ -21,7 +21,7 @@ PID::PID(double* Input, double* Output, double* Setpoint,
     mySetpoint = Setpoint;
     inAuto = false;
 
-    PID::SetOutputLimits(0.0f, (double)MAX_ADC);				//default output limit corresponds to
+    PID::SetOutputLimits(-MAX_ADC, MAX_ADC);				//default output limit corresponds to
 																//the arduino pwm limits
 
     SampleTime = 100;											//default Controller Sample Time is 100ms
