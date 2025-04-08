@@ -2295,3 +2295,1466 @@ Finished building: default.size.stdout
  
 Finished building: Throttle_Body_Board.list
  
+17:10:19 **** Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:163:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  163 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:469:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  469 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:226:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  226 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:176:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  176 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:134:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  134 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106420	   1744	   3808	 111972	  1b564	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:10:52 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:472:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  472 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106404	   1744	   3808	 111956	  1b554	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:12:51 **** Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+17:12:52 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:472:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  472 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106404	   1744	   3808	 111956	  1b554	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:12:57 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+ 106404	   1744	   3808	 111956	  1b554	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+17:14:28 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+17:14:28 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:472:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  472 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106404	   1744	   3808	 111956	  1b554	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:14:41 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+ 106404	   1744	   3808	 111956	  1b554	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+17:15:24 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:472:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  472 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106420	   1744	   3808	 111972	  1b564	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:23:15 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+17:23:15 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: In function 'void adaptPIDTuning()':
+../Core/Src/alt_main.cpp:99:16: error: unable to find numeric literal operator 'operator""f'
+   99 | #define MED_KP 1f
+      |                ^~
+../Core/Src/alt_main.cpp:193:32: note: in expansion of macro 'MED_KP'
+  193 |         throttlePID.SetTunings(MED_KP, MED_KI, MED_KD);
+      |                                ^~~~~~
+../Core/Src/alt_main.cpp:100:16: error: unable to find numeric literal operator 'operator""f'
+  100 | #define MED_KI 0f
+      |                ^~
+../Core/Src/alt_main.cpp:193:40: note: in expansion of macro 'MED_KI'
+  193 |         throttlePID.SetTunings(MED_KP, MED_KI, MED_KD);
+      |                                        ^~~~~~
+../Core/Src/alt_main.cpp:101:16: error: unable to find numeric literal operator 'operator""f'
+  101 | #define MED_KD 0f
+      |                ^~
+../Core/Src/alt_main.cpp:193:48: note: in expansion of macro 'MED_KD'
+  193 |         throttlePID.SetTunings(MED_KP, MED_KI, MED_KD);
+      |                                                ^~~~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:472:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  472 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+make: *** [Core/Src/subdir.mk:74: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+17:23:28 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+17:23:29 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:472:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  472 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106420	   1744	   3808	 111972	  1b564	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:23:33 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+ 106420	   1744	   3808	 111972	  1b564	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+17:29:23 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106412	   1744	   3808	 111964	  1b55c	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:30:52 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106356	   1744	   3808	 111908	  1b524	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:32:25 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106356	   1744	   3808	 111908	  1b524	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:32:58 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106356	   1744	   3808	 111908	  1b524	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:33:59 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106356	   1744	   3808	 111908	  1b524	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:36:34 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106356	   1744	   3808	 111908	  1b524	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:37:58 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106356	   1744	   3808	 111908	  1b524	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:41:16 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+17:41:17 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/PID_V1.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/PID_V1.d" -MT"Core/Src/PID_V1.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/PID_V1.o"
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106356	   1744	   3808	 111908	  1b524	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:43:17 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106356	   1744	   3808	 111908	  1b524	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:44:21 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106356	   1744	   3808	 111908	  1b524	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:44:59 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106348	   1744	   3808	 111900	  1b51c	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:48:42 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp:95:16: error: unable to find numeric literal operator 'operator""f'
+   95 | #define AGR_KI 0f
+      |                ^~
+../Core/Src/alt_main.cpp:113:12: note: in expansion of macro 'AGR_KI'
+  113 | #define KI AGR_KI
+      |            ^~~~~~
+../Core/Src/alt_main.cpp:130:49: note: in expansion of macro 'KI'
+  130 | PID throttlePID(&pot1_d, &pid_out, set_ptr, KP, KI, KD, DIRECT);
+      |                                                 ^~
+../Core/Src/alt_main.cpp:96:16: error: unable to find numeric literal operator 'operator""f'
+   96 | #define AGR_KD 0f
+      |                ^~
+../Core/Src/alt_main.cpp:114:12: note: in expansion of macro 'AGR_KD'
+  114 | #define KD AGR_KD
+      |            ^~~~~~
+../Core/Src/alt_main.cpp:130:53: note: in expansion of macro 'KD'
+  130 | PID throttlePID(&pot1_d, &pid_out, set_ptr, KP, KI, KD, DIRECT);
+      |                                                     ^~
+../Core/Src/alt_main.cpp: In function 'void adaptPIDTuning()':
+../Core/Src/alt_main.cpp:95:16: error: unable to find numeric literal operator 'operator""f'
+   95 | #define AGR_KI 0f
+      |                ^~
+../Core/Src/alt_main.cpp:188:40: note: in expansion of macro 'AGR_KI'
+  188 |         throttlePID.SetTunings(AGR_KP, AGR_KI, AGR_KD);
+      |                                        ^~~~~~
+../Core/Src/alt_main.cpp:96:16: error: unable to find numeric literal operator 'operator""f'
+   96 | #define AGR_KD 0f
+      |                ^~
+../Core/Src/alt_main.cpp:188:48: note: in expansion of macro 'AGR_KD'
+  188 |         throttlePID.SetTunings(AGR_KP, AGR_KI, AGR_KD);
+      |                                                ^~~~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+make: *** [Core/Src/subdir.mk:74: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+17:48:51 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+17:48:51 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106348	   1744	   3808	 111900	  1b51c	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:48:57 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+ 106348	   1744	   3808	 111900	  1b51c	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+17:50:07 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106356	   1744	   3808	 111908	  1b524	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:50:58 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106356	   1744	   3808	 111908	  1b524	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:51:41 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106356	   1744	   3808	 111908	  1b524	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:52:48 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106348	   1744	   3808	 111900	  1b51c	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:53:42 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106356	   1744	   3808	 111908	  1b524	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+17:54:54 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:166:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  166 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:467:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  467 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:229:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  229 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:179:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  179 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106356	   1744	   3808	 111908	  1b524	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+18:05:17 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp:91:29: error: 'getSetpointSteps' was not declared in this scope
+   91 | static uint16_t set_point = getSetpointSteps(50);               // Comes from CAN as a percentage as converted to ADC steps. In terms of ADC steps -> 0 - 4095
+      |                             ^~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp: In function 'double getSetpointSteps(uint8_t)':
+../Core/Src/alt_main.cpp:331:51: error: 'throttle_position_percentage' was not declared in this scope; did you mean 'throttle_percentage'?
+  331 |         return static_cast<double>(roundf(((float)throttle_position_percentage / MAX_DUTY_CYCLE) * OPEN_ADC_STEPS));
+      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                   throttle_percentage
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:472:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  472 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:231:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  231 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:181:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  181 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:138:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  138 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+make: *** [Core/Src/subdir.mk:74: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+18:05:55 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+18:05:55 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp:92:1: error: 'set_point_d' does not name a type
+   92 | set_point_d = getSetpointSteps(50);// Comes from CAN as a percentage as converted to ADC steps. In terms of ADC steps -> 0 - 4095
+      | ^~~~~~~~~~~
+../Core/Src/alt_main.cpp: In function 'double getSetpointSteps(uint8_t)':
+../Core/Src/alt_main.cpp:332:51: error: 'throttle_position_percentage' was not declared in this scope; did you mean 'throttle_percentage'?
+  332 |         return static_cast<double>(roundf(((float)throttle_position_percentage / MAX_DUTY_CYCLE) * OPEN_ADC_STEPS));
+      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                   throttle_percentage
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:473:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  473 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:232:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  232 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:182:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  182 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:139:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  139 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+make: *** [Core/Src/subdir.mk:74: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+18:06:28 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+18:06:29 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp:92:1: error: 'set_point' does not name a type
+   92 | set_point= getSetpointSteps (50);
+      | ^~~~~~~~~
+../Core/Src/alt_main.cpp: In function 'double getSetpointSteps(uint8_t)':
+../Core/Src/alt_main.cpp:331:51: error: 'throttle_position_percentage' was not declared in this scope; did you mean 'throttle_percentage'?
+  331 |         return static_cast<double>(roundf(((float)throttle_position_percentage / MAX_DUTY_CYCLE) * OPEN_ADC_STEPS));
+      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                   throttle_percentage
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:472:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  472 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:231:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  231 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:181:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  181 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:138:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  138 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+make: *** [Core/Src/subdir.mk:74: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+18:06:32 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+18:06:32 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp:92:1: error: 'set_point' does not name a type
+   92 | set_point= getSetpointSteps(50);
+      | ^~~~~~~~~
+../Core/Src/alt_main.cpp: In function 'double getSetpointSteps(uint8_t)':
+../Core/Src/alt_main.cpp:331:51: error: 'throttle_position_percentage' was not declared in this scope; did you mean 'throttle_percentage'?
+  331 |         return static_cast<double>(roundf(((float)throttle_position_percentage / MAX_DUTY_CYCLE) * OPEN_ADC_STEPS));
+      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                   throttle_percentage
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:472:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  472 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:231:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  231 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:181:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  181 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:138:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  138 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+make: *** [Core/Src/subdir.mk:74: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+18:07:04 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+18:07:05 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp:121:1: error: 'set_point_d' does not name a type
+  121 | set_point_d = getSetpointSteps(50);
+      | ^~~~~~~~~~~
+../Core/Src/alt_main.cpp: In function 'double getSetpointSteps(uint8_t)':
+../Core/Src/alt_main.cpp:330:51: error: 'throttle_position_percentage' was not declared in this scope; did you mean 'throttle_percentage'?
+  330 |         return static_cast<double>(roundf(((float)throttle_position_percentage / MAX_DUTY_CYCLE) * OPEN_ADC_STEPS));
+      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                   throttle_percentage
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:471:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  471 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:230:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  230 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:180:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  180 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+make: *** [Core/Src/subdir.mk:74: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+18:07:19 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+18:07:19 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp:156:1: error: 'set_point_d' does not name a type
+  156 | set_point_d = getSetpointSteps(50);
+      | ^~~~~~~~~~~
+../Core/Src/alt_main.cpp: In function 'double getSetpointSteps(uint8_t)':
+../Core/Src/alt_main.cpp:331:51: error: 'throttle_position_percentage' was not declared in this scope; did you mean 'throttle_percentage'?
+  331 |         return static_cast<double>(roundf(((float)throttle_position_percentage / MAX_DUTY_CYCLE) * OPEN_ADC_STEPS));
+      |                                                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+      |                                                   throttle_percentage
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:472:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  472 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:231:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  231 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:181:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  181 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:136:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  136 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+make: *** [Core/Src/subdir.mk:74: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+18:07:55 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+18:07:56 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp:156:1: error: 'set_point_d' does not name a type
+  156 | set_point_d = getSetpointSteps(50);
+      | ^~~~~~~~~~~
+../Core/Src/alt_main.cpp:473:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  473 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:231:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  231 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:181:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  181 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:136:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  136 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+make: *** [Core/Src/subdir.mk:74: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+18:08:30 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+18:08:31 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp:156:1: error: 'set_point_d' does not name a type
+  156 | set_point_d = getSetpointSteps(50);
+      | ^~~~~~~~~~~
+../Core/Src/alt_main.cpp:473:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  473 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:231:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  231 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:181:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  181 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:136:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  136 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+make: *** [Core/Src/subdir.mk:74: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+18:09:01 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+18:09:02 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:167:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  167 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:472:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  472 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:230:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  230 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:180:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  180 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:136:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  136 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106532	   1744	   3808	 112084	  1b5d4	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+18:09:09 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+   text	   data	    bss	    dec	    hex	filename
+ 106532	   1744	   3808	 112084	  1b5d4	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+18:10:58 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:167:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  167 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:472:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  472 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:230:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  230 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:180:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  180 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:136:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  136 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106532	   1744	   3808	 112084	  1b5d4	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+18:11:42 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:167:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  167 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:472:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  472 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:230:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  230 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:180:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  180 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:136:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  136 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106532	   1744	   3808	 112084	  1b5d4	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+18:12:21 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:167:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  167 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:472:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  472 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:230:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  230 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:180:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  180 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:136:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  136 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106532	   1744	   3808	 112084	  1b5d4	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+18:17:29 **** Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+18:17:31 **** Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:167:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  167 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: In function 'void adaptPIDTuning()':
+../Core/Src/alt_main.cpp:189:32: error: 'AGR_KP' was not declared in this scope
+  189 |         throttlePID.SetTunings(AGR_KP, AGR_KI, AGR_KD);
+      |                                ^~~~~~
+../Core/Src/alt_main.cpp:189:40: error: 'AGR_KI' was not declared in this scope
+  189 |         throttlePID.SetTunings(AGR_KP, AGR_KI, AGR_KD);
+      |                                        ^~~~~~
+../Core/Src/alt_main.cpp:189:48: error: 'AGR_KD' was not declared in this scope
+  189 |         throttlePID.SetTunings(AGR_KP, AGR_KI, AGR_KD);
+      |                                                ^~~~~~
+../Core/Src/alt_main.cpp:194:32: error: 'MED_KP' was not declared in this scope
+  194 |         throttlePID.SetTunings(MED_KP, MED_KI, MED_KD);
+      |                                ^~~~~~
+../Core/Src/alt_main.cpp:194:40: error: 'MED_KI' was not declared in this scope
+  194 |         throttlePID.SetTunings(MED_KP, MED_KI, MED_KD);
+      |                                        ^~~~~~
+../Core/Src/alt_main.cpp:194:48: error: 'MED_KD' was not declared in this scope
+  194 |         throttlePID.SetTunings(MED_KP, MED_KI, MED_KD);
+      |                                                ^~~~~~
+../Core/Src/alt_main.cpp:199:32: error: 'CONS_KP' was not declared in this scope
+  199 |         throttlePID.SetTunings(CONS_KP, CONS_KI, CONS_KD);
+      |                                ^~~~~~~
+../Core/Src/alt_main.cpp:199:41: error: 'CONS_KI' was not declared in this scope
+  199 |         throttlePID.SetTunings(CONS_KP, CONS_KI, CONS_KD);
+      |                                         ^~~~~~~
+../Core/Src/alt_main.cpp:199:50: error: 'CONS_KD' was not declared in this scope
+  199 |         throttlePID.SetTunings(CONS_KP, CONS_KI, CONS_KD);
+      |                                                  ^~~~~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:470:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  470 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:230:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  230 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:180:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  180 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:136:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  136 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+make: *** [Core/Src/subdir.mk:74: Core/Src/alt_main.o] Error 1
+"make -j16 all" terminated with exit code 2. Build might be incomplete.
+18:17:47 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+18:17:49 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:167:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  167 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:470:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  470 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:230:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  230 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:180:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  180 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:136:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  136 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106532	   1744	   3808	 112084	  1b5d4	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 
+18:18:35 **** Incremental Build of configuration Debug for project PID Controller ****
+make -j16 all 
+arm-none-eabi-size  PID\ Controller.elf 
+   text	   data	    bss	    dec	    hex	filename
+  37076	    116	   3312	  40504	   9e38	PID Controller.elf
+Finished building: default.size.stdout
+ 
+18:18:37 **** Incremental Build of configuration Debug for project Throttle_Body_Board ****
+make -j16 all 
+arm-none-eabi-g++ "../Core/Src/alt_main.cpp" -mcpu=cortex-m4 -std=gnu++20 -g3 -DDEBUG -DUSE_HAL_DRIVER -DSTM32G491xx -c -I"C:/Users/kohlmanz/fh_dev/mp6_tbb/Throttle_Body_Board/Core/Inc" -I../Core/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc -I../Drivers/STM32G4xx_HAL_Driver/Inc/Legacy -I../Drivers/CMSIS/Device/ST/STM32G4xx/Include -I../Drivers/CMSIS/Include -O0 -ffunction-sections -fdata-sections -fno-exceptions -fno-rtti -fno-use-cxa-atexit -Wall -fstack-usage -fcyclomatic-complexity -MMD -MP -MF"Core/Src/alt_main.d" -MT"Core/Src/alt_main.o"  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -o "Core/Src/alt_main.o"
+../Core/Src/alt_main.cpp: In function 'void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*)':
+../Core/Src/alt_main.cpp:168:20: warning: variable 'last' set but not used [-Wunused-but-set-variable]
+  168 |         static int last, current;
+      |                    ^~~~
+../Core/Src/alt_main.cpp: At global scope:
+../Core/Src/alt_main.cpp:471:6: warning: 'void setThrottleSetpoint(double)' defined but not used [-Wunused-function]
+  471 | void setThrottleSetpoint(double setpoint)
+      |      ^~~~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:231:14: warning: 'Error processCANMessage(CANMessage*, Command)' defined but not used [-Wunused-function]
+  231 | static Error processCANMessage(CANMessage *msg, Command command)
+      |              ^~~~~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:181:13: warning: 'void adaptPIDTuning()' defined but not used [-Wunused-function]
+  181 | static void adaptPIDTuning(void)
+      |             ^~~~~~~~~~~~~~
+../Core/Src/alt_main.cpp:137:16: warning: 'tx_data' defined but not used [-Wunused-variable]
+  137 | static uint8_t tx_data[8];
+      |                ^~~~~~~
+arm-none-eabi-g++ -o "Throttle_Body_Board.elf" @"objects.list"   -mcpu=cortex-m4 -T"C:\Users\kohlmanz\fh_dev\mp6_tbb\Throttle_Body_Board\STM32G491RETX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Throttle_Body_Board.map" -Wl,--gc-sections -static  -mfpu=fpv4-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -lstdc++ -lsupc++ -Wl,--end-group
+C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/bin/ld.exe: C:/ST/STM32CubeIDE_1.16.1/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.externaltools.gnu-tools-for-stm32.12.3.rel1.win32_1.1.0.202410251130/tools/bin/../lib/gcc/arm-none-eabi/12.3.1/../../../../arm-none-eabi/lib/thumb/v7e-m+fp/hard\libc.a(libc_a-getentropyr.o): in function `_getentropy_r':
+(.text._getentropy_r+0xe): warning: _getentropy is not implemented and will always fail
+Finished building target: Throttle_Body_Board.elf
+ 
+arm-none-eabi-size  Throttle_Body_Board.elf 
+arm-none-eabi-objdump -h -S Throttle_Body_Board.elf  > "Throttle_Body_Board.list"
+   text	   data	    bss	    dec	    hex	filename
+ 106532	   1744	   3808	 112084	  1b5d4	Throttle_Body_Board.elf
+Finished building: default.size.stdout
+ 
+Finished building: Throttle_Body_Board.list
+ 

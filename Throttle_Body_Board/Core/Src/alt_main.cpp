@@ -72,7 +72,8 @@
 #include <string.h>
 #include "pid_controller.h"
 #include "PID_V1.h"
-#define DEADBAND_DIFF 10 // if (tps_buffer[0] - set_point > Deadband_diff) { ... determine direction, else we are at set point }
+
+#define OPEN_ADC_STEPS 3600		// Measured ADC steps for fully open - pots may measure farther
 
 #define CHINESEIUM // Using chineseium h-bridge (L298N), uses Motor1Pin1 (PA4) -> IN1, Motor1Pin2 (PA5) -> IN2, PWM_High (PC0, TIM1 CH1) -> ENA
 #define CUSTOM_PID
@@ -87,35 +88,37 @@ static volatile bool pid_ready = false;
 static volatile bool shutdown_req = false;
 
 static uint32_t tps_buffer[2];
-static uint16_t set_point = 2048;		// Comes from CAN as a percentage as converted to ADC steps. In terms of ADC steps -> 0 - 4095
-
+static uint16_t set_point = 2867;
 /* Adaptive tuning parameters */
+
 // Aggressive tuning parameters for large error
-#define AGR_KP 1.8f
+#define AGR_KP 0.09f
 #define AGR_KI 0.01f
-#define AGR_KD 0.002f
+#define AGR_KD 0.001f
+
+// Non-adaptive tuning parameters
+//#define KP 0
+//#define KI 0
+//#define KD 0
+#define KP AGR_KP
+#define KI AGR_KI
+#define KD AGR_KD
 
 // Medium tuning parameters for medium errors
-#define MED_KP 0.9f
-#define MED_KI 0.008f
-#define MED_KD 0.001f
+#define MED_KP 1.0f
+#define MED_KI 0.0f
+#define MED_KD 0.0f
 
 // Conservative tuning parameters for small errors
 #define CONS_KP 0.008f
 #define CONS_KI 0.005f
 #define CONS_KD 0.01f
 
-// Non-adaptive tuning parameters
-#define KP AGR_KP
-#define KI AGR_KI
-#define KD AGR_KD
-
 // Output from PID controller
 static double pid_out;
 
 // Double representation of set point- recall that it's in terms of ADC steps, but library requires double type
 static double set_point_d = set_point;
-
 // Pointer to double representation of set point
 static double* set_ptr = &set_point_d;
 
@@ -149,6 +152,8 @@ static Error handleStatusReport(void);
 static Error processCANMessage(CANMessage *msg, Command command);
 static void my_shutdown(void);
 static void myprintf(const char *fmt, ...);
+static double getSetpointSteps(uint8_t percentage);
+
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
@@ -321,6 +326,10 @@ static Error handleError(Error code)
 	return ok;
 }
 
+static double getSetpointSteps(uint8_t percentage)
+{
+	return static_cast<double>(roundf(((float)percentage / MAX_DUTY_CYCLE) * OPEN_ADC_STEPS));
+}
 /**
  * Gets the throttle position percentage from the current message in the queue, calculates the set point,
  * and sets it.
@@ -331,9 +340,7 @@ static Error handleThrottle(CANMessage *msg)
 	uint8_t throttle_position_percentage = msg->data[0];
 
 	// Get position in terms of ADC levels based on percent.
-	set_point = roundf(((float)throttle_position_percentage / MAX_DUTY_CYCLE) * MAX_ADC_OUTPUT);
-	set_point_d = static_cast<double>(set_point);
-
+	set_point_d = getSetpointSteps(throttle_position_percentage);
 	return ok;
 }
 
@@ -385,8 +392,8 @@ static void stopMotor(void)
  * @param pid_output PID controller output (positive for forward, negative for reverse).
  */
 // In terms of ADC POT1 steps
-#define MAX_PHYSICAL_LIMIT 3875
-#define MIN_PHYSCIAL_LIMIT 636
+#define MAX_PHYSICAL_LIMIT 3890
+#define MIN_PHYSCIAL_LIMIT 640
 static void controlMotor(double control_signal, int32_t position_delta)
 {
 
@@ -400,11 +407,11 @@ static void controlMotor(double control_signal, int32_t position_delta)
 
 	// Without a deadband, small errors (e.g., ±10 ADC steps)
 	// could keep the motor oscillating or running at low PWM, causing jitter and wear.
-	if (abs(position_delta) <= DEADBAND_DIFF)
-	{
-	    stopMotor();
-	    return;
-	}
+//	if (abs(position_delta) <= DEADBAND_DIFF)
+//	{
+//	    stopMotor();
+//	    return;
+//	}
 
 	// Calculate duty cycle from PID output
 	const double duty_cycle = fabs(control_signal);
@@ -428,10 +435,8 @@ static void controlMotor(double control_signal, int32_t position_delta)
 		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty);						 // ENA PWM
 		HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
 	}
-	else
-	{																			 // Within deadband, stop
-		stopMotor();
-	}
+
+
 #else
 	// Non-CHINESEIUM: Uses PWM_HIGH for forward, PWM_LOW for reverse
 	if (control_signal > 0) // Control signal = pid output = -100 -> 100 to be mapped to PWM
@@ -446,20 +451,17 @@ static void controlMotor(double control_signal, int32_t position_delta)
 		__HAL_TIM_SET_COMPARE(&htim17, TIM_CHANNEL_1, duty); // PWM_LOW duty
 		HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1);
 	}
-	else
-	{ // Within deadband, stop
-		stopMotor();
-	}
+
 #endif
 	GPIO_PinState ina = HAL_GPIO_ReadPin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin);
 	GPIO_PinState inb = HAL_GPIO_ReadPin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin);
 
-	myprintf("POT1 : %f POT2 : %f PID: %f DUTY: %i, set point: %i, delta: %i, INA %i, INB %i\r\n",
+	myprintf("POT1 : %f POT2 : %f PID: %f DUTY: %i, set point: %f, delta: %i, INA %i, INB %i\r\n",
 			pot1_d,
 			pot2_d,
 			control_signal,
 			duty,
-			set_point,
+			set_point_d,
 			position_delta,
 			(int)ina,
 			(int)inb);
@@ -479,6 +481,8 @@ void setThrottleSetpoint(double setpoint)
 
 int alt_main(void)
 {
+	set_point_d = getSetpointSteps(75);
+
 	/* Initialization */
 	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
 
@@ -515,7 +519,7 @@ int alt_main(void)
 
 		if (pid_ready && tps_ready)
 		{
-			position_delta = set_point - tps_buffer[0];
+			position_delta = set_point_d - pot1_d;
 //			pid_out = throttlePID.calculate(tps_buffer[0], HAL_GetTick());
 			throttlePID.Compute();
 
