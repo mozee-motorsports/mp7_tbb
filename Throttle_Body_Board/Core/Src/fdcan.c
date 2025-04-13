@@ -204,6 +204,10 @@ HAL_StatusTypeDef fdcanFilterInit(FDCAN_HandleTypeDef* hfdcan, FDCAN_TxHeaderTyp
 	if (HAL_FDCAN_ConfigFilter(hfdcan, &fdcan_filter_config) != HAL_OK)
 	  return HAL_ERROR; // Filter configuration Error
 
+	// Explicitly reject non-matching messages
+	if (HAL_FDCAN_ConfigGlobalFilter(hfdcan, FDCAN_REJECT, FDCAN_REJECT, FDCAN_REJECT_REMOTE, FDCAN_REJECT_REMOTE) != HAL_OK)
+	  return HAL_ERROR;
+
 	// Configure TX Header for FDCAN1
 //	txHeader.Identifier = SW_MODULE;									// Recall header format - changed dynamically
 	txHeader->IdType = FDCAN_STANDARD_ID;								// Using standard IDs, not extended IDs

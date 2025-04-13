@@ -6,6 +6,7 @@
 		<item key="isRegEx" value="false"/>
 		<item key="selection" value="getSetpointSteps"/>
 		<list key="findhistory">
+			<item value="caninit"/>
 			<item value="getSetpointSteps"/>
 			<item value="myprintf"/>
 			<item value="set_p"/>
@@ -13,7 +14,6 @@
 			<item value="SetTunings"/>
 			<item value="position_delta"/>
 			<item value="detla"/>
-			<item value="DEADBAND"/>
 		</list>
 		<list key="replacehistory">
 			<item value="throttlePID"/>
