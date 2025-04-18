@@ -95,10 +95,10 @@ static volatile bool shutdown_req = false;
 static uint32_t tps_buffer[2];
 
 
-static uint32_t trim_buffer[12];
+static uint32_t trim_buffer[2];
 static bool trim_sample_fresh = false;
-static double trim_pot1 = static_cast<double>(trim_buffer[8-1]);
-static double trim_pot2 = static_cast<double>(trim_buffer[9-1]);
+static uint32_t trim_pot1 = trim_buffer[0];
+static uint32_t trim_pot2 = trim_buffer[1];
 
 static uint16_t set_point = 50;	// Percentage
 /* Adaptive tuning parameters */
@@ -275,14 +275,15 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
 	// Cast adc to double to used as PID parameters
 	if (hadc->Instance == ADC1) {
-		pot1_d = static_cast<double>(tps_buffer[0]);
-		pot2_d = static_cast<double>(tps_buffer[1]);
+		pot1_d = tps_buffer[0];
+		pot2_d = tps_buffer[1];
 	}
 
 	if (hadc->Instance == ADC2) {
-		trim_pot1 = static_cast<double>(trim_buffer[0]);
-		trim_pot2 = static_cast<double>(trim_buffer[1]);
-		trim_sample_fresh = true;
+		trim_pot1 = trim_buffer[0];
+		trim_pot2 = trim_buffer[1];
+		//trim_sample_fresh = true;
+		myprintf("trim1: %d trim2: %d\n", trim_pot1, trim_pot2);
 	}
 
 }
@@ -608,7 +609,7 @@ int alt_main(void)
 		error_queue.push(adc_failure); // ADC failure
 
 	HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
-	if (HAL_ADC_Start_DMA(&hadc2, reinterpret_cast<uint32_t*>(trim_buffer), 12) != HAL_OK)
+	if (HAL_ADC_Start_DMA(&hadc2, reinterpret_cast<uint32_t*>(trim_buffer), 2) != HAL_OK)
 			error_queue.push(adc_failure); // ADC failure
 
 	// Init canfd instance
@@ -628,11 +629,6 @@ int alt_main(void)
 
 	while (1)
 	{		/* Super loop */
-
-		if(trim_sample_fresh) {
-			myprintf("trim1: %lf trim2: %lf", trim_pot1, trim_pot2);
-			trim_sample_fresh = false;
-		}
 		// Process CAN messages in the queue
 		if (!fdcan_queue.empty())
 		{
