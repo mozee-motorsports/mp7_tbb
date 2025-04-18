@@ -25,6 +25,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "dac.h"
 #include "dma.h"
 #include "fdcan.h"
 #include "usart.h"
@@ -111,7 +112,7 @@ int main(void)
   MX_RTC_Init();
   MX_TIM2_Init();
   MX_TIM17_Init();
-  MX_ADC2_Init();
+  MX_DAC1_Init();
   /* USER CODE BEGIN 2 */
   alt_main();
 

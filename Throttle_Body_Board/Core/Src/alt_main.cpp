@@ -61,6 +61,7 @@
 #include "tim.h"
 #include "gpio.h"
 #include "main.h"
+#include "dac.h"
 
 #include <math.h>
 #include <stdlib.h>
@@ -75,7 +76,7 @@ using namespace std;
 
 #define OPEN_ADC_STEPS 3600		// Measured ADC steps for fully open - pots may measure farther
 
-#define CHINESEIUM // Using chineseium h-bridge (L298N), uses Motor1Pin1 (PA4) -> IN1, Motor1Pin2 (PA5) -> IN2, PWM_High (PC0, TIM1 CH1) -> ENA
+//#define CHINESEIUM // Using chineseium h-bridge (L298N), uses Motor1Pin1 (PA4) -> IN1, Motor1Pin2 (PA5) -> IN2, PWM_High (PC0, TIM1 CH1) -> ENA
 #define CUSTOM_PID
 
 
@@ -92,13 +93,9 @@ static volatile bool tps_ready = false;
 static volatile bool pid_ready = false;
 static volatile bool shutdown_req = false;
 
-static uint32_t tps_buffer[2];
+static uint32_t tps_buffer[4];
+static volatile bool trim_sample_fresh = false;
 
-
-static uint32_t trim_buffer[2];
-static bool trim_sample_fresh = false;
-static uint32_t trim_pot1 = trim_buffer[0];
-static uint32_t trim_pot2 = trim_buffer[1];
 
 static uint16_t set_point = 50;	// Percentage
 /* Adaptive tuning parameters */
@@ -277,13 +274,7 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 	if (hadc->Instance == ADC1) {
 		pot1_d = tps_buffer[0];
 		pot2_d = tps_buffer[1];
-	}
-
-	if (hadc->Instance == ADC2) {
-		trim_pot1 = trim_buffer[0];
-		trim_pot2 = trim_buffer[1];
-		//trim_sample_fresh = true;
-		myprintf("trim1: %d trim2: %d\n", trim_pot1, trim_pot2);
+		trim_sample_fresh = true;
 	}
 
 }
@@ -513,34 +504,34 @@ static Error handleStatusReport(void)
 
 static void stopMotor(void)
 {
-#ifdef CHINESEIUM
-	HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_RESET); // IN1 low
-	HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_RESET); // IN2 low
-	HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);								 // ENA off
-#else
+//#ifdef CHINESEIUM
+//	HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_RESET); // IN1 low
+//	HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_RESET); // IN2 low
+//	HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);								 // ENA off
+//#else
 	HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);  // PWM_HIGH off
 	HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1); // PWM_LOW off
-#endif
+//#endif
 }
 
 static void applyPWM(uint8_t duty, bool forward)
 {
-#ifdef CHINESEIUM
-	if(forward)
-	{
-		HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_SET);	 // IN1 high
-		HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_RESET); // IN2 low
-		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty);						 // ENA PWM
-		HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-	}
-	else
-	{
-		HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_RESET); // IN1 low
-		HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_SET);	 // IN2 high
-		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty);						 // ENA PWM
-		HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-	}
-#else
+//#ifdef CHINESEIUM
+//	if(forward)
+//	{
+//		HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_SET);	 // IN1 high
+//		HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_RESET); // IN2 low
+//		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty);						 // ENA PWM
+//		HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+//	}
+//	else
+//	{
+//		HAL_GPIO_WritePin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin, GPIO_PIN_RESET); // IN1 low
+//		HAL_GPIO_WritePin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin, GPIO_PIN_SET);	 // IN2 high
+//		__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty);						 // ENA PWM
+//		HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+//	}
+//#else
 	if(forward)
 	{
 		HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1);			// PWM_LOW off
@@ -553,7 +544,7 @@ static void applyPWM(uint8_t duty, bool forward)
 		__HAL_TIM_SET_COMPARE(&htim17, TIM_CHANNEL_1, duty); // PWM_LOW duty
 		HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1);
 	}
-#endif
+//#endif
 }
 
 // PWM LOW = TIM17 CH1
@@ -582,18 +573,16 @@ static void controlMotor(double control_signal, int32_t position_delta)
 
 	applyPWM(duty, control_signal >= 0.0);
 	
-	GPIO_PinState ina = HAL_GPIO_ReadPin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin);
-	GPIO_PinState inb = HAL_GPIO_ReadPin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin);
+//	GPIO_PinState ina = HAL_GPIO_ReadPin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin);
+//	GPIO_PinState inb = HAL_GPIO_ReadPin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin);
 
-//	myprintf("POT1 : %f POT2 : %f PID: %f DUTY: %i, set point: %f, delta: %i, INA %i, INB %i\r\n",
-//			pot1_d,
-//			pot2_d,
-//			control_signal,
-//			duty,
-//			set_point_d,
-//			position_delta,
-//			(int)ina,
-//			(int)inb);
+	myprintf("POT1 : %f POT2 : %f PID: %f DUTY: %i, set point: %f, delta: %i\r\n",
+			pot1_d,
+			pot2_d,
+			control_signal,
+			duty,
+			set_point_d,
+			position_delta);
 
 }
 
@@ -605,12 +594,12 @@ int alt_main(void)
 	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
 
 
-	if (HAL_ADC_Start_DMA(&hadc1, reinterpret_cast<uint32_t*>(tps_buffer), 2) != HAL_OK)
+	if (HAL_ADC_Start_DMA(&hadc1, reinterpret_cast<uint32_t*>(tps_buffer), 4) != HAL_OK)
 		error_queue.push(adc_failure); // ADC failure
 
-	HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
-	if (HAL_ADC_Start_DMA(&hadc2, reinterpret_cast<uint32_t*>(trim_buffer), 2) != HAL_OK)
-			error_queue.push(adc_failure); // ADC failure
+//	HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
+//	if (HAL_ADC_Start_DMA(&hadc2, reinterpret_cast<uint32_t*>(trim_buffer), 2) != HAL_OK)
+//			error_queue.push(adc_failure); // ADC failure
 
 	// Init canfd instance
 	if (fdcanInit(&hfdcan1) != HAL_OK)
@@ -625,11 +614,17 @@ int alt_main(void)
 	throttlePID.SetOutputLimits(-1 * static_cast<double>(TIM1_17_ARR), static_cast<double>(TIM1_17_ARR));		// Normalized limits: -100 - 100% - map these directly to the pwm
 	static double position_delta; // How close are we to the actual setpoint?
 
-
+	HAL_DAC_Start(&hdac1, DAC_CHANNEL_1);
+	HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, 4095);
 
 	while (1)
 	{		/* Super loop */
 		// Process CAN messages in the queue
+
+		myprintf("test\n");
+		if (trim_sample_fresh) {
+			myprintf("trim1: %d trim2: %d\n", tps_buffer[2], tps_buffer[3]);
+		}
 		if (!fdcan_queue.empty())
 		{
 			CANMessage msg = fdcan_queue.front();

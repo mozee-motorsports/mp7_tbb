@@ -71,10 +71,6 @@ void Error_Handler(void);
 #define POT1_GPIO_Port GPIOA
 #define POT2_Pin GPIO_PIN_1
 #define POT2_GPIO_Port GPIOA
-#define Motor1Pin1_Pin GPIO_PIN_4
-#define Motor1Pin1_GPIO_Port GPIOA
-#define Motor1Pin2_Pin GPIO_PIN_5
-#define Motor1Pin2_GPIO_Port GPIOA
 #define PWM_LOW_Pin GPIO_PIN_7
 #define PWM_LOW_GPIO_Port GPIOA
 
