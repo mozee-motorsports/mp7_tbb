@@ -111,6 +111,7 @@ int main(void)
   MX_RTC_Init();
   MX_TIM2_Init();
   MX_TIM17_Init();
+  MX_ADC2_Init();
   /* USER CODE BEGIN 2 */
   alt_main();
 

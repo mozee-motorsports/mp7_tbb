@@ -63,6 +63,10 @@ void Error_Handler(void);
 #define PWM_HIGH_GPIO_Port GPIOC
 #define HBRIDGE_EN_Pin GPIO_PIN_1
 #define HBRIDGE_EN_GPIO_Port GPIOC
+#define TRIM_1_Pin GPIO_PIN_2
+#define TRIM_1_GPIO_Port GPIOC
+#define TRIM_2_Pin GPIO_PIN_3
+#define TRIM_2_GPIO_Port GPIOC
 #define POT1_Pin GPIO_PIN_0
 #define POT1_GPIO_Port GPIOA
 #define POT2_Pin GPIO_PIN_1

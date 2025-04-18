@@ -93,6 +93,13 @@ static volatile bool pid_ready = false;
 static volatile bool shutdown_req = false;
 
 static uint32_t tps_buffer[2];
+
+
+static uint32_t trim_buffer[12];
+static bool trim_sample_fresh = false;
+static double trim_pot1 = static_cast<double>(trim_buffer[8-1]);
+static double trim_pot2 = static_cast<double>(trim_buffer[9-1]);
+
 static uint16_t set_point = 50;	// Percentage
 /* Adaptive tuning parameters */
 
@@ -267,8 +274,17 @@ static void wave(void)
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc)
 {
 	// Cast adc to double to used as PID parameters
-	pot1_d = static_cast<double>(tps_buffer[0]);
-	pot2_d = static_cast<double>(tps_buffer[1]);
+	if (hadc->Instance == ADC1) {
+		pot1_d = static_cast<double>(tps_buffer[0]);
+		pot2_d = static_cast<double>(tps_buffer[1]);
+	}
+
+	if (hadc->Instance == ADC2) {
+		trim_pot1 = static_cast<double>(trim_buffer[0]);
+		trim_pot2 = static_cast<double>(trim_buffer[1]);
+		trim_sample_fresh = true;
+	}
+
 }
 
 // Sample at fixed intervals: 10ms
@@ -568,15 +584,15 @@ static void controlMotor(double control_signal, int32_t position_delta)
 	GPIO_PinState ina = HAL_GPIO_ReadPin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin);
 	GPIO_PinState inb = HAL_GPIO_ReadPin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin);
 
-	myprintf("POT1 : %f POT2 : %f PID: %f DUTY: %i, set point: %f, delta: %i, INA %i, INB %i\r\n",
-			pot1_d,
-			pot2_d,
-			control_signal,
-			duty,
-			set_point_d,
-			position_delta,
-			(int)ina,
-			(int)inb);
+//	myprintf("POT1 : %f POT2 : %f PID: %f DUTY: %i, set point: %f, delta: %i, INA %i, INB %i\r\n",
+//			pot1_d,
+//			pot2_d,
+//			control_signal,
+//			duty,
+//			set_point_d,
+//			position_delta,
+//			(int)ina,
+//			(int)inb);
 
 }
 
@@ -587,8 +603,13 @@ int alt_main(void)
 	/* Initialization */
 	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
 
+
 	if (HAL_ADC_Start_DMA(&hadc1, reinterpret_cast<uint32_t*>(tps_buffer), 2) != HAL_OK)
 		error_queue.push(adc_failure); // ADC failure
+
+	HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
+	if (HAL_ADC_Start_DMA(&hadc2, reinterpret_cast<uint32_t*>(trim_buffer), 12) != HAL_OK)
+			error_queue.push(adc_failure); // ADC failure
 
 	// Init canfd instance
 	if (fdcanInit(&hfdcan1) != HAL_OK)
@@ -608,6 +629,10 @@ int alt_main(void)
 	while (1)
 	{		/* Super loop */
 
+		if(trim_sample_fresh) {
+			myprintf("trim1: %lf trim2: %lf", trim_pot1, trim_pot2);
+			trim_sample_fresh = false;
+		}
 		// Process CAN messages in the queue
 		if (!fdcan_queue.empty())
 		{
