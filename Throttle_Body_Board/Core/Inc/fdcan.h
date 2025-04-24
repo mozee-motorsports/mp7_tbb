@@ -83,6 +83,7 @@ typedef enum
   fdcan_rx_failure    = 0x05U,
   fdcan_tx_failure    = 0x06U,
   adc_failure         = 0x07U,
+  dac_init_failure = 0x08U,
 }Error;
 /* USER CODE END Private defines */
 

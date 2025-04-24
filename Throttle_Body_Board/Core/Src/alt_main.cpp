@@ -81,7 +81,7 @@ using namespace std;
 
 
 enum TestMode { MODE_WAVE, MODE_OPEN_TEST };
-volatile TestMode current_mode = MODE_WAVE;
+volatile TestMode current_mode = MODE_OPEN_TEST;
 
 #define MAX_ADC_OUTPUT 0xFFF // MAX is 4095 = 3V3
 #define MAX_DUTY_CYCLE 100.0f
@@ -103,7 +103,7 @@ static uint16_t set_point = 50;	// Percentage
 // Aggressive tuning parameters for large error
 #define AGR_KP 0.21f
 #define AGR_KI 0.0006f
-#define AGR_KD 0.0020f
+#define AGR_KD 0.0025f
 
 // Non-adaptive tuning parameters
 //#define KP 0
@@ -159,7 +159,7 @@ static Error handleStatusReport(void);
 static Error processCANMessage(CANMessage *msg, Command command);
 static void my_shutdown(void);
 static void myprintf(const char *fmt, ...);
-static double getSetpointSteps(uint8_t percentage);
+static double getSetpointSteps(float percentage);
 static void applyPWM(uint8_t duty, bool forward);
 static void wave(void);
 static void openTest(void);
@@ -216,7 +216,7 @@ static void wave(void)
 {
 	const uint8_t max_percent = 100;
 	const uint8_t step_size = 2;        // Percent step size
-	const uint32_t hold_time = 30;     // ms to hold at each step
+	const uint32_t hold_time = 20;     // ms to hold at each step
 
 	// Ascend from 0% to 80%
 	for (uint8_t percent = 10; percent <= max_percent; percent += step_size)
@@ -450,10 +450,10 @@ static Error handleError(Error code)
 	return ok;
 }
 
-static double getSetpointSteps(uint8_t percentage)
+static double getSetpointSteps(float percentage)
 {
 	// Unsigned integer, so negatives roll over to MAX - 1, if percentage is greater than 100, clamp to fully open
-	double duty =  percentage < 100 ? static_cast<double>(roundf(((float)percentage / MAX_DUTY_CYCLE) * OPEN_ADC_STEPS)) : OPEN_ADC_STEPS;
+	double duty =  percentage < 100 ? static_cast<double>(roundf((percentage / MAX_DUTY_CYCLE) * OPEN_ADC_STEPS)) : OPEN_ADC_STEPS;
 	if (!duty)
 		return MIN_PHYSCIAL_LIMIT;
 	else
@@ -466,10 +466,12 @@ static double getSetpointSteps(uint8_t percentage)
 static Error handleThrottle(CANMessage *msg)
 {
 	// Process received data - Only 1 byte for throttle percentage
-	uint8_t throttle_position_percentage = msg->data[0];
+	uint16_t throttle_adc_taps = (((uint16_t)msg->data[1] << 8)) | msg->data[0];
+	float throttle_percentage = (throttle_adc_taps/4096.0)*100.0;
 
 	// Get position in terms of ADC levels based on percent.
-	set_point_d = getSetpointSteps(throttle_position_percentage);
+	set_point_d = getSetpointSteps(throttle_percentage);
+	//myprintf("set setpoint to %lf\n", set_point_d);
 	return ok;
 }
 
@@ -576,13 +578,13 @@ static void controlMotor(double control_signal, int32_t position_delta)
 //	GPIO_PinState ina = HAL_GPIO_ReadPin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin);
 //	GPIO_PinState inb = HAL_GPIO_ReadPin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin);
 
-	myprintf("POT1 : %f POT2 : %f PID: %f DUTY: %i, set point: %f, delta: %i\r\n",
-			pot1_d,
-			pot2_d,
-			control_signal,
-			duty,
-			set_point_d,
-			position_delta);
+	//myprintf("POT1 : %f POT2 : %f PID: %f DUTY: %i, set point: %f, delta: %i\r\n",
+//			pot1_d,
+//			pot2_d,
+//			control_signal,
+//			duty,
+//			set_point_d,
+//			position_delta);
 
 }
 
@@ -614,19 +616,45 @@ int alt_main(void)
 	throttlePID.SetOutputLimits(-1 * static_cast<double>(TIM1_17_ARR), static_cast<double>(TIM1_17_ARR));		// Normalized limits: -100 - 100% - map these directly to the pwm
 	static double position_delta; // How close are we to the actual setpoint?
 
-	HAL_DAC_Start(&hdac1, DAC_CHANNEL_1);
-	HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, 4095);
+	if(HAL_DAC_Start(&hdac1, DAC_CHANNEL_1) != HAL_OK) {
+		error_queue.push(dac_init_failure);
+	};
 
+	HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, 1670);
+
+	HAL_GPIO_WritePin(HBRIDGE_MODE2_GPIO_Port, HBRIDGE_MODE2_Pin, GPIO_PIN_SET); // Set to PWM/PWM mode
+
+	HAL_GPIO_WritePin(HBRIDGE_DECAY_GPIO_Port, HBRIDGE_DECAY_Pin, GPIO_PIN_RESET); // Set Decay to motor mode
+	HAL_GPIO_WritePin(HBRIDGE_OCPM_GPIO_Port, HBRIDGE_OCPM_Pin, GPIO_PIN_SET); // Set OCPM to auto recovery
+
+
+	HAL_GPIO_WritePin(HBRIDGE_EN_GPIO_Port, HBRIDGE_EN_Pin, GPIO_PIN_SET);      // Enable HBridge
 	while (1)
 	{		/* Super loop */
 		// Process CAN messages in the queue
 
-		myprintf("test\n");
+		//myprintf("test\n");
 		if (trim_sample_fresh) {
-			myprintf("trim1: %d trim2: %d\n", tps_buffer[2], tps_buffer[3]);
+			//myprintf("trim1: %d trim2: %d\n", tps_buffer[2], tps_buffer[3]);
+
+			uint16_t tps_0 = tps_buffer[0];
+
+//			double tps_5v = tps_buffer[0]/4096.0;
+//			uint16_t tps_5v_u = (uint16_t)(tps_5v * 1670.0);
+//			myprintf("tps_5v_u = %d\n", tps_5v_u);
+//
+			double trim_3v3 = tps_buffer[2]/4096.0;
+			uint16_t trim_3v3_u = (uint16_t)(trim_3v3 * 1670);
+//			uint16_t tps_trimmed = tps_5v_u + trim_3v3_u;
+			uint16_t tps_trimmed = trim_3v3_u;
+
+			tps_trimmed = tps_trimmed < 1670 ? tps_trimmed : 1670; // cap at 5V
+			myprintf("tps_trimmed_taps: %d\n", tps_trimmed);
+			//HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, tps_trimmed);
+			HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, 0);
 		}
-		if (!fdcan_queue.empty())
-		{
+		if (!fdcan_queue.empty()) {
+
 			CANMessage msg = fdcan_queue.front();
 			fdcan_queue.pop();
 			Error code = processCANMessage(&msg, static_cast<Command>((msg.rx_header.Identifier & 0x0F)));
@@ -642,24 +670,24 @@ int alt_main(void)
 			position_delta = set_point_d - pot1_d;
 
 			/* COMMENT THIS SECTION OUT FOR PRODUCTION*/
-			switch (current_mode)
-			{
-			case MODE_WAVE:
-					wave();
-					break;
-			case MODE_OPEN_TEST:
-				openTest();
-				break;
-
-			default:
-				wave();
-				break;
-			}
+//			switch (current_mode)
+//			{
+//			case MODE_WAVE:
+//					wave();
+//					break;
+//			case MODE_OPEN_TEST:
+//				openTest();
+//				break;
+//
+//			default:
+//				wave();
+//				break;
+//			}
 
 			/* UNCOMMENT FOLLOWING TWO LINES IN PRODUCTION */
-//			 throttlePID.Compute();
-//
-//			 controlMotor(pid_out, position_delta);
+			 throttlePID.Compute();
+
+			 controlMotor(pid_out, position_delta);
 		}
 	}
 	my_shutdown(); // Shutdown system
@@ -705,13 +733,31 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 				error_queue.push(fdcan_rx_failure); // FDCAN RX failure
 
 			// Process critical commands
-			my_shutdown();
+			//my_shutdown();
 
 			// Queue non-critical commands
-			CANMessage msg = {rx_header, {0}};
+			FDCAN_RxHeaderTypeDef msgHeader = {
+					.Identifier = rxHeader.Identifier,
+					.IdType = rxHeader.IdType,
+					.RxFrameType = rxHeader.RxFrameType,
+					.DataLength = rxHeader.DataLength,
+					.ErrorStateIndicator = rxHeader.ErrorStateIndicator,
+					.BitRateSwitch = rxHeader.BitRateSwitch,
+					.FDFormat = rxHeader.FDFormat,
+					.RxTimestamp = rxHeader.RxTimestamp,
+					.FilterIndex = rxHeader.FilterIndex,
+					.IsFilterMatchingFrame = rxHeader.IsFilterMatchingFrame,
 
+			};
+			CANMessage msg = {
+				.rx_header = msgHeader,
+			};
+
+			for (int i = 0; i < 8; i ++) {
+				msg.data[i] = rxData[i];
+			}
 			// Make deep copy of payload
-			memcpy(msg.data, rx_data, sizeof(rx_data));
+			//memcpy(msg.data, rx_data, sizeof(rx_data));
 
 			// Add message to queue
 			fdcan_queue.push(msg);

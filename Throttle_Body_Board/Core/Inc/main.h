@@ -71,8 +71,16 @@ void Error_Handler(void);
 #define POT1_GPIO_Port GPIOA
 #define POT2_Pin GPIO_PIN_1
 #define POT2_GPIO_Port GPIOA
+#define ECU_CTRL_Pin GPIO_PIN_4
+#define ECU_CTRL_GPIO_Port GPIOA
 #define PWM_LOW_Pin GPIO_PIN_7
 #define PWM_LOW_GPIO_Port GPIOA
+#define HBRIDGE_DECAY_Pin GPIO_PIN_0
+#define HBRIDGE_DECAY_GPIO_Port GPIOB
+#define HBRIDGE_OCPM_Pin GPIO_PIN_1
+#define HBRIDGE_OCPM_GPIO_Port GPIOB
+#define HBRIDGE_MODE2_Pin GPIO_PIN_2
+#define HBRIDGE_MODE2_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
