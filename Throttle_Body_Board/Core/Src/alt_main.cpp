@@ -106,7 +106,7 @@ static uint16_t set_point = 50;	// Percentage
 /* Adaptive tuning parameters */
 
 // Aggressive tuning parameters for large error
-#define AGR_KP 0.1f
+#define AGR_KP 0.11f
 #define AGR_KI 0.02f
 #define AGR_KD 0.002f
 
@@ -123,10 +123,10 @@ static uint16_t set_point = 50;	// Percentage
 #define MED_KI 0.0f
 #define MED_KD 0.0f
 
-// Conservative tuning parameters for small errors
-#define CONS_KP 0.008f
-#define CONS_KI 0.005f
-#define CONS_KD 0.01f
+// Conservative tuning parameters for small errors IDLE TUNE
+#define CONS_KP 0.55f
+#define CONS_KI 0.00f
+#define CONS_KD 0.0f
 
 // Output from PID controller
 static double pid_out;
@@ -144,7 +144,7 @@ PID throttlePID(&pot1_d, &pid_out, set_ptr, KP, KI, KD, DIRECT);
 
 #define INTERVAL_MS (int32_t)10
 #define MAX_PHYSICAL_LIMIT 3890
-#define MIN_PHYSCIAL_LIMIT 640
+#define MIN_PHYSCIAL_LIMIT 405
 // FDCAN Defines
 static FDCAN_TxHeaderTypeDef tx_header;
 static FDCAN_RxHeaderTypeDef rx_header;
@@ -464,7 +464,7 @@ static double getSetpointSteps(float percentage)
 	if (!duty)
 		return MIN_PHYSCIAL_LIMIT;
 	else
-		return duty;
+		return duty < MIN_PHYSCIAL_LIMIT ? MIN_PHYSCIAL_LIMIT : duty;
 }
 /**
  * Gets the throttle position percentage from the current message in the queue, calculates the set point,
@@ -478,8 +478,8 @@ static Error handleThrottle(CANMessage *msg)
 
 	// Get position in terms of ADC levels based on percent.
 	set_point_d = getSetpointSteps(throttle_percentage);
-	myprintf("throttle_percent = %f\n", throttle_percentage);
-	myprintf("set_point_d = %lf\n", set_point_d);
+//	myprintf("throttle_percent = %f\n", throttle_percentage);
+//	myprintf("set_point_d = %lf\n", set_point_d);
 	return ok;
 }
 
@@ -564,8 +564,7 @@ static void applyPWM(uint8_t duty, bool forward)
  * @param pid_output PID controller output (positive for forward, negative for reverse).
  */
 // In terms of ADC POT1 steps
-#define MAX_PHYSICAL_LIMIT 3890
-#define MIN_PHYSCIAL_LIMIT 640
+
 static void controlMotor(double control_signal, int32_t position_delta)
 {
 
@@ -695,9 +694,23 @@ int alt_main(void)
 //			}
 
 			/* UNCOMMENT FOLLOWING TWO LINES IN PRODUCTION */
-			 throttlePID.Compute();
 
-			 controlMotor(pid_out, position_delta);
+			if (set_point_d>=650 && pot1_d>=650)
+			{
+				throttlePID.SetTunings(AGR_KP, AGR_KI, AGR_KD);
+				myprintf("adap tunings: ");
+			}
+
+			if(set_point_d<650 && pot1_d<650)
+			{
+				throttlePID.SetTunings(CONS_KP, CONS_KI, CONS_KD);
+				myprintf("cons tunings: ");
+			}
+
+			myprintf("set_point_d: %lf, pot1_d: %lf\n", set_point_d, pot1_d);
+			throttlePID.Compute();
+			controlMotor(pid_out, position_delta);
+
 		}
 	}
 	//my_shutdown(); // Shutdown system
