@@ -63,13 +63,18 @@
 #include "main.h"
 #include "dac.h"
 
+//extern "C" {
+//	#include "fdcan_queue.h"
+//}
+
+
 #include <math.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdarg.h>
 #include <stdint.h>
-#include <queue>
+
 #include <string.h>
 #include "PID_V1.h"
 using namespace std;
@@ -101,9 +106,9 @@ static uint16_t set_point = 50;	// Percentage
 /* Adaptive tuning parameters */
 
 // Aggressive tuning parameters for large error
-#define AGR_KP 0.21f
-#define AGR_KI 0.0006f
-#define AGR_KD 0.0025f
+#define AGR_KP 0.1f
+#define AGR_KI 0.02f
+#define AGR_KD 0.002f
 
 // Non-adaptive tuning parameters
 //#define KP 0
@@ -145,9 +150,11 @@ static FDCAN_TxHeaderTypeDef tx_header;
 static FDCAN_RxHeaderTypeDef rx_header;
 static uint8_t rx_data[8];
 
+#include "fdcan_queue.hpp"
 // Private function prototypes
-static std::queue<CANMessage> fdcan_queue; // Queue to process non-critical tasks
-static std::queue<Error> error_queue;	   // Queue to process errors
+static FDCANBuffer fdcan_queue(3); // Queue to process non-critical tasks
+
+//static std::queue<Error> error_queue;	   // Queue to process errors
 
 // Function prototypes
 static void controlMotor(double control_signal, int32_t position_delta);
@@ -361,7 +368,7 @@ static Error processCANMessage(CANMessage *msg, Command command)
 	{
 	case shutdown: // Already handled in the ISR
 		// Shutdown command, exit program
-		my_shutdown();
+		//my_shutdown();
 		break;
 	case throttle_percentage:
 		code = handleThrottle(msg);
@@ -370,7 +377,7 @@ static Error processCANMessage(CANMessage *msg, Command command)
 		code = handleError((Error)(msg->data[0]));
 		break;
 	case status_report:
-		code = handleStatusReport();
+		//code = handleStatusReport();
 		break;
 	default: // Invalid command, return error
 		code = invalid_command;
@@ -380,7 +387,7 @@ static Error processCANMessage(CANMessage *msg, Command command)
 	// If there is an error, then add it to the queue
 	if (code != ok)
 	{
-		error_queue.push(code);
+//		error_queue.push(code);
 	}
 
 	return code;
@@ -471,38 +478,39 @@ static Error handleThrottle(CANMessage *msg)
 
 	// Get position in terms of ADC levels based on percent.
 	set_point_d = getSetpointSteps(throttle_percentage);
-	//myprintf("set setpoint to %lf\n", set_point_d);
+	myprintf("throttle_percent = %f\n", throttle_percentage);
+	myprintf("set_point_d = %lf\n", set_point_d);
 	return ok;
 }
 
 /*
  * Returns battery level of Throttle Control board by sampling with ADC - 0xFF if not implemented
  */
-static Error handleStatusReport(void)
-{
-	std::queue<Error> temp = error_queue; // Create a copy
-
-	// First verify dlc
-	if (rx_header.DataLength != STATUS_REPORT_DLC)
-		return mismatch_dlc;
-
-	// Check if there are any errors
-	while (!temp.empty())
-	{
-		Error error = temp.front(); // Get error from queue
-
-		// Setup packet to send
-		uint8_t tx_data[3] = {0xFF, 0xFF, (uint8_t)error};
-
-		// Send error, if we can't then return error
-		if (fdcanWrite(&hfdcan1, tx_header, tx_data, STATUS_REPORT_DLC, steering_wheel, from, DEFAULT_PRIORITY, status_report) != HAL_OK)
-			return fdcan_tx_failure;
-
-		temp.pop(); // Remove error from queue
-	}
-
-	return ok;
-}
+//static Error handleStatusReport(void)
+//{
+////	std::queue<Error> temp = error_queue; // Create a copy
+//
+//	// First verify dlc
+//	if (rx_header.DataLength != STATUS_REPORT_DLC)
+//		return mismatch_dlc;
+//
+//	// Check if there are any errors
+//	while (!temp.empty())
+//	{
+//		Error error = temp.front(); // Get error from queue
+//
+//		// Setup packet to send
+//		uint8_t tx_data[3] = {0xFF, 0xFF, (uint8_t)error};
+//
+//		// Send error, if we can't then return error
+//		if (fdcanWrite(&hfdcan1, tx_header, tx_data, STATUS_REPORT_DLC, steering_wheel, from, DEFAULT_PRIORITY, status_report) != HAL_OK)
+//			return fdcan_tx_failure;
+//
+//		temp.pop(); // Remove error from queue
+//	}
+//
+//	return ok;
+//}
 
 static void stopMotor(void)
 {
@@ -578,7 +586,7 @@ static void controlMotor(double control_signal, int32_t position_delta)
 //	GPIO_PinState ina = HAL_GPIO_ReadPin(Motor1Pin1_GPIO_Port, Motor1Pin1_Pin);
 //	GPIO_PinState inb = HAL_GPIO_ReadPin(Motor1Pin2_GPIO_Port, Motor1Pin2_Pin);
 
-	//myprintf("POT1 : %f POT2 : %f PID: %f DUTY: %i, set point: %f, delta: %i\r\n",
+//	myprintf("POT1 : %f POT2 : %f PID: %f DUTY: %i, set point: %f, delta: %i\r\n",
 //			pot1_d,
 //			pot2_d,
 //			control_signal,
@@ -596,31 +604,31 @@ int alt_main(void)
 	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
 
 
-	if (HAL_ADC_Start_DMA(&hadc1, reinterpret_cast<uint32_t*>(tps_buffer), 4) != HAL_OK)
-		error_queue.push(adc_failure); // ADC failure
+	if (HAL_ADC_Start_DMA(&hadc1, reinterpret_cast<uint32_t*>(tps_buffer), 4) != HAL_OK) {}
+//		error_queue.push(adc_failure); // ADC failure
 
 //	HAL_ADCEx_Calibration_Start(&hadc2, ADC_SINGLE_ENDED);
 //	if (HAL_ADC_Start_DMA(&hadc2, reinterpret_cast<uint32_t*>(trim_buffer), 2) != HAL_OK)
 //			error_queue.push(adc_failure); // ADC failure
 
 	// Init canfd instance
-	if (fdcanInit(&hfdcan1) != HAL_OK)
-		error_queue.push(fdcan_init_failure); // FDCAN failure
+	if (fdcanInit(&hfdcan1) != HAL_OK) {}
+//		error_queue.push(fdcan_init_failure); // FDCAN failure
 
 	// Sets up the CANFD filter
-	if (fdcanFilterInit(&hfdcan1, &tx_header) != HAL_OK)
-		error_queue.push(fdcan_init_failure); // FDCAN failure
+	if (fdcanFilterInit(&hfdcan1, &tx_header) != HAL_OK) {}
+//		error_queue.push(fdcan_init_failure); // FDCAN failure
 
 	throttlePID.SetMode(AUTOMATIC);
 	throttlePID.SetSampleTime(INTERVAL_MS);
 	throttlePID.SetOutputLimits(-1 * static_cast<double>(TIM1_17_ARR), static_cast<double>(TIM1_17_ARR));		// Normalized limits: -100 - 100% - map these directly to the pwm
 	static double position_delta; // How close are we to the actual setpoint?
 
-	if(HAL_DAC_Start(&hdac1, DAC_CHANNEL_1) != HAL_OK) {
-		error_queue.push(dac_init_failure);
-	};
+//	if(HAL_DAC_Start(&hdac1, DAC_CHANNEL_1) != HAL_OK) {
+////		error_queue.push(dac_init_failure);
+//	};
 
-	HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, 1670);
+//	HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, 1670);
 
 	HAL_GPIO_WritePin(HBRIDGE_MODE2_GPIO_Port, HBRIDGE_MODE2_Pin, GPIO_PIN_SET); // Set to PWM/PWM mode
 
@@ -634,29 +642,31 @@ int alt_main(void)
 		// Process CAN messages in the queue
 
 		//myprintf("test\n");
-		if (trim_sample_fresh) {
-			//myprintf("trim1: %d trim2: %d\n", tps_buffer[2], tps_buffer[3]);
-
-			uint16_t tps_0 = tps_buffer[0];
-
-//			double tps_5v = tps_buffer[0]/4096.0;
-//			uint16_t tps_5v_u = (uint16_t)(tps_5v * 1670.0);
-//			myprintf("tps_5v_u = %d\n", tps_5v_u);
+//		if (trim_sample_fresh) {
+//			//myprintf("trim1: %d trim2: %d\n", tps_buffer[2], tps_buffer[3]);
 //
-			double trim_3v3 = tps_buffer[2]/4096.0;
-			uint16_t trim_3v3_u = (uint16_t)(trim_3v3 * 1670);
-//			uint16_t tps_trimmed = tps_5v_u + trim_3v3_u;
-			uint16_t tps_trimmed = trim_3v3_u;
+//			uint16_t tps_0 = tps_buffer[0];
+//
+//			double tps_5v = tps_buffer[0]/4096.0;
+//			uint16_t tps_5v_u = (uint16_t)(tps_5v * 1300.0);
+////			myprintf("tps_5v_u = %d\n", tps_5v_u);
+////
+//			double trim_3v3 = tps_buffer[2]/4096.0;
+////			uint16_t trim_3v3_u = (uint16_t)(trim_3v3 * 300);
+//			uint16_t trim_3v3_u = (uint16_t)(trim_3v3 * 1670);
+////			uint16_t tps_trimmed = tps_5v_u + trim_3v3_u;
+//			uint16_t tps_trimmed = trim_3v3_u;
+//
+////			tps_trimmed = tps_trimmed < 1300 ? tps_trimmed : 1300; // cap at 5V
+////			myprintf("tps_trimmed_taps: %d\n", tps_trimmed);
+//			//HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, tps_trimmed);
+//			HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, tps_trimmed);
+//		}
+		if (fdcan_queue.size() != 0) {
 
-			tps_trimmed = tps_trimmed < 1670 ? tps_trimmed : 1670; // cap at 5V
-			myprintf("tps_trimmed_taps: %d\n", tps_trimmed);
-			//HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, tps_trimmed);
-			HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, 0);
-		}
-		if (!fdcan_queue.empty()) {
+			CANMessage msg;
+			fdcan_queue.get(0, msg);
 
-			CANMessage msg = fdcan_queue.front();
-			fdcan_queue.pop();
 			Error code = processCANMessage(&msg, static_cast<Command>((msg.rx_header.Identifier & 0x0F)));
 			if (code != ok)
 			{
@@ -690,7 +700,7 @@ int alt_main(void)
 			 controlMotor(pid_out, position_delta);
 		}
 	}
-	my_shutdown(); // Shutdown system
+	//my_shutdown(); // Shutdown system
 }
 
 /**
@@ -725,12 +735,12 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 			uint8_t rxData[8];				// 8 bit number expressed as a percentage -> 0 - 100%
 
 			// Get Rx messages from RX FIFO0
-			if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &rxHeader, rxData) != HAL_OK)
-				error_queue.push(fdcan_rx_failure); // FDCAN RX failure
+			if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &rxHeader, rxData) != HAL_OK){}
+//				error_queue.push(fdcan_rx_failure); // FDCAN RX failure
 
 			// Activate notification again in case HAL deactivates interrupt
-			if (HAL_FDCAN_ActivateNotification(hfdcan, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0) != HAL_OK)
-				error_queue.push(fdcan_rx_failure); // FDCAN RX failure
+			if (HAL_FDCAN_ActivateNotification(hfdcan, FDCAN_IT_RX_FIFO0_NEW_MESSAGE, 0) != HAL_OK){};
+//				error_queue.push(fdcan_rx_failure); // FDCAN RX failure
 
 			// Process critical commands
 			//my_shutdown();
@@ -749,6 +759,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan, uint32_t RxFifo0ITs)
 					.IsFilterMatchingFrame = rxHeader.IsFilterMatchingFrame,
 
 			};
+
 			CANMessage msg = {
 				.rx_header = msgHeader,
 			};
