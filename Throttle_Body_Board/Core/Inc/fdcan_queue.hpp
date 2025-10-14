@@ -30,7 +30,9 @@ public:
         buffer_[head_] = msg;
         head_ = (head_ + 1) % capacity_;
         if (count_ < capacity_) {
-            count_++;
+        	size_t temp = count_;
+        	temp = temp + 1;
+            count_ = temp;
         } else {
             tail_ = (tail_ + 1) % capacity_; // Overwrite oldest
         }

@@ -97,6 +97,8 @@ int main(void)
   /* Configure the system clock */
   SystemClock_Config();
 
+  HAL_Delay(500);
+
   /* USER CODE BEGIN SysInit */
 
   /* USER CODE END SysInit */
@@ -113,6 +115,7 @@ int main(void)
   MX_TIM2_Init();
   MX_TIM17_Init();
   MX_DAC1_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
   alt_main();
 

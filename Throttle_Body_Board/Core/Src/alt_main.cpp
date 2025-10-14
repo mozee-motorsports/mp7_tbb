@@ -99,6 +99,7 @@ using namespace std;
 
 #define OPEN_ADC_STEPS                                                         \
   3600 // Measured ADC steps for fully open - pots may measure farther
+#define IDLE_PCT 5
 
 // TODO: Whhat?
 #define MAX_ADC_OUTPUT 0xFFF // MAX is 4095 = 3V3 ?
@@ -113,7 +114,7 @@ static volatile bool shutdown_req = false;
 static uint32_t tps_buffer[4];
 static volatile bool trim_sample_fresh = false;
 
-static uint16_t set_point = 50; // Percentage
+static uint16_t set_point = IDLE_PCT; // Percentage
 
 // Output from PID controller
 static double pid_out;
@@ -140,8 +141,8 @@ static double min_limit_trimmed = MIN_PHYSICAL_LIMIT;
 
 // FDCAN Defines
 static FDCAN_TxHeaderTypeDef tx_header;
-static FDCAN_RxHeaderTypeDef rx_header;
-static uint8_t rx_data[8];
+//static FDCAN_RxHeaderTypeDef rx_header;
+//static uint8_t rx_data[8];
 
 #include "fdcan_queue.hpp"
 // Private function prototypes
@@ -152,7 +153,6 @@ static FDCANBuffer fdcan_queue(3); // Queue to process non-critical tasks
 // Function prototypes
 static void controlMotor(double control_signal, int32_t position_delta);
 static void stopMotor(void);
-static void adaptPIDTuning(void); // Adaptive tuning
 static Error handleError(Error code);
 static Error handleThrottle(CANMessage *msg);
 static Error handleStatusReport(void);
@@ -161,6 +161,8 @@ static void my_shutdown(void);
 static void myprintf(const char *fmt, ...);
 static double getSetpointSteps(float percentage);
 static void applyPWM(uint8_t duty, bool forward);
+
+static bool ready_to_drive = false;
 
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
   // Cast adc to double to used as PID parameters
@@ -182,6 +184,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     // ADC flag
     tps_ready = true;
   }
+  // Ready to drive watchdog
+  if(htim->Instance == TIM4) {
+	  ready_to_drive = false;
+	  //stopMotor();
+	  set_point_d = getSetpointSteps(IDLE_PCT); // go to idle
+	  //myprintf("BARK!\n");
+	  // this timer is started by processCANMessage on ready-to-drive heartbeat
+	  HAL_TIM_Base_Stop_IT(&htim4);
+	  __HAL_TIM_SET_COUNTER(&htim4, 0);
+  }
 }
 
 static void my_shutdown(void) {
@@ -200,9 +212,61 @@ static void myprintf(const char *fmt, ...) {
   HAL_UART_Transmit(&hlpuart1, (uint8_t *)buffer, len, -1);
 }
 
+typedef enum {
+    SAFETY_SYSTEM = 0,
+    BROADCAST = 1,
+    THROTTLE_CONTROL_BOARD = 2,
+    PEDAL_BOX = 3,
+    STEERING_WHEEL = 4,
+    THERMO_CONTROL_BOARD = 5,
+    ISOLATION_EXPANSION_DEVICE = 6,
+} eModule;
+
+typedef enum {
+    TO = 0,
+    FROM = 1,
+} eDirection;
+
+typedef struct {
+    uint8_t priority;
+    eModule module;
+    eDirection direction;
+    uint8_t command;
+} sCAN_Header;
+
+
+sCAN_Header parse_id(uint32_t id) {
+    return sCAN_Header {
+        .priority = (uint8_t)((id >> 8) & 0b0111),
+        .module  = (eModule)((id >> 5) & 0b0111),
+        .direction = (eDirection) ((id >> 4) & 0b01),
+        .command = (uint8_t)(id & 0xF),
+    };
+}
+
+uint32_t header2id(sCAN_Header header) {
+    uint32_t id = 0;
+    id |= (header.priority << 8);
+    id |= (header.module << 5);
+    id |= (header.direction << 4);
+    id |= header.command;
+    return id;
+}
 // Process commands sent from the control board master to the throttle control
 // board
 static Error processCANMessage(CANMessage *msg, Command command) {
+
+  sCAN_Header id = parse_id(msg->rx_header.Identifier);
+  if (id.module == BROADCAST && command == 0) {
+	  // ready to drive heartbeat
+	  //myprintf("got heartbeat, petting watchdog\n");
+	  ready_to_drive = true;
+	  HAL_TIM_Base_Stop_IT(&htim4);
+	  __HAL_TIM_SET_COUNTER(&htim4, 0); // pet the watchdog
+	  HAL_TIM_Base_Start_IT(&htim4);
+	  return ok;
+  }
+
   // Execute sent command
   Error code = ok;
   switch (command) {
@@ -308,12 +372,19 @@ static double getSetpointSteps(float percentage) {
 }
 
 static Error handleThrottle(CANMessage *msg) {
+
+
   // Process received data - Only 1 byte for throttle percentage
   uint16_t throttle_adc_taps = (((uint16_t)msg->data[1] << 8)) | msg->data[0];
   float throttle_percentage = (throttle_adc_taps / 4096.0) * 100.0;
 
   // Get position in terms of ADC levels based on percent.
-  set_point_d = getSetpointSteps(throttle_percentage);
+  if(ready_to_drive) {
+	  set_point_d = getSetpointSteps(throttle_percentage);
+  } else {
+	  set_point_d = getSetpointSteps(IDLE_PCT);
+  }
+
   //  myprintf("throttle_percent = %f\n", throttle_percentage);
   //  myprintf("set_point_d = %lf\n", set_point_d);
   return ok;
@@ -352,6 +423,7 @@ static Error handleThrottle(CANMessage *msg) {
 //
 
 static void stopMotor(void) {
+  // applyPWM will turn these back on when ready_to_drive = true;
   HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);  // PWM_HIGH off
   HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1); // PWM_LOW off
 }
@@ -408,6 +480,9 @@ static void controlMotor(double control_signal, int32_t position_delta) {
 }
 
 int alt_main(void) {
+  HAL_GPIO_WritePin(HBRIDGE_EN_GPIO_Port, HBRIDGE_EN_Pin,
+	                    GPIO_PIN_RESET); // Disable H-bridge at start
+
   set_point_d = getSetpointSteps(set_point);
 
   /* Initialization */
@@ -448,6 +523,11 @@ int alt_main(void) {
 
   HAL_GPIO_WritePin(HBRIDGE_EN_GPIO_Port, HBRIDGE_EN_Pin,
                     GPIO_PIN_SET); // Enable HBridge
+
+
+  /* start the CAN watchdog */
+  //HAL_TIM_Base_GetState(&htim4);
+  HAL_TIM_Base_Start_IT(&htim4);
   /* Super loop */
   while (1) {
     // Process CAN messages in the queue
@@ -476,15 +556,18 @@ int alt_main(void) {
 
       if (set_point_d >= 650 && pot1_d >= 650) {
         throttlePID.SetTunings(AGR_KP, AGR_KI, AGR_KD);
-        myprintf("adap tunings: ");
+        //myprintf("adap tunings: ");
       }
 
       if (set_point_d < 650 && pot1_d < 650) {
         throttlePID.SetTunings(CONS_KP, CONS_KI, CONS_KD);
-        myprintf("cons tunings: ");
+        //myprintf("cons tunings: ");
       }
 
-      myprintf("set_point_d: %lf, pot1_d: %lf, min_limit: %lf\n", set_point_d, pot1_d, min_limit_trimmed);
+
+      myprintf("set_point_d: %lf\n", set_point_d);
+      //myprintf("ready_to_drive: %d\n", ready_to_drive);
+      //myprintf("set_point_d: %lf, pot1_d: %lf, min_limit: %lf\n", set_point_d, pot1_d, min_limit_trimmed);
       throttlePID.Compute();
       controlMotor(pid_out, position_delta);
     }
@@ -536,7 +619,6 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,
       //        error_queue.push(fdcan_rx_failure); // FDCAN RX failure
 
       // Process critical commands
-      // my_shutdown();
 
       /* NOTE: you should not need to do this but memcpy not worky ¯\_(ツ)_/¯ */
       FDCAN_RxHeaderTypeDef msgHeader = {
