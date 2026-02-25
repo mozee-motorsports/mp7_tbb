@@ -1,4 +1,0 @@
-../Core/Src/pid_controller.cpp:9:1:PIDController::PIDController(double, double, double, double, double)	12	static
-../Core/Src/pid_controller.cpp:22:6:void PIDController::setSetpoint(double)	0	static
-../Core/Src/pid_controller.cpp:26:8:double PIDController::calculate(double, uint32_t)	72	static
-../Core/Src/pid_controller.cpp:66:6:void PIDController::reset()	0	static
