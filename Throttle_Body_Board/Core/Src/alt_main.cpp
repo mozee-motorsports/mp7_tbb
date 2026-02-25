@@ -150,6 +150,11 @@ static FDCANBuffer fdcan_queue(3); // Queue to process non-critical tasks
 
 // static std::queue<Error> error_queue;    // Queue to process errors
 
+//TODO: remove after testing
+static uint16_t msg_num = 0;
+static uint16_t pbb_taps = 0;
+static float throttle_pct = 0;
+
 // Function prototypes
 static void controlMotor(double control_signal, int32_t position_delta);
 static void stopMotor(void);
@@ -376,7 +381,11 @@ static Error handleThrottle(CANMessage *msg) {
 
   // Process received data - Only 1 byte for throttle percentage
   uint16_t throttle_adc_taps = (((uint16_t)msg->data[1] << 8)) | msg->data[0];
+  msg_num = (((uint16_t)msg->data[3] << 8)) | msg->data[2];
   float throttle_percentage = (throttle_adc_taps / 4096.0) * 100.0;
+
+  pbb_taps = throttle_adc_taps;
+  throttle_pct = throttle_percentage;
 
   // Get position in terms of ADC levels based on percent.
   if(ready_to_drive) {
@@ -570,6 +579,9 @@ int alt_main(void) {
       //myprintf("set_point_d: %lf, pot1_d: %lf, min_limit: %lf\n", set_point_d, pot1_d, min_limit_trimmed);
       throttlePID.Compute();
       controlMotor(pid_out, position_delta);
+
+      myprintf("%d | tap: %d, pct: %f, R(s): %lf, H(s): %lf, err: %lf",
+         		  msg_num, pbb_taps, throttle_pct, set_point_d, pot1_d, (set_point_d - pot1_d));
     }
   }
   // my_shutdown(); // Shutdown system
