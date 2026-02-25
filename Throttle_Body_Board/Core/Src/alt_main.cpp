@@ -385,8 +385,8 @@ static Error handleThrottle(CANMessage *msg) {
 	  set_point_d = getSetpointSteps(IDLE_PCT);
   }
 
-  //  myprintf("throttle_percent = %f\n", throttle_percentage);
-  //  myprintf("set_point_d = %lf\n", set_point_d);
+    myprintf("throttle_percent = %f\n", throttle_percentage);
+    myprintf("set_point_d = %lf\n", set_point_d);
   return ok;
 }
 
@@ -565,7 +565,7 @@ int alt_main(void) {
       }
 
 
-      myprintf("set_point_d: %lf\n", set_point_d);
+      // myprintf("set_point_d: %lf\n", set_point_d);
       //myprintf("ready_to_drive: %d\n", ready_to_drive);
       //myprintf("set_point_d: %lf, pot1_d: %lf, min_limit: %lf\n", set_point_d, pot1_d, min_limit_trimmed);
       throttlePID.Compute();

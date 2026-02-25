@@ -1,5 +1,5 @@
 ../Core/Src/pid2.cpp:43:11:int32_t Pid::PID::compute(uint32_t)	9
-../Core/Src/pid2.cpp:101:8:void Pid::PID::setTunings(int32_t, int32_t, int32_t, Pid::ProportionalGain)	4
+../Core/Src/pid2.cpp:101:8:void Pid::PID::setTunings(int32_t, int32_t, int32_t, Pid::ProportionalGain)	2
 ../Core/Src/pid2.cpp:20:3:Pid::PID::PID(uint32_t, int32_t, int32_t, int32_t, uint8_t, Pid::FeedbackDirection, Pid::ProportionalGain)	1
 ../Core/Src/pid2.cpp:25:3:Pid::PID::PID(uint32_t, int32_t, int32_t, int32_t, uint8_t, Pid::FeedbackDirection)	1
 ../Core/Src/pid2.cpp:28:3:Pid::PID::PID(uint32_t, int32_t, int32_t, int32_t, uint8_t)	1
