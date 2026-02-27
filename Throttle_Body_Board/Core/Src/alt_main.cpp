@@ -1,3 +1,4 @@
+
 /*
  * alt_main.cpp
  *
@@ -97,6 +98,10 @@ using namespace std;
 #define CONS_KI 0.4f
 #define CONS_KD 0.0009f
 
+float P = 0.25f;
+float I = 0.4f;
+float D = 0.0009f;
+
 #define OPEN_ADC_STEPS                                                         \
   3600 // Measured ADC steps for fully open - pots may measure farther
 #define IDLE_PCT 5
@@ -135,7 +140,7 @@ PID throttlePID(&pot1_d, &pid_out, set_ptr, KP, KI, KD, DIRECT);
 #define MAX_PHYSICAL_LIMIT 3890
 
 /* way low... but will be corrected by trim pot */
-#define MIN_PHYSICAL_LIMIT 300 
+#define MIN_PHYSICAL_LIMIT 300
 
 static double min_limit_trimmed = MIN_PHYSICAL_LIMIT;
 
@@ -394,8 +399,8 @@ static Error handleThrottle(CANMessage *msg) {
 	  set_point_d = getSetpointSteps(IDLE_PCT);
   }
 
-    myprintf("throttle_percent = %f\n", throttle_percentage);
-    myprintf("set_point_d = %lf\n", set_point_d);
+//    myprintf("throttle_percent = %f\n", throttle_percentage);
+//    myprintf("set_point_d = %lf\n", set_point_d);
   return ok;
 }
 
@@ -562,14 +567,21 @@ int alt_main(void) {
 
     if (pid_ready && tps_ready) {
       position_delta = set_point_d - pot1_d;
+      //Remove
+
+	  P = 0.10;
+	  I = 0.05;
+	  D = 0.001;
+	throttlePID.SetTunings(P, I, D);
 
       if (set_point_d >= 650 && pot1_d >= 650) {
-        throttlePID.SetTunings(AGR_KP, AGR_KI, AGR_KD);
+    	// throttlePID.SetTunings(CONS_KP, CONS_KI, CONS_KD);
         //myprintf("adap tunings: ");
       }
 
       if (set_point_d < 650 && pot1_d < 650) {
-        throttlePID.SetTunings(CONS_KP, CONS_KI, CONS_KD);
+    	  	// throttlePID.SetTunings(CONS_KP, CONS_KI, CONS_KD);
+
         //myprintf("cons tunings: ");
       }
 
@@ -580,7 +592,7 @@ int alt_main(void) {
       throttlePID.Compute();
       controlMotor(pid_out, position_delta);
 
-      myprintf("%d | tap: %d, pct: %f, R(s): %lf, H(s): %lf, err: %lf",
+      myprintf("%d | tap: %d, pct: %f, R(s): %lf, H(s): %lf, err: %lf\r\n",
          		  msg_num, pbb_taps, throttle_pct, set_point_d, pot1_d, (set_point_d - pot1_d));
     }
   }
