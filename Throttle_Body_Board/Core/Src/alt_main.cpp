@@ -1,56 +1,56 @@
 /*
- * alt_main.cpp
- *
- *  Created on: Feb 4, 2025
- *      Author: kohlmanz
- ********************************************************************************
- *  Wiring - Chinesium
- *    Motor Connections
- *      VNH5019  OUTA   -> Pin 4D (Motor +)
- *      VNH5019  OUTB   -> Pin 1A (Motor -)
- *
- *    L298N Control Pins
- *      VNH5019  INA  -> PA4 (Motor1Pin1)
- *      VNH5019  INB  -> PA5 (Motor1Pin2)
- *      VNH5019  ENA  -> PC0 (PWM_HIGH, for speed control via PWM)
- *
- *    Power Supply
- *      VNH5019  VDD  -> 5V (logic supply)
- *      VNH5019  VIN  -> 12V (motor supply)
- *      VNH5019  GND  -> Common ground with STM32
- *      VNH5019  GND  -> Supply ground
- *
- *    Potentiometer Connections
- *      Pin 3C (Poti +) -> 3V3 (or 5V if your ADC is 5V-based)
- *      Pin 2B (Poti -) -> GND
- *      Pin 6F (Poti 1) -> PA0 (ADC1_IN1)
- *      Pin 5E (Poti 2) -> PA1 (ADC1_IN2)
- *
- *  Control Logic :
- *    Forward (Open Throttle):
- *      Set PA4 (IN1) high, PA5 (IN2) low.
- *      Apply PWM on PC0 (ENA) to control motor speed.
- *
- *    Reverse (Close Throttle):
- *      Set PA4 (IN1) low, PA5 (IN2) high.
- *      Apply PWM on PC0 (ENA).
- *
- *    Stop:
- *      Set PA4 and PA5 low (or disable ENA).
- ********************************************************************************
- *  ETC Outputs:
- *    POT1            : Analog position forward, TPS+
- *    POT2            : Analog position reverse, TPS-
- *
- *  ETC Inputs:
- *    POT+            : + pot ref, 3V3
- *    POT-            : - pot ref, GND
- *    Motor+            : + motor control sig, Hbridge output+
- *    Motor-            : - motor control sig, Hbrdige output-
- *
- ********************************************************************************
- *
- */
+* alt_main.cpp
+*
+*  Created on: Feb 4, 2025
+*      Author: kohlmanz
+********************************************************************************
+*  Wiring - Chinesium
+*    Motor Connections
+*      VNH5019  OUTA   -> Pin 4D (Motor +)
+*      VNH5019  OUTB   -> Pin 1A (Motor -)
+*
+*    L298N Control Pins
+*      VNH5019  INA  -> PA4 (Motor1Pin1)
+*      VNH5019  INB  -> PA5 (Motor1Pin2)
+*      VNH5019  ENA  -> PC0 (PWM_HIGH, for speed control via PWM)
+*
+*    Power Supply
+*      VNH5019  VDD  -> 5V (logic supply)
+*      VNH5019  VIN  -> 12V (motor supply)
+*      VNH5019  GND  -> Common ground with STM32
+*      VNH5019  GND  -> Supply ground
+*
+*    Potentiometer Connections
+*      Pin 3C (Poti +) -> 3V3 (or 5V if your ADC is 5V-based)
+*      Pin 2B (Poti -) -> GND
+*      Pin 6F (Poti 1) -> PA0 (ADC1_IN1)
+*      Pin 5E (Poti 2) -> PA1 (ADC1_IN2)
+*
+*  Control Logic :
+*    Forward (Open Throttle):
+*      Set PA4 (IN1) high, PA5 (IN2) low.
+*      Apply PWM on PC0 (ENA) to control motor speed.
+*
+*    Reverse (Close Throttle):
+*      Set PA4 (IN1) low, PA5 (IN2) high.
+*      Apply PWM on PC0 (ENA).
+*
+*    Stop:
+*      Set PA4 and PA5 low (or disable ENA).
+********************************************************************************
+*  ETC Outputs:
+*    POT1            : Analog position forward, TPS+
+*    POT2            : Analog position reverse, TPS-
+*
+*  ETC Inputs:
+*    POT+            : + pot ref, 3V3
+*    POT-            : - pot ref, GND
+*    Motor+            : + motor control sig, Hbridge output+
+*    Motor-            : - motor control sig, Hbrdige output-
+*
+********************************************************************************
+*
+*/
 
 /* stdlib Includes */
 #include <math.h>
@@ -93,9 +93,9 @@ using namespace std;
 #define MED_KD 0.0f
 
 // Conservative tuning parameters for small errors IDLE TUNE
-#define CONS_KP 0.25f
-#define CONS_KI 0.4f
-#define CONS_KD 0.0009f
+#define CONS_KP 0.0f
+#define CONS_KI 0.0f
+#define CONS_KD 0.01f
 
 #define OPEN_ADC_STEPS                                                         \
   3600 // Measured ADC steps for fully open - pots may measure farther
@@ -135,7 +135,7 @@ PID throttlePID(&pot1_d, &pid_out, set_ptr, KP, KI, KD, DIRECT);
 #define MAX_PHYSICAL_LIMIT 3890
 
 /* way low... but will be corrected by trim pot */
-#define MIN_PHYSICAL_LIMIT 300 
+#define MIN_PHYSICAL_LIMIT 300
 
 static double min_limit_trimmed = MIN_PHYSICAL_LIMIT;
 
@@ -394,15 +394,15 @@ static Error handleThrottle(CANMessage *msg) {
 	  set_point_d = getSetpointSteps(IDLE_PCT);
   }
 
-    myprintf("throttle_percent = %f\n", throttle_percentage);
-    myprintf("set_point_d = %lf\n", set_point_d);
+    //myprintf("throttle_percent = %f\n", throttle_percentage);
+    //myprintf("set_point_d = %lf\n", set_point_d);
   return ok;
 }
 
 /*
- * Returns battery level of Throttle Control board by sampling with ADC - 0xFF
- * if not implemented
- */
+* Returns battery level of Throttle Control board by sampling with ADC - 0xFF
+* if not implemented
+*/
 // static Error handleStatusReport(void)
 //{
 ////  std::queue<Error> temp = error_queue; // Create a copy
@@ -452,11 +452,11 @@ static void applyPWM(uint8_t duty, bool forward) {
 // PWM LOW = TIM17 CH1
 // PWM HIGH = TIM1 CH1
 /**
- * @brief Sets motor direction and speed based on PID output, respecting
- * physical limits.
- * @param pid_output PID controller output (positive for forward, negative for
- * reverse).
- */
+* @brief Sets motor direction and speed based on PID output, respecting
+* physical limits.
+* @param pid_output PID controller output (positive for forward, negative for
+* reverse).
+*/
 // In terms of ADC POT1 steps
 
 static void controlMotor(double control_signal, int32_t position_delta) {
@@ -471,10 +471,10 @@ static void controlMotor(double control_signal, int32_t position_delta) {
   }
 
   // Calculate duty cycle from PID output
-  const double duty_cycle = fabs(control_signal);
-  const uint8_t duty = (duty_cycle > MAX_DUTY_CYCLE)
-                           ? MAX_DUTY_CYCLE
-                           : static_cast<uint8_t>(duty_cycle);
+  const double duty_cycle = fabs(control_signal); 		// fabs gets a floating point absolute value
+  const uint8_t duty = (duty_cycle > MAX_DUTY_CYCLE)	// is duty cycle greater than max duty cycle
+                           ? MAX_DUTY_CYCLE 			// then set duty to max duty cycle
+                           : static_cast<uint8_t>(duty_cycle); // else turn the float into a uint8_t and assign it to duty
 
   applyPWM(duty, control_signal >= 0.0);
 
@@ -539,77 +539,58 @@ int alt_main(void) {
   HAL_TIM_Base_Start_IT(&htim4);
   /* Super loop */
   while (1) {
-    // Process CAN messages in the queue
+    // Local-only position-hold test (bang-bang with deadband)
 
-    if (trim_sample_fresh) {
-      // set minimum position based on TRIM_1 
-      double trimmer = (tps_buffer[2] / 4096.0)*350.0;
-      min_limit_trimmed = MIN_PHYSICAL_LIMIT + trimmer; 
+    // Target position in the SAME units as pot1_d (ADC taps or your scaled value).
+    // Change this to the position you want to hold.
+	const double percent_idle = 1.5;
+	const double adc_range = 3100 - 700;
+    const double target_pos = (percent_idle/100)*adc_range +700;// percent * range ~(3100 - 750) +750
+    // How close is "good enough" before we stop the motor.
+    const double deadband = 100.0;
+
+    // Duty command magnitude.
+    const double duty_cmd = 70;
+
+    // Current position error
+    const double err = target_pos - pot1_d;
+
+    // If we are too closed, open. If too open, close. Otherwise stop.
+    if (err > deadband) {
+      controlMotor(+duty_cmd, 0);
+    } else if (err < -deadband) {
+      controlMotor(-duty_cmd, 0);
+    } else {
+      controlMotor(60, 0);
     }
 
-    if (fdcan_queue.size() != 0) {
-
-      CANMessage msg;
-      fdcan_queue.get(0, msg);
-
-      Error code = processCANMessage(
-          &msg, static_cast<Command>((msg.rx_header.Identifier & 0x0F)));
-      if (code != ok) {
-        myprintf("Error processing CAN message: %d\r\n", code);
-        handleError(code);
-      }
-    }
-
-    if (pid_ready && tps_ready) {
-      position_delta = set_point_d - pot1_d;
-
-      if (set_point_d >= 650 && pot1_d >= 650) {
-        throttlePID.SetTunings(AGR_KP, AGR_KI, AGR_KD);
-        //myprintf("adap tunings: ");
-      }
-
-      if (set_point_d < 650 && pot1_d < 650) {
-        throttlePID.SetTunings(CONS_KP, CONS_KI, CONS_KD);
-        //myprintf("cons tunings: ");
-      }
-
-
-      // myprintf("set_point_d: %lf\n", set_point_d);
-      //myprintf("ready_to_drive: %d\n", ready_to_drive);
-      //myprintf("set_point_d: %lf, pot1_d: %lf, min_limit: %lf\n", set_point_d, pot1_d, min_limit_trimmed);
-      throttlePID.Compute();
-      controlMotor(pid_out, position_delta);
-
-      myprintf("%d | tap: %d, pct: %f, R(s): %lf, H(s): %lf, err: %lf",
-         		  msg_num, pbb_taps, throttle_pct, set_point_d, pot1_d, (set_point_d - pot1_d));
-    }
   }
   // my_shutdown(); // Shutdown system
 }
 
 /**
- * NOTE: probably none of this is accurate - Caleb
- * @brief  Callback function for handling received messages in FDCAN Rx FIFO 0.
- * @param  hfdcan: Pointer to the FDCAN handle.
- * @param  RxFifo0ITs: Interrupt flags for Rx FIFO 0.
- * @retval None
- *
- * This function is called when a new message is received in the FDCAN Rx FIFO
- * 0. It processes the received data, calculates the throttle position
- * percentage, determines the set point in terms of ADC levels, computes the
- * duty cycle percentage using a PID controller, and updates the PWM duty cycle
- * accordingly. At this stage, all messages are filtered to have a direction bit
- * = 0 (To Module)
- *
- * The function performs the following steps:
- * 1. Checks if the FDCAN instance is FDCAN1.
- * 2. Verifies if a new message is received in Rx FIFO 0.
- * 3. Retrieves the received message and processes the data.
- * 4. Calculates the throttle position percentage from the received data.
- * 5. Converts the throttle position percentage to an ADC set point.
- * 6. Computes the duty cycle percentage using the PID controller.
- * 7. Updates the PWM duty cycle based on the computed duty cycle percentage.
- */
+* NOTE: probably none of this is accurate - Caleb
+* @brief  Callback function for handling received messages in FDCAN Rx FIFO 0.
+* @param  hfdcan: Pointer to the FDCAN handle.
+* @param  RxFifo0ITs: Interrupt flags for Rx FIFO 0.
+* @retval None
+*
+* This function is called when a new message is received in the FDCAN Rx FIFO
+* 0. It processes the received data, calculates the throttle position
+* percentage, determines the set point in terms of ADC levels, computes the
+* duty cycle percentage using a PID controller, and updates the PWM duty cycle
+* accordingly. At this stage, all messages are filtered to have a direction bit
+* = 0 (To Module)
+*
+* The function performs the following steps:
+* 1. Checks if the FDCAN instance is FDCAN1.
+* 2. Verifies if a new message is received in Rx FIFO 0.
+* 3. Retrieves the received message and processes the data.
+* 4. Calculates the throttle position percentage from the received data.
+* 5. Converts the throttle position percentage to an ADC set point.
+* 6. Computes the duty cycle percentage using the PID controller.
+* 7. Updates the PWM duty cycle based on the computed duty cycle percentage.
+*/
 void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,
                                uint32_t RxFifo0ITs) {
   if (hfdcan->Instance == FDCAN1) {
