@@ -104,7 +104,7 @@ float D = 0.0009f;
 
 #define OPEN_ADC_STEPS                                                         \
   3600 // Measured ADC steps for fully open - pots may measure farther
-#define IDLE_PCT 5
+#define IDLE_PCT 1.5
 
 // TODO: Whhat?
 #define MAX_ADC_OUTPUT 0xFFF // MAX is 4095 = 3V3 ?
@@ -399,8 +399,8 @@ static Error handleThrottle(CANMessage *msg) {
 	  set_point_d = getSetpointSteps(IDLE_PCT);
   }
 
-//    myprintf("throttle_percent = %f\n", throttle_percentage);
-//    myprintf("set_point_d = %lf\n", set_point_d);
+   // myprintf("throttle_percent = %f\n", throttle_percentage);
+   // myprintf("set_point_d = %lf\n", set_point_d);
   return ok;
 }
 
@@ -544,7 +544,6 @@ int alt_main(void) {
   HAL_TIM_Base_Start_IT(&htim4);
   /* Super loop */
   while (1) {
-<<<<<<< Updated upstream
     // Process CAN messages in the queue
 
     if (trim_sample_fresh) {
@@ -552,51 +551,6 @@ int alt_main(void) {
       double trimmer = (tps_buffer[2] / 4096.0)*350.0;
       min_limit_trimmed = MIN_PHYSICAL_LIMIT + trimmer; 
     }
-
-    if (fdcan_queue.size() != 0) {
-
-      CANMessage msg;
-      fdcan_queue.get(0, msg);
-
-      Error code = processCANMessage(
-          &msg, static_cast<Command>((msg.rx_header.Identifier & 0x0F)));
-      if (code != ok) {
-        myprintf("Error processing CAN message: %d\r\n", code);
-        handleError(code);
-      }
-    }
-
-    if (pid_ready && tps_ready) {
-      position_delta = set_point_d - pot1_d;
-      //Remove
-
-	  P = 0.10;
-	  I = 0.05;
-	  D = 0.001;
-	throttlePID.SetTunings(P, I, D);
-
-      if (set_point_d >= 650 && pot1_d >= 650) {
-    	// throttlePID.SetTunings(CONS_KP, CONS_KI, CONS_KD);
-        //myprintf("adap tunings: ");
-      }
-
-      if (set_point_d < 650 && pot1_d < 650) {
-    	  	// throttlePID.SetTunings(CONS_KP, CONS_KI, CONS_KD);
-
-        //myprintf("cons tunings: ");
-      }
-
-
-      // myprintf("set_point_d: %lf\n", set_point_d);
-      //myprintf("ready_to_drive: %d\n", ready_to_drive);
-      //myprintf("set_point_d: %lf, pot1_d: %lf, min_limit: %lf\n", set_point_d, pot1_d, min_limit_trimmed);
-      throttlePID.Compute();
-      controlMotor(pid_out, position_delta);
-
-      myprintf("%d | tap: %d, pct: %f, R(s): %lf, H(s): %lf, err: %lf\r\n",
-         		  msg_num, pbb_taps, throttle_pct, set_point_d, pot1_d, (set_point_d - pot1_d));
-    }
-=======
 
 	if (fdcan_queue.size() != 0) {
 
@@ -641,8 +595,6 @@ int alt_main(void) {
     }
 
     printf("%d| pct: %lf t_pos: %lf", msg_num, throttle_pct, target_pos);
-
->>>>>>> Stashed changes
   }
   // my_shutdown(); // Shutdown system
 }
