@@ -387,7 +387,7 @@ static Error handleThrottle(CANMessage *msg) {
   // Process received data - Only 1 byte for throttle percentage
   uint16_t throttle_adc_taps = (((uint16_t)msg->data[1] << 8)) | msg->data[0];
   msg_num = (((uint16_t)msg->data[3] << 8)) | msg->data[2];
-  float throttle_percentage = (throttle_adc_taps / 4096.0) * 100.0;
+  float throttle_percentage = (throttle_adc_taps / 4095.0) * 100.0;
 
   pbb_taps = throttle_adc_taps;
   throttle_pct = throttle_percentage;
@@ -544,6 +544,7 @@ int alt_main(void) {
   HAL_TIM_Base_Start_IT(&htim4);
   /* Super loop */
   while (1) {
+<<<<<<< Updated upstream
     // Process CAN messages in the queue
 
     if (trim_sample_fresh) {
@@ -595,6 +596,53 @@ int alt_main(void) {
       myprintf("%d | tap: %d, pct: %f, R(s): %lf, H(s): %lf, err: %lf\r\n",
          		  msg_num, pbb_taps, throttle_pct, set_point_d, pot1_d, (set_point_d - pot1_d));
     }
+=======
+
+	if (fdcan_queue.size() != 0) {
+
+		CANMessage msg;
+	    fdcan_queue.get(0, msg);
+
+	    Error code = processCANMessage(
+	    		&msg, static_cast<Command>((msg.rx_header.Identifier & 0x0F)));
+	    if (code != ok) {
+	    	myprintf("Error processing CAN message: %d\r\n", code);
+	    	handleError(code);
+	    }
+	}
+
+    // Target position in the SAME units as pot1_d (ADC taps or your scaled value).
+    // Change this to the position you want to hold.
+
+	// allow for some noise
+    if(throttle_pct < 5){
+    	throttle_pct = 1.5;
+    }
+
+	const double percent_idle = 1.5;
+	const double adc_range = 3100 - 700;
+    const double target_pos = (throttle_pct/100)*adc_range +700;// percent * range ~(3100 - 750) +750
+    // How close is "good enough" before we stop the motor.
+    const double deadband = 100.0;
+
+    // Duty command magnitude.
+    const double duty_cmd = 70;
+
+    // Current position error
+    const double err = target_pos - pot1_d;
+
+    // If we are too closed, open. If too open, close. Otherwise stop.
+    if (err > deadband) {
+      controlMotor(+duty_cmd, 0);
+    } else if (err < -deadband) {
+      controlMotor(-duty_cmd, 0);
+    } else {
+      controlMotor(60, 0);
+    }
+
+    printf("%d| pct: %lf t_pos: %lf", msg_num, throttle_pct, target_pos);
+
+>>>>>>> Stashed changes
   }
   // my_shutdown(); // Shutdown system
 }
