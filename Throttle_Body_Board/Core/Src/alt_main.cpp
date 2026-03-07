@@ -569,8 +569,8 @@ int alt_main(void) {
     // Change this to the position you want to hold.
 
 	// allow for some noise
-    if(throttle_pct < 5){
-    	throttle_pct = 1.5;
+    if(throttle_pct < 10){
+    	throttle_pct = 1.25;
     }
 
 	const double percent_idle = 1.5;
