@@ -571,27 +571,27 @@ int alt_main(void) {
 
 	// allow for some noise
     if(throttle_pct < 10){
-    	throttle_pct = 10;
+    	throttle_pct = 2.5;
     }
 
 	// const double percent_idle = 1.5;
-    const double ADC_MIN_TEMP = 650;
+    const double ADC_MIN_TEMP = 585;
 	const double adc_range = 3420 - ADC_MIN_TEMP;
     const double target_pos = (throttle_pct/100)*adc_range +ADC_MIN_TEMP;// percent * range ~(3100 - 750) +750
     // How close is "good enough" before we stop the motor.
-    const double deadband = 100;
-
-    // Duty command magnitude.
-    const double duty_cmd = 1;
+    const double deadband = 5; // WARNING: This seems to change DC gain
 
     // Current position error
     const double err = target_pos - pot1_d;
+
+    // Duty command magnitude.
+    const double duty_cmd = SS_DUTY_CYCLE +fabs(err/4);
 
     // If we are too closed, open. If too open, close. Otherwise stop.
     if (err > deadband) {
       controlMotor(+duty_cmd, 0);
     } else if (err < -deadband) {
-      controlMotor(-duty_cmd, 0);
+      controlMotor(-duty_cmd+5, 0);
     } else {
       controlMotor(SS_DUTY_CYCLE, 0);
     }
