@@ -109,6 +109,7 @@ float D = 0.0009f;
 // TODO: Whhat?
 #define MAX_ADC_OUTPUT 0xFFF // MAX is 4095 = 3V3 ?
 #define MAX_DUTY_CYCLE 100.0f
+#define SS_DUTY_CYCLE 44 // Steady State Duty Cycle, Cannot be float ~43
 #define TIM1_17_ARR MAX_DUTY_CYCLE
 #define SAMPLES_PER_CHANNEL 256
 
@@ -570,17 +571,18 @@ int alt_main(void) {
 
 	// allow for some noise
     if(throttle_pct < 10){
-    	throttle_pct = 1.25;
+    	throttle_pct = 10;
     }
 
-	const double percent_idle = 1.5;
-	const double adc_range = 3100 - 700;
-    const double target_pos = (throttle_pct/100)*adc_range +700;// percent * range ~(3100 - 750) +750
+	// const double percent_idle = 1.5;
+    const double ADC_MIN_TEMP = 650;
+	const double adc_range = 3420 - ADC_MIN_TEMP;
+    const double target_pos = (throttle_pct/100)*adc_range +ADC_MIN_TEMP;// percent * range ~(3100 - 750) +750
     // How close is "good enough" before we stop the motor.
-    const double deadband = 100.0;
+    const double deadband = 100;
 
     // Duty command magnitude.
-    const double duty_cmd = 70;
+    const double duty_cmd = 1;
 
     // Current position error
     const double err = target_pos - pot1_d;
@@ -591,10 +593,10 @@ int alt_main(void) {
     } else if (err < -deadband) {
       controlMotor(-duty_cmd, 0);
     } else {
-      controlMotor(60, 0);
+      controlMotor(SS_DUTY_CYCLE, 0);
     }
 
-    printf("%d| pct: %lf t_pos: %lf", msg_num, throttle_pct, target_pos);
+    myprintf("%d| pct: %lf t_pos: %lf pot1_d: %lf\r\n", msg_num, throttle_pct, target_pos, pot1_d);
   }
   // my_shutdown(); // Shutdown system
 }
