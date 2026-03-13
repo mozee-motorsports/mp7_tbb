@@ -10,7 +10,7 @@
 #define MAX_ADC		(double)(0xFFF)
 
 /*Constructor (...)*********************************************************
- *    The parameters specified here are those for for which we can't set up
+ *    The parameters specified here are those for which we can't set up
  *    reliable defaults, so we need to have the user set them.
  ***************************************************************************/
 PID::PID(double* Input, double* Output, double* Setpoint,

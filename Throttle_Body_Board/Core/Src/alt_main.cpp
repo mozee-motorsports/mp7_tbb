@@ -78,6 +78,7 @@
 #include "PID_V1.h" // arduino library
 using namespace std;
 
+// PID Tuning Constants ===========================================================
 // Aggressive tuning parameters for large error
 #define AGR_KP 0.11f
 #define AGR_KI 0.02f
@@ -103,48 +104,44 @@ float P = 0.6f;
 float I = 0.1f;
 float D = 0.005f;
 
+// Hard ware Specifiers =========================================================
 // Measured ADC steps for fully open - pots may measure farther
-#define OPEN_ADC_STEPS 3380
+#define OPEN_ADC_STEPS 3380 // TODO Refactor to MAX_PHYSCIAL_LIMIT
 #define IDLE_PCT 1.5
+/* way low... but will be corrected by trim pot calibrated on 3/10 */
+#define MAX_PHYSICAL_LIMIT 3890 // 100% val
+#define MIN_PHYSICAL_LIMIT 588 // 0 % val
 
 // TODO: Whhat?
-#define MAX_ADC_OUTPUT 0xFFF // MAX is 4095 = 3V3 ?
+#define MAX_INT_INPUT 0xFFF // MAX is 4095 = 3V3 ?
 #define MAX_DUTY_CYCLE 100.0f
 #define TIM1_17_ARR MAX_DUTY_CYCLE
 #define SAMPLES_PER_CHANNEL 256
 
+//Software Flags ================================================================
 static volatile bool tps_ready = false;
 static volatile bool pid_ready = false;
 static volatile bool shutdown_req = false;
 
 static uint32_t tps_buffer[4];
 static volatile bool trim_sample_fresh = false;
-
-static uint16_t set_point = IDLE_PCT; // Percentage
-
-// Output from PID controller
-static double pid_out;
-
-// Double representation of set point- recall that it's in terms of ADC steps,
-// but library requires double type
-static double set_point_d = set_point;
-// Pointer to double representation of set point
-static double *set_ptr = &set_point_d;
+static bool ready_to_drive = false;
 
 static double pot1_d = static_cast<double>(tps_buffer[0]);
 static double pot2_d = static_cast<double>(tps_buffer[1]);
 
-// Create PID controller object
-PID throttlePID(&pot1_d, &pid_out, set_ptr, KP, KI, KD, DIRECT);
-
+// PID ==========================================================================
 #define INTERVAL_MS (int32_t)1
-#define MAX_PHYSICAL_LIMIT 3890
+// Output from PID controller
+static double pid_out;
+// Double representation of set point- recall that it's in percentage,
+static double set_pct_d = IDLE_PCT;
+// Pointer to double representation of set point
+static double *set_pct_ptr = &set_pct_d;
+// Create PID controller object
+PID throttlePID(&pot1_d, &pid_out, set_pct_ptr, KP, KI, KD, DIRECT); // TODO Include filter
 
-/* way low... but will be corrected by trim pot calibrated on 3/10 */
-#define MIN_PHYSICAL_LIMIT 588
-
-static double min_limit_trimmed = MIN_PHYSICAL_LIMIT;
-
+// CAN ===========================================================================
 // FDCAN Defines
 static FDCAN_TxHeaderTypeDef tx_header;
 //static FDCAN_RxHeaderTypeDef rx_header;
@@ -156,13 +153,14 @@ static FDCANBuffer fdcan_queue(3); // Queue to process non-critical tasks
 
 // static std::queue<Error> error_queue;    // Queue to process errors
 
+// testing =======================================================================
 //TODO: remove after testing
 static uint16_t msg_num = 0;
 static uint16_t pbb_taps = 0;
 static float throttle_pct = 0;
-int last_msg_num = 5;
+int last_msg_num = 0;
 
-// Function prototypes
+// Function prototypes ============================================================
 static void controlMotor(double control_signal);
 static void stopMotor(void);
 static Error handleError(Error code);
@@ -174,8 +172,7 @@ static void myprintf(const char *fmt, ...);
 static double getSetpointSteps(float percentage);
 static void applyPWM(uint8_t duty, bool forward);
 
-static bool ready_to_drive = false;
-
+// Functions ======================================================================
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
   // Cast adc to double to used as PID parameters
   if (hadc->Instance == ADC1) {
@@ -187,11 +184,11 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
 
 // Sample at fixed intervals: 10ms
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-  static int last, current;
+  static int last, current; // Ignore this error
   if (htim->Instance == TIM2) {
     current = HAL_GetTick();
     pid_ready = true;
-    //last = current;
+    last = current;
 
     // ADC flag
     tps_ready = true;
@@ -200,7 +197,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
   if(htim->Instance == TIM4) {
 	  ready_to_drive = false;
 	  //stopMotor();
-	  set_point_d = getSetpointSteps(IDLE_PCT); // go to idle
+	  set_pct_d = getSetpointSteps(IDLE_PCT); // go to idle
 	  //myprintf("BARK!\n");
 	  // this timer is started by processCANMessage on ready-to-drive heartbeat
 	  HAL_TIM_Base_Stop_IT(&htim4);
@@ -379,14 +376,11 @@ static double getSetpointSteps(float percentage) {
   }else{
     duty_adc = OPEN_ADC_STEPS;
   }
-  /*double duty = percentage < 100
-                    ? static_cast<double>(roundf((percentage / MAX_DUTY_CYCLE) *
-                                                 OPEN_ADC_STEPS))
-                    : OPEN_ADC_STEPS;*/
+
   if (!duty_adc){
-    return min_limit_trimmed;
+    return MIN_PHYSICAL_LIMIT;
   }else{
-    return duty_adc < min_limit_trimmed ? min_limit_trimmed : duty_adc;
+    return duty_adc < MIN_PHYSICAL_LIMIT ? MIN_PHYSICAL_LIMIT : duty_adc;
   }
 }
 
@@ -412,7 +406,7 @@ static Error handleThrottle(CANMessage *msg) {
   } else {
 	  set_point_d = getSetpointSteps(IDLE_PCT);
   }++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-  set_point_d = getSetpointSteps(throttle_percentage);
+  set_pct_d = getSetpointSteps(throttle_percentage);
 
    // myprintf("throttle_percent = %f\n", throttle_percentage);
    //myprintf("set_point_d = %lf\n", set_point_d);
@@ -482,7 +476,7 @@ static void applyPWM(uint8_t duty, bool forward) {
 static void controlMotor(double control_signal) {
 
   // Prevent driving beyond physical limits
-  if ((pot1_d <= min_limit_trimmed &&
+  if ((pot1_d <= MIN_PHYSICAL_LIMIT &&
        control_signal < 0) || // At min, trying to close further
       (pot1_d >= MAX_PHYSICAL_LIMIT &&
        control_signal > 0)) { // At max, trying to open further
@@ -499,12 +493,12 @@ static void controlMotor(double control_signal) {
   applyPWM(duty, control_signal >= 0.0);
 
 }
-
+// main =======================================================================
 int alt_main(void) {
   HAL_GPIO_WritePin(HBRIDGE_EN_GPIO_Port, HBRIDGE_EN_Pin,
 	                    GPIO_PIN_RESET); // Disable H-bridge at start
 
-  set_point_d = getSetpointSteps(set_point);
+  set_pct_d = getSetpointSteps(IDLE_PCT);
 
   /* Initialization */
   HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
@@ -528,12 +522,6 @@ int alt_main(void) {
       -1 * static_cast<double>(TIM1_17_ARR),
       static_cast<double>(TIM1_17_ARR)); // Normalized limits: -100 - 100% - map
                                          // these directly to the pwm
-  //static double position_delta; // How close are we to the actual setpoint?
-
-  //  if(HAL_DAC_Start(&hdac1, DAC_CHANNEL_1) != HAL_OK) {
-  //    error_queue.push(dac_init_failure);
-  //  };
-  //  HAL_DAC_SetValue(&hdac1, DAC_CHANNEL_1, DAC_ALIGN_12B_R, 1670);
 
   HAL_GPIO_WritePin(HBRIDGE_MODE2_GPIO_Port, HBRIDGE_MODE2_Pin,
                     GPIO_PIN_SET); // Set to PWM/PWM mode
@@ -550,12 +538,13 @@ int alt_main(void) {
   //HAL_TIM_Base_GetState(&htim4);
   HAL_TIM_Base_Start_IT(&htim4);
 
+  //set tunings before entering forever loop
   throttlePID.SetTunings(P, I, D);
 
   /* Super loop */
   while (1) {
-    // Process CAN messages in the queue
 
+    // Process CAN messages in the queue
 	if (fdcan_queue.size() != 0) {
 
 		CANMessage msg;
@@ -568,6 +557,7 @@ int alt_main(void) {
 	    	handleError(code);
 	    }
 	}
+
 	//compute pid_out
     throttlePID.Compute();
 
@@ -576,7 +566,7 @@ int alt_main(void) {
     //controlMotor(throttle_pct);
 
     if ((last_msg_num != msg_num) || (msg_num == 0) ){ // only print unique messages except for 0
-    	myprintf("%d | pct: %f, R(s): %f, H(s): %f\r\n", msg_num, throttle_pct, set_point_d, pot1_d);
+    	myprintf("%d | pct: %f, R(s): %f, H(s): %f\r\n", msg_num, throttle_pct, set_pct_d, pot1_d);
     	last_msg_num = msg_num;
     }
 
