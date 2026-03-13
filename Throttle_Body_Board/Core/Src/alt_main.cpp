@@ -98,12 +98,13 @@ using namespace std;
 #define CONS_KI 0.4f
 #define CONS_KD 0.0009f
 
-float P = 0.25f;
-float I = 0.4f;
-float D = 0.0009f;
+//used for testing
+float P = 0.6f;
+float I = 0.1f;
+float D = 0.005f;
 
-#define OPEN_ADC_STEPS                                                         \
-  3600 // Measured ADC steps for fully open - pots may measure farther
+// Measured ADC steps for fully open - pots may measure farther
+#define OPEN_ADC_STEPS 3380
 #define IDLE_PCT 1.5
 
 // TODO: Whhat?
@@ -136,11 +137,11 @@ static double pot2_d = static_cast<double>(tps_buffer[1]);
 // Create PID controller object
 PID throttlePID(&pot1_d, &pid_out, set_ptr, KP, KI, KD, DIRECT);
 
-#define INTERVAL_MS (int32_t)10
+#define INTERVAL_MS (int32_t)1
 #define MAX_PHYSICAL_LIMIT 3890
 
-/* way low... but will be corrected by trim pot */
-#define MIN_PHYSICAL_LIMIT 300
+/* way low... but will be corrected by trim pot calibrated on 3/10 */
+#define MIN_PHYSICAL_LIMIT 588
 
 static double min_limit_trimmed = MIN_PHYSICAL_LIMIT;
 
@@ -159,15 +160,16 @@ static FDCANBuffer fdcan_queue(3); // Queue to process non-critical tasks
 static uint16_t msg_num = 0;
 static uint16_t pbb_taps = 0;
 static float throttle_pct = 0;
+int last_msg_num = 5;
 
 // Function prototypes
-static void controlMotor(double control_signal, int32_t position_delta);
+static void controlMotor(double control_signal);
 static void stopMotor(void);
 static Error handleError(Error code);
 static Error handleThrottle(CANMessage *msg);
-static Error handleStatusReport(void);
+//static Error handleStatusReport(void);
 static Error processCANMessage(CANMessage *msg, Command command);
-static void my_shutdown(void);
+//static void my_shutdown(void);
 static void myprintf(const char *fmt, ...);
 static double getSetpointSteps(float percentage);
 static void applyPWM(uint8_t duty, bool forward);
@@ -189,7 +191,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
   if (htim->Instance == TIM2) {
     current = HAL_GetTick();
     pid_ready = true;
-    last = current;
+    //last = current;
 
     // ADC flag
     tps_ready = true;
@@ -206,10 +208,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
   }
 }
 
-static void my_shutdown(void) {
+/*static void my_shutdown(void) {
   stopMotor();
   exit(1);
-}
+}*/
 
 static void myprintf(const char *fmt, ...) {
   static char buffer[256];
@@ -371,14 +373,21 @@ static Error handleError(Error code) {
 static double getSetpointSteps(float percentage) {
   // Unsigned integer, so negatives roll over to MAX - 1, if percentage is
   // greater than 100, clamp to fully open
-  double duty = percentage < 100
+  double duty_adc;
+  if (percentage < 100){
+	duty_adc = static_cast<double>(roundf((percentage / MAX_DUTY_CYCLE) * OPEN_ADC_STEPS));
+  }else{
+    duty_adc = OPEN_ADC_STEPS;
+  }
+  /*double duty = percentage < 100
                     ? static_cast<double>(roundf((percentage / MAX_DUTY_CYCLE) *
                                                  OPEN_ADC_STEPS))
-                    : OPEN_ADC_STEPS;
-  if (!duty)
+                    : OPEN_ADC_STEPS;*/
+  if (!duty_adc){
     return min_limit_trimmed;
-  else
-    return duty < min_limit_trimmed ? min_limit_trimmed : duty;
+  }else{
+    return duty_adc < min_limit_trimmed ? min_limit_trimmed : duty_adc;
+  }
 }
 
 static Error handleThrottle(CANMessage *msg) {
@@ -389,18 +398,24 @@ static Error handleThrottle(CANMessage *msg) {
   msg_num = (((uint16_t)msg->data[3] << 8)) | msg->data[2];
   float throttle_percentage = (throttle_adc_taps / 4095.0) * 100.0;
 
+  if (throttle_percentage<IDLE_PCT){
+	  throttle_percentage = IDLE_PCT;
+  }
+
   pbb_taps = throttle_adc_taps;
   throttle_pct = throttle_percentage;
 
   // Get position in terms of ADC levels based on percent.
+  /* Uncomment when READY to DRIVE +++++++++++++++++++++++++++++++
   if(ready_to_drive) {
 	  set_point_d = getSetpointSteps(throttle_percentage);
   } else {
 	  set_point_d = getSetpointSteps(IDLE_PCT);
-  }
+  }++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+  set_point_d = getSetpointSteps(throttle_percentage);
 
    // myprintf("throttle_percent = %f\n", throttle_percentage);
-   // myprintf("set_point_d = %lf\n", set_point_d);
+   //myprintf("set_point_d = %lf\n", set_point_d);
   return ok;
 }
 
@@ -464,7 +479,7 @@ static void applyPWM(uint8_t duty, bool forward) {
  */
 // In terms of ADC POT1 steps
 
-static void controlMotor(double control_signal, int32_t position_delta) {
+static void controlMotor(double control_signal) {
 
   // Prevent driving beyond physical limits
   if ((pot1_d <= min_limit_trimmed &&
@@ -483,14 +498,6 @@ static void controlMotor(double control_signal, int32_t position_delta) {
 
   applyPWM(duty, control_signal >= 0.0);
 
-  //  myprintf("POT1 : %f POT2 : %f PID: %f DUTY: %i, set point: %f, delta:
-  //  %i\r\n",
-  //      pot1_d,
-  //      pot2_d,
-  //      control_signal,
-  //      duty,
-  //      set_point_d,
-  //      position_delta);
 }
 
 int alt_main(void) {
@@ -521,7 +528,7 @@ int alt_main(void) {
       -1 * static_cast<double>(TIM1_17_ARR),
       static_cast<double>(TIM1_17_ARR)); // Normalized limits: -100 - 100% - map
                                          // these directly to the pwm
-  static double position_delta; // How close are we to the actual setpoint?
+  //static double position_delta; // How close are we to the actual setpoint?
 
   //  if(HAL_DAC_Start(&hdac1, DAC_CHANNEL_1) != HAL_OK) {
   //    error_queue.push(dac_init_failure);
@@ -542,15 +549,12 @@ int alt_main(void) {
   /* start the CAN watchdog */
   //HAL_TIM_Base_GetState(&htim4);
   HAL_TIM_Base_Start_IT(&htim4);
+
+  throttlePID.SetTunings(P, I, D);
+
   /* Super loop */
   while (1) {
     // Process CAN messages in the queue
-
-    if (trim_sample_fresh) {
-      // set minimum position based on TRIM_1 
-      double trimmer = (tps_buffer[2] / 4096.0)*350.0;
-      min_limit_trimmed = MIN_PHYSICAL_LIMIT + trimmer; 
-    }
 
 	if (fdcan_queue.size() != 0) {
 
@@ -564,37 +568,18 @@ int alt_main(void) {
 	    	handleError(code);
 	    }
 	}
+	//compute pid_out
+    throttlePID.Compute();
 
-    // Target position in the SAME units as pot1_d (ADC taps or your scaled value).
-    // Change this to the position you want to hold.
+    controlMotor(pid_out);
+    // uncomment below and comment above for open loop
+    //controlMotor(throttle_pct);
 
-	// allow for some noise
-    if(throttle_pct < 5){
-    	throttle_pct = 1.5;
+    if ((last_msg_num != msg_num) || (msg_num == 0) ){ // only print unique messages except for 0
+    	myprintf("%d | pct: %f, R(s): %f, H(s): %f\r\n", msg_num, throttle_pct, set_point_d, pot1_d);
+    	last_msg_num = msg_num;
     }
 
-	const double percent_idle = 1.5;
-	const double adc_range = 3100 - 700;
-    const double target_pos = (throttle_pct/100)*adc_range +700;// percent * range ~(3100 - 750) +750
-    // How close is "good enough" before we stop the motor.
-    const double deadband = 100.0;
-
-    // Duty command magnitude.
-    const double duty_cmd = 70;
-
-    // Current position error
-    const double err = target_pos - pot1_d;
-
-    // If we are too closed, open. If too open, close. Otherwise stop.
-    if (err > deadband) {
-      controlMotor(+duty_cmd, 0);
-    } else if (err < -deadband) {
-      controlMotor(-duty_cmd, 0);
-    } else {
-      controlMotor(60, 0);
-    }
-
-    printf("%d| pct: %lf t_pos: %lf", msg_num, throttle_pct, target_pos);
   }
   // my_shutdown(); // Shutdown system
 }
