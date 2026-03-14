@@ -106,7 +106,6 @@ float D = 0.005f;
 
 // Hard ware Specifiers =========================================================
 // Measured ADC steps for fully open - pots may measure farther
-#define OPEN_ADC_STEPS 3380 // TODO Refactor to MAX_PHYSCIAL_LIMIT
 #define IDLE_PCT 1.5
 /* way low... but will be corrected by trim pot calibrated on 3/10 */
 #define MAX_PHYSICAL_LIMIT 3890 // 100% val
@@ -138,8 +137,12 @@ static double pid_out;
 static double set_pct_d = IDLE_PCT;
 // Pointer to double representation of set point
 static double *set_pct_ptr = &set_pct_d;
+// double for pct_throttle_output
+static double pct_pot1_d = IDLE_PCT;
+// Pointer to the pct of pot 1
+static double *pct_pot1_ptr = &pct_pot1_d;
 // Create PID controller object
-PID throttlePID(&pot1_d, &pid_out, set_pct_ptr, KP, KI, KD, DIRECT); // TODO Include filter
+PID throttlePID(pct_pot1_ptr, &pid_out, set_pct_ptr, KP, KI, KD, DIRECT);
 
 // CAN ===========================================================================
 // FDCAN Defines
@@ -167,7 +170,6 @@ static Error handleError(Error code);
 static Error handleThrottle(CANMessage *msg);
 //static Error handleStatusReport(void);
 static Error processCANMessage(CANMessage *msg, Command command);
-//static void my_shutdown(void);
 static void myprintf(const char *fmt, ...);
 static double getSetpointSteps(float percentage);
 static void applyPWM(uint8_t duty, bool forward);
@@ -205,10 +207,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
   }
 }
 
-/*static void my_shutdown(void) {
-  stopMotor();
-  exit(1);
-}*/
 
 static void myprintf(const char *fmt, ...) {
   static char buffer[256];
@@ -367,83 +365,38 @@ static Error handleError(Error code) {
   return ok;
 }
 
-static double getSetpointSteps(float percentage) {
-  // Unsigned integer, so negatives roll over to MAX - 1, if percentage is
-  // greater than 100, clamp to fully open
-  double duty_adc;
-  if (percentage < 100){
-	duty_adc = static_cast<double>(roundf((percentage / MAX_DUTY_CYCLE) * OPEN_ADC_STEPS));
-  }else{
-    duty_adc = OPEN_ADC_STEPS;
-  }
+static double throttleTaps2Pct(double throttle_adc_taps) {
 
-  if (!duty_adc){
-    return MIN_PHYSICAL_LIMIT;
-  }else{
-    return duty_adc < MIN_PHYSICAL_LIMIT ? MIN_PHYSICAL_LIMIT : duty_adc;
-  }
+  double adc_range = MAX_PHYSICAL_LIMIT - MIN_PHYSICAL_LIMIT;
+  float throttle_percentage = (throttle_adc_taps - MIN_PHYSICAL_LIMIT / adc_range) * 100.0;
+  // TODO Implement filter
+  return throttle_percentage;
 }
 
 static Error handleThrottle(CANMessage *msg) {
-
 
   // Process received data - Only 1 byte for throttle percentage
   uint16_t throttle_adc_taps = (((uint16_t)msg->data[1] << 8)) | msg->data[0];
   msg_num = (((uint16_t)msg->data[3] << 8)) | msg->data[2];
   float throttle_percentage = (throttle_adc_taps / 4095.0) * 100.0;
 
-  if (throttle_percentage<IDLE_PCT){
-	  throttle_percentage = IDLE_PCT;
-  }
-
-  pbb_taps = throttle_adc_taps;
-  throttle_pct = throttle_percentage;
-
-  // Get position in terms of ADC levels based on percent.
   /* Uncomment when READY to DRIVE +++++++++++++++++++++++++++++++
   if(ready_to_drive) {
-	  set_point_d = getSetpointSteps(throttle_percentage);
+    if (throttle_percentage<IDLE_PCT){
+	  set_pct_d = IDLE_PCT;
+	}else{
+	  set_point_d = throttle_percentage;
+	}
   } else {
-	  set_point_d = getSetpointSteps(IDLE_PCT);
+   set_point_d = IDLE_PCT
   }++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-  set_pct_d = getSetpointSteps(throttle_percentage);
-
-   // myprintf("throttle_percent = %f\n", throttle_percentage);
-   //myprintf("set_point_d = %lf\n", set_point_d);
+  if (throttle_percentage<IDLE_PCT){
+    set_pct_d = IDLE_PCT;
+  }else{
+	set_pct_d = throttle_percentage;
+  }
   return ok;
 }
-
-/*
- * Returns battery level of Throttle Control board by sampling with ADC - 0xFF
- * if not implemented
- */
-// static Error handleStatusReport(void)
-//{
-////  std::queue<Error> temp = error_queue; // Create a copy
-//
-//  // First verify dlc
-//  if (rx_header.DataLength != STATUS_REPORT_DLC)
-//    return mismatch_dlc;
-//
-//  // Check if there are any errors
-//  while (!temp.empty())
-//  {
-//    Error error = temp.front(); // Get error from queue
-//
-//    // Setup packet to send
-//    uint8_t tx_data[3] = {0xFF, 0xFF, (uint8_t)error};
-//
-//    // Send error, if we can't then return error
-//    if (fdcanWrite(&hfdcan1, tx_header, tx_data, STATUS_REPORT_DLC,
-//    steering_wheel, from, DEFAULT_PRIORITY, status_report) != HAL_OK)
-//      return fdcan_tx_failure;
-//
-//    temp.pop(); // Remove error from queue
-//  }
-//
-//  return ok;
-//}
-//
 
 static void stopMotor(void) {
   // applyPWM will turn these back on when ready_to_drive = true;
@@ -498,7 +451,7 @@ int alt_main(void) {
   HAL_GPIO_WritePin(HBRIDGE_EN_GPIO_Port, HBRIDGE_EN_Pin,
 	                    GPIO_PIN_RESET); // Disable H-bridge at start
 
-  set_pct_d = getSetpointSteps(IDLE_PCT);
+  set_pct_d = IDLE_PCT;
 
   /* Initialization */
   HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
@@ -557,8 +510,10 @@ int alt_main(void) {
 	    	handleError(code);
 	    }
 	}
+	// convert output (adc) to pct
+	pct_pot1_d = throttleTaps2Pct(pot1_d);
 
-	//compute pid_out
+	// compute pid_out
     throttlePID.Compute();
 
     controlMotor(pid_out);

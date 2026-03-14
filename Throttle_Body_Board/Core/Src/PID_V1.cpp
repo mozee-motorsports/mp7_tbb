@@ -70,7 +70,7 @@ bool PID::Compute()
       if(outputSum > outMax) outputSum= outMax;
       else if(outputSum < outMin) outputSum= outMin;
 
-      /*Add Proportional on Error, if P_ON_E is specified*/
+      /*Add Proportional on Error, if P_ON_E is specified DEFAULT*/
 	   double output;
       if(pOnE) output = kp * error;
       else output = 0;
