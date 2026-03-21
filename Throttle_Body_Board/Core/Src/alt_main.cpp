@@ -199,7 +199,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
   if(htim->Instance == TIM4) {
 	  ready_to_drive = false;
 	  //stopMotor();
-	  set_pct_d = getSetpointSteps(IDLE_PCT); // go to idle
+	  set_pct_d = IDLE_PCT; // go to idle
 	  //myprintf("BARK!\n");
 	  // this timer is started by processCANMessage on ready-to-drive heartbeat
 	  HAL_TIM_Base_Stop_IT(&htim4);
