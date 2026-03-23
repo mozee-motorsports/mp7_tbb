@@ -109,7 +109,7 @@ float D = 0.005f;
 #define IDLE_PCT 1.5
 /* way low... but will be corrected by trim pot calibrated on 3/10 */
 #define MAX_PHYSICAL_LIMIT 3890 // 100% val
-#define MIN_PHYSICAL_LIMIT 588 // 0 % val
+#define MIN_PHYSICAL_LIMIT 584 // 0 % val TODO measure this exactly for precise idle
 
 // TODO: Whhat?
 #define MAX_INT_INPUT 0xFFF // MAX is 4095 = 3V3 ?
@@ -364,12 +364,30 @@ static Error handleError(Error code) {
   }
   return ok;
 }
+// filter for throttle taps
+static double filterThrottleTaps(double raw_taps) {
+  static double filtered_taps = MIN_PHYSICAL_LIMIT;
+  const double alpha = 0.15;   // lower = smoother, slower
 
+  // clamp first
+  if (raw_taps <= MIN_PHYSICAL_LIMIT) {
+    filtered_taps = MIN_PHYSICAL_LIMIT;
+  } else if (raw_taps >= MAX_PHYSICAL_LIMIT) {
+    filtered_taps = MAX_PHYSICAL_LIMIT;
+  } else {
+    filtered_taps = filtered_taps + alpha * (raw_taps - filtered_taps);
+  }
+
+  return filtered_taps;
+}
+// take throttle taps filter them and turn them into percentage
 static double throttleTaps2Pct(double throttle_adc_taps) {
+  double filtered_taps = filterThrottleTaps(throttle_adc_taps);
+  double adc_range = (double)(MAX_PHYSICAL_LIMIT - MIN_PHYSICAL_LIMIT);
 
-  double adc_range = MAX_PHYSICAL_LIMIT - MIN_PHYSICAL_LIMIT;
-  float throttle_percentage = (throttle_adc_taps - MIN_PHYSICAL_LIMIT / adc_range) * 100.0;
-  // TODO Implement filter
+  double throttle_percentage = ((filtered_taps - (double)MIN_PHYSICAL_LIMIT) / adc_range) * 100.0;
+
+  //myprintf("taps filtered: %f, pct: %f \r\n", filtered_taps, throttle_percentage);
   return throttle_percentage;
 }
 
@@ -521,7 +539,7 @@ int alt_main(void) {
     //controlMotor(throttle_pct);
 
     if ((last_msg_num != msg_num) || (msg_num == 0) ){ // only print unique messages except for 0
-    	myprintf("%d | pct: %f, R(s): %f, H(s): %f\r\n", msg_num, throttle_pct, set_pct_d, pot1_d);
+    	myprintf("%d | R(s): %f, H(s): %f\r\n", msg_num , set_pct_d, pct_pot1_d);
     	last_msg_num = msg_num;
     }
 
