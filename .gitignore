@@ -26,6 +26,14 @@
 *.a
 *.lib
 
+#matlab and looging 
+*.log
+*.data
+*.csv
+*.mat
+*.png
+*.zip
+
 # Executables
 *.exe
 *.out
