@@ -100,15 +100,15 @@ using namespace std;
 #define CONS_KD 0.0009f
 
 //used for testing
-float P = 0.6f;
-float I = 0.1f;
-float D = 0.005f;
+float P = 15.0f;
+float I = 0.0f;
+float D = 0.0f;
 
 // Hard ware Specifiers =========================================================
 // Measured ADC steps for fully open - pots may measure farther
 #define IDLE_PCT 1.5
 /* way low... but will be corrected by trim pot calibrated on 3/10 */
-#define MAX_PHYSICAL_LIMIT 3890 // 100% val
+#define MAX_PHYSICAL_LIMIT 3415//3890 // 100% val
 #define MIN_PHYSICAL_LIMIT 584 // 0 % val TODO measure this exactly for precise idle
 
 // TODO: Whhat?
@@ -534,12 +534,13 @@ int alt_main(void) {
 	// compute pid_out
     throttlePID.Compute();
 
-    controlMotor(pid_out);
+    //controlMotor(pid_out);
     // uncomment below and comment above for open loop
-    //controlMotor(throttle_pct);
+    set_pct_d = 61;
+    controlMotor(set_pct_d);
 
     if ((last_msg_num != msg_num) || (msg_num == 0) ){ // only print unique messages except for 0
-    	myprintf("%d | R(s): %f, H(s): %f\r\n", msg_num , set_pct_d, pct_pot1_d);
+    	myprintf("%d | R(s): %f, H(s): %f, Pot 1: %f\r\n", msg_num , set_pct_d, pct_pot1_d, pot1_d);
     	last_msg_num = msg_num;
     }
 
