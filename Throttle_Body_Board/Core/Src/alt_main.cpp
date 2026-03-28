@@ -107,14 +107,13 @@ float D = 0.0f;
 // Hard ware Specifiers =========================================================
 // Measured ADC steps for fully open - pots may measure farther
 #define IDLE_PCT 1.5
-/* way low... but will be corrected by trim pot // calibrated on 3/10 */
-#define MAX_PHYSICAL_LIMIT 3665//3890 // 100% val
-#define MIN_PHYSICAL_LIMIT 392 // 0 % val TODO measure this exactly for precise idle
-#define DEAD_ZONE_FULL 20 // dead zone for 0 and 100%
+/* way low... but will be corrected by trim pot calibrated on 3/10 */
+#define MAX_PHYSICAL_LIMIT 3415//3890 // 100% val
+#define MIN_PHYSICAL_LIMIT 584 // 0 % val TODO measure this exactly for precise idle
 
 // TODO: Whhat?
 #define MAX_INT_INPUT 0xFFF // MAX is 4095 = 3V3 ?
-#define MAX_DUTY_CYCLE 1000.0f
+#define MAX_DUTY_CYCLE 100.0f
 #define TIM1_17_ARR MAX_DUTY_CYCLE
 #define SAMPLES_PER_CHANNEL 256
 
@@ -162,9 +161,7 @@ static FDCANBuffer fdcan_queue(3); // Queue to process non-critical tasks
 static uint16_t msg_num = 0;
 static uint16_t pbb_taps = 0;
 static float throttle_pct = 0;
-static int last_msg_num = 0;
-static int pwm_test = 0;
-static float duty_test = 0;
+int last_msg_num = 0;
 
 // Function prototypes ============================================================
 static void controlMotor(double control_signal);
@@ -386,22 +383,11 @@ static double filterThrottleTaps(double raw_taps) {
 // take throttle taps filter them and turn them into percentage
 static double throttleTaps2Pct(double throttle_adc_taps) {
   double filtered_taps = filterThrottleTaps(throttle_adc_taps);
+  double adc_range = (double)(MAX_PHYSICAL_LIMIT - MIN_PHYSICAL_LIMIT);
 
-  double effective_min = (double)MIN_PHYSICAL_LIMIT + DEAD_ZONE_FULL;
-  double effective_max = (double)MAX_PHYSICAL_LIMIT - DEAD_ZONE_FULL;
-  double effective_range = effective_max - effective_min;
+  double throttle_percentage = ((filtered_taps - (double)MIN_PHYSICAL_LIMIT) / adc_range) * 100.0;
 
-  double throttle_percentage;
-
-  if (filtered_taps <= effective_min) {
-    throttle_percentage = 0.0;
-  } else if (filtered_taps >= effective_max) {
-    throttle_percentage = 100.0;
-  } else {
-    throttle_percentage =
-        ((filtered_taps - effective_min) / effective_range) * 100.0;
-  }
-
+  //myprintf("taps filtered: %f, pct: %f \r\n", filtered_taps, throttle_percentage);
   return throttle_percentage;
 }
 
@@ -410,7 +396,7 @@ static Error handleThrottle(CANMessage *msg) {
   // Process received data - Only 1 byte for throttle percentage
   uint16_t throttle_adc_taps = (((uint16_t)msg->data[1] << 8)) | msg->data[0];
   msg_num = (((uint16_t)msg->data[3] << 8)) | msg->data[2];
-  float throttle_percentage = (throttle_adc_taps / MAX_INT_INPUT) * 100.0;
+  float throttle_percentage = (throttle_adc_taps / 4095.0) * 100.0;
 
   /* Uncomment when READY to DRIVE +++++++++++++++++++++++++++++++
   if(ready_to_drive) {
@@ -436,17 +422,15 @@ static void stopMotor(void) {
   HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1); // PWM_LOW off
 }
 
-static void applyPWM(uint16_t duty, bool forward) {
+static void applyPWM(uint8_t duty, bool forward) {
   if (forward) {
     HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1);           // PWM_LOW off
     __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty); // PWM_HIGH duty
     HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-    pwm_test = duty;
   } else {
     HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);             // PWM_HIGH off
     __HAL_TIM_SET_COMPARE(&htim17, TIM_CHANNEL_1, duty); // PWM_LOW duty
     HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1);
-    pwm_test = -1*duty;
   }
 }
 
@@ -473,12 +457,10 @@ static void controlMotor(double control_signal) {
 
   // Calculate duty cycle from PID output
   const double duty_cycle = fabs(control_signal);
-  //myprintf("duty: %f ", duty_cycle);
-  const uint16_t duty = (duty_cycle > MAX_DUTY_CYCLE)
+  const uint8_t duty = (duty_cycle > MAX_DUTY_CYCLE)
                            ? MAX_DUTY_CYCLE
-                           : static_cast<uint16_t>(duty_cycle);
-  //myprintf("duty: %i ", duty);
-  duty_test = duty;
+                           : static_cast<uint8_t>(duty_cycle);
+
   applyPWM(duty, control_signal >= 0.0);
 
 }
@@ -509,7 +491,7 @@ int alt_main(void) {
   throttlePID.SetSampleTime(INTERVAL_MS);
   throttlePID.SetOutputLimits(
       -1 * static_cast<double>(TIM1_17_ARR),
-      static_cast<double>(TIM1_17_ARR)); // Normalized limits:
+      static_cast<double>(TIM1_17_ARR)); // Normalized limits: -100 - 100% - map
                                          // these directly to the pwm
 
   HAL_GPIO_WritePin(HBRIDGE_MODE2_GPIO_Port, HBRIDGE_MODE2_Pin,
@@ -549,23 +531,16 @@ int alt_main(void) {
 	// convert output (adc) to pct
 	pct_pot1_d = throttleTaps2Pct(pot1_d);
 
-	//ryans crap
-
-
-
-	set_pct_d //
-
 	// compute pid_out
     throttlePID.Compute();
 
-    controlMotor(pid_out);
+    //controlMotor(pid_out);
     // uncomment below and comment above for open loop
-    //set_pct_d = 0;
-    //controlMotor(set_pct_d*10);
+    set_pct_d = 61;
+    controlMotor(set_pct_d);
 
     if ((last_msg_num != msg_num) || (msg_num == 0) ){ // only print unique messages except for 0
-    	myprintf("%d | R(s): %f, H(s): %f, Pot 1: %f, PWM: %i\r\n",
-    			msg_num , set_pct_d, pct_pot1_d, pot1_d, pwm_test);
+    	myprintf("%d | R(s): %f, H(s): %f, Pot 1: %f\r\n", msg_num , set_pct_d, pct_pot1_d, pot1_d);
     	last_msg_num = msg_num;
     }
 
