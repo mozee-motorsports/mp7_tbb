@@ -137,7 +137,8 @@ static double pid_out;
 // Double representation of set point- recall that it's in percentage,
 static double set_pct_d = IDLE_PCT;
 // Pointer to double representation of set point
-static double *set_pct_ptr = &set_pct_d;
+static double set_pct_test = 0; // ryan test
+static double *set_pct_ptr =  &set_pct_test;// &set_pct_d;
 // double for pct_throttle_output
 static double pct_pot1_d = IDLE_PCT;
 // Pointer to the pct of pot 1
@@ -165,6 +166,10 @@ static float throttle_pct = 0;
 static int last_msg_num = 0;
 static int pwm_test = 0;
 static float duty_test = 0;
+static int current_time = 0;
+static int last_time = 0;
+#define MAX_STEP 1
+#define UPDATE_TIME 10
 
 // Function prototypes ============================================================
 static void controlMotor(double control_signal);
@@ -411,7 +416,7 @@ static Error handleThrottle(CANMessage *msg) {
   uint16_t throttle_adc_taps = (((uint16_t)msg->data[1] << 8)) | msg->data[0];
   msg_num = (((uint16_t)msg->data[3] << 8)) | msg->data[2];
   float throttle_percentage = (throttle_adc_taps / MAX_INT_INPUT) * 100.0;
-
+  //myprintf("throttle: %f   ", throttle_percentage);
   /* Uncomment when READY to DRIVE +++++++++++++++++++++++++++++++
   if(ready_to_drive) {
     if (throttle_percentage<IDLE_PCT){
@@ -550,10 +555,29 @@ int alt_main(void) {
 	pct_pot1_d = throttleTaps2Pct(pot1_d);
 
 	//ryans crap
+	current_time = HAL_GetTick();
 
+	if (current_time-last_time >= UPDATE_TIME){
+		double diff = set_pct_d - set_pct_test;
 
+		if (fabs(diff) <= MAX_STEP){
+			set_pct_test = set_pct_d;
+		} // if the step isnt too big
 
-	set_pct_d //
+		if (fabs(diff) >= MAX_STEP){
+
+			if ((diff) >0){
+				set_pct_test = set_pct_test + MAX_STEP;
+			}
+
+			if ((diff) <0){
+				set_pct_test = set_pct_test - MAX_STEP;
+			}
+		}
+	}
+
+	//set_pct_test = 0; // to pid loop
+	//set_pct_d = 0 ;// desired throttle position FAST, 1000hz
 
 	// compute pid_out
     throttlePID.Compute();
@@ -564,8 +588,8 @@ int alt_main(void) {
     //controlMotor(set_pct_d*10);
 
     if ((last_msg_num != msg_num) || (msg_num == 0) ){ // only print unique messages except for 0
-    	myprintf("%d | R(s): %f, H(s): %f, Pot 1: %f, PWM: %i\r\n",
-    			msg_num , set_pct_d, pct_pot1_d, pot1_d, pwm_test);
+    	myprintf("%d | R(s): %f, H(s): %f, Pot 1: %f, PWM: %i ryan: %f\r\n",
+    			msg_num , set_pct_d, pct_pot1_d, pot1_d, pwm_test, set_pct_test);
     	last_msg_num = msg_num;
     }
 
