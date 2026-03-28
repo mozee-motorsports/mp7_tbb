@@ -534,10 +534,10 @@ int alt_main(void) {
 	// compute pid_out
     throttlePID.Compute();
 
-    //controlMotor(pid_out);
+    controlMotor(pid_out);
     // uncomment below and comment above for open loop
-    set_pct_d = 61;
-    controlMotor(set_pct_d);
+    //set_pct_d = 61;
+    //controlMotor(set_pct_d);
 
     if ((last_msg_num != msg_num) || (msg_num == 0) ){ // only print unique messages except for 0
     	myprintf("%d | R(s): %f, H(s): %f, Pot 1: %f\r\n", msg_num , set_pct_d, pct_pot1_d, pot1_d);
