@@ -103,6 +103,7 @@ using namespace std;
 float P = 15.0f; //18
 float I = 300.0f; //1000
 float D = 0.1f; //.1
+#define IDLE_I 1500
 
 // Hard ware Specifiers =========================================================
 // Measured ADC steps for fully open - pots may measure farther
@@ -416,8 +417,10 @@ static Error handleThrottle(CANMessage *msg) {
   }++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
   if (throttle_percentage<IDLE_PCT){
     set_pct_d = IDLE_PCT;
+    throttlePID.SetTunings(P, IDLE_I, D);
   }else{
 	set_pct_d = throttle_percentage;
+	throttlePID.SetTunings(P, I, D);
   }
   return ok;
 }
