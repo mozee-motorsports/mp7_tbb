@@ -100,15 +100,15 @@ using namespace std;
 #define CONS_KD 0.0009f
 
 //used for testing
-float P = 15.0f;
-float I = 0.0f;
-float D = 0.0f;
+float P = 15.0f; //18
+float I = 300.0f; //1000
+float D = 0.1f; //.1
 
 // Hard ware Specifiers =========================================================
 // Measured ADC steps for fully open - pots may measure farther
 #define IDLE_PCT 1.5
 /* way low... but will be corrected by trim pot calibrated on 3/10 */
-#define MAX_PHYSICAL_LIMIT 3415//3890 // 100% val
+#define MAX_PHYSICAL_LIMIT 3700//3890 // 100% val
 #define MIN_PHYSICAL_LIMIT 584 // 0 % val TODO measure this exactly for precise idle
 
 // TODO: Whhat?
@@ -136,7 +136,9 @@ static double pid_out;
 // Double representation of set point- recall that it's in percentage,
 static double set_pct_d = IDLE_PCT;
 // Pointer to double representation of set point
-static double *set_pct_ptr = &set_pct_d;
+//static double *set_pct_ptr = &set_pct_d;
+static double set_pct_test = 0; // ryan test
+static double *set_pct_ptr =  &set_pct_test;// &set_pct_d;
 // double for pct_throttle_output
 static double pct_pot1_d = IDLE_PCT;
 // Pointer to the pct of pot 1
@@ -162,6 +164,10 @@ static uint16_t msg_num = 0;
 static uint16_t pbb_taps = 0;
 static float throttle_pct = 0;
 int last_msg_num = 0;
+static int current_time = 0;
+static int last_time = 0;
+#define MAX_STEP 3
+#define UPDATE_TIME 2
 
 // Function prototypes ============================================================
 static void controlMotor(double control_signal);
@@ -464,6 +470,31 @@ static void controlMotor(double control_signal) {
   applyPWM(duty, control_signal >= 0.0);
 
 }
+// chathelper
+#define MOVING_AVG_SIZE 1000
+static double movingAverage(double new_value) {
+    static double values[MOVING_AVG_SIZE] = {0};
+    static int index = 0;
+    static double sum = 0.0f;
+
+    // remove old value from sum
+    sum -= values[index];
+
+    // store new value
+    values[index] = new_value;
+
+    // add new value to sum
+    sum += values[index];
+
+    // move index in a loop
+    index++;
+    if (index >= MOVING_AVG_SIZE) {
+        index = 0;
+    }
+
+    return sum / MOVING_AVG_SIZE;
+}
+
 // main =======================================================================
 int alt_main(void) {
   HAL_GPIO_WritePin(HBRIDGE_EN_GPIO_Port, HBRIDGE_EN_Pin,
@@ -531,6 +562,34 @@ int alt_main(void) {
 	// convert output (adc) to pct
 	pct_pot1_d = throttleTaps2Pct(pot1_d);
 
+	//ryans crap
+		current_time = HAL_GetTick();
+		double filtered_throttle = movingAverage(set_pct_d);
+
+		if (current_time-last_time >= UPDATE_TIME){
+			double diff = filtered_throttle - set_pct_test;
+
+			if (fabs(diff) <= MAX_STEP){
+				set_pct_test = filtered_throttle;
+			}                            // if the step isnt too big
+
+			if (fabs(diff) >= MAX_STEP){// if the step is too big
+
+				if ((diff) >0){
+					set_pct_test = set_pct_test + MAX_STEP;
+				}
+
+				if ((diff) <0){
+					set_pct_test = set_pct_test - MAX_STEP;
+				}
+			}
+
+			last_time = HAL_GetTick();
+		}
+
+
+
+
 	// compute pid_out
     throttlePID.Compute();
 
@@ -540,7 +599,8 @@ int alt_main(void) {
     //controlMotor(set_pct_d);
 
     if ((last_msg_num != msg_num) || (msg_num == 0) ){ // only print unique messages except for 0
-    	myprintf("%d | R(s): %f, H(s): %f, Pot 1: %f\r\n", msg_num , set_pct_d, pct_pot1_d, pot1_d);
+    	myprintf("%d | R(s): %f, H(s): %f\r\n",
+    			msg_num , set_pct_test, pct_pot1_d);
     	last_msg_num = msg_num;
     }
 
