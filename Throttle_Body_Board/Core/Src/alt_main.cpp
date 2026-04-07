@@ -104,16 +104,16 @@ float P = 15.0f;
 float I = 0.0f;
 float D = 0.0f;
 
+#define IDLE_PCT 6.7
+
 // Hard ware Specifiers =========================================================
-// Measured ADC steps for fully open - pots may measure farther
-#define IDLE_PCT 1.5
 /* way low... but will be corrected by trim pot calibrated on 3/10 */
 #define MAX_PHYSICAL_LIMIT 3415//3890 // 100% val
 #define MIN_PHYSICAL_LIMIT 584 // 0 % val TODO measure this exactly for precise idle
 
 // TODO: Whhat?
 #define MAX_INT_INPUT 0xFFF // MAX is 4095 = 3V3 ?
-#define MAX_DUTY_CYCLE 100.0f
+#define MAX_DUTY_CYCLE 1000.0f
 #define TIM1_17_ARR MAX_DUTY_CYCLE
 #define SAMPLES_PER_CHANNEL 256
 
@@ -534,10 +534,10 @@ int alt_main(void) {
 	// compute pid_out
     throttlePID.Compute();
 
-    //controlMotor(pid_out);
+    controlMotor(pid_out);
     // uncomment below and comment above for open loop
-    set_pct_d = 61;
-    controlMotor(set_pct_d);
+    //set_pct_d = 61;
+    //controlMotor(set_pct_d);
 
     if ((last_msg_num != msg_num) || (msg_num == 0) ){ // only print unique messages except for 0
     	myprintf("%d | R(s): %f, H(s): %f, Pot 1: %f\r\n", msg_num , set_pct_d, pct_pot1_d, pot1_d);
