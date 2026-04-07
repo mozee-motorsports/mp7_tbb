@@ -100,16 +100,21 @@ using namespace std;
 #define CONS_KD 0.0009f
 
 //used for testing
-float P = 15.0f;
+float P = 40.0f;
 float I = 0.0f;
 float D = 0.0f;
 
 #define IDLE_PCT 6.7
 
+// Dead band compensation
+#define PWM_DEADBAND_OPEN   610.0
+#define PWM_DEADBAND_CLOSE  600.0
+#define PID_STOP_BAND       5.0
+
 // Hard ware Specifiers =========================================================
 /* way low... but will be corrected by trim pot calibrated on 3/10 */
 #define MAX_PHYSICAL_LIMIT 3415//3890 // 100% val
-#define MIN_PHYSICAL_LIMIT 584 // 0 % val TODO measure this exactly for precise idle
+#define MIN_PHYSICAL_LIMIT 387 // 0 % val TODO measure this exactly for precise idle
 
 // TODO: Whhat?
 #define MAX_INT_INPUT 0xFFF // MAX is 4095 = 3V3 ?
@@ -162,6 +167,7 @@ static uint16_t msg_num = 0;
 static uint16_t pbb_taps = 0;
 static float throttle_pct = 0;
 int last_msg_num = 0;
+int PWM_test = 0;
 
 // Function prototypes ============================================================
 static void controlMotor(double control_signal);
@@ -172,7 +178,7 @@ static Error handleThrottle(CANMessage *msg);
 static Error processCANMessage(CANMessage *msg, Command command);
 static void myprintf(const char *fmt, ...);
 static double getSetpointSteps(float percentage);
-static void applyPWM(uint8_t duty, bool forward);
+static void applyPWM(uint16_t  duty, bool forward);
 
 // Functions ======================================================================
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
@@ -422,15 +428,15 @@ static void stopMotor(void) {
   HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1); // PWM_LOW off
 }
 
-static void applyPWM(uint8_t duty, bool forward) {
+static void applyPWM(uint16_t duty, bool forward) {
   if (forward) {
     HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1);           // PWM_LOW off
     __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty); // PWM_HIGH duty
     HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
   } else {
     HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);             // PWM_HIGH off
-    __HAL_TIM_SET_COMPARE(&htim17, TIM_CHANNEL_1, duty); // PWM_LOW duty
-    HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1);
+    //__HAL_TIM_SET_COMPARE(&htim17, TIM_CHANNEL_1, duty); // PWM_LOW duty
+   // HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1);
   }
 }
 
@@ -447,23 +453,54 @@ static void applyPWM(uint8_t duty, bool forward) {
 static void controlMotor(double control_signal) {
 
   // Prevent driving beyond physical limits
-  if ((pot1_d <= MIN_PHYSICAL_LIMIT &&
-       control_signal < 0) || // At min, trying to close further
-      (pot1_d >= MAX_PHYSICAL_LIMIT &&
-       control_signal > 0)) { // At max, trying to open further
+  if ((pot1_d <= MIN_PHYSICAL_LIMIT && control_signal < 0.0) ||
+      (pot1_d >= MAX_PHYSICAL_LIMIT && control_signal > 0.0)) {
     stopMotor();
     return;
   }
 
-  // Calculate duty cycle from PID output
-  const double duty_cycle = fabs(control_signal);
-  const uint8_t duty = (duty_cycle > MAX_DUTY_CYCLE)
-                           ? MAX_DUTY_CYCLE
-                           : static_cast<uint8_t>(duty_cycle);
+  const bool forward = (control_signal >= 0.0);
+  const double deadband_pwm = forward ? PWM_DEADBAND_OPEN : PWM_DEADBAND_CLOSE;
+  const double mag = fabs(control_signal);
 
-  applyPWM(duty, control_signal >= 0.0);
+  // Small command: do not buzz the motor
+  if (mag <= PID_STOP_BAND) {
+    stopMotor();
+    return;
+  }
 
+  // Clamp PID output to expected range
+  double clipped_mag = mag;
+  if (clipped_mag > MAX_DUTY_CYCLE) {
+    clipped_mag = MAX_DUTY_CYCLE;
+  }
+
+  // Map PID output from:
+  // PID_STOP_BAND ... MAX_DUTY_CYCLE
+  // into
+  // deadband_pwm ... MAX_DUTY_CYCLE
+  const double scaled =
+      deadband_pwm +
+      ((clipped_mag - PID_STOP_BAND) / (MAX_DUTY_CYCLE - PID_STOP_BAND)) *
+      (MAX_DUTY_CYCLE - deadband_pwm);
+
+  uint16_t duty = (uint16_t)scaled;
+
+  if (duty > (uint16_t)MAX_DUTY_CYCLE) {
+    duty = (uint16_t)MAX_DUTY_CYCLE;
+  }
+
+  //testing
+  if (forward){
+	  PWM_test = duty;
+  }else{
+	  PWM_test = -1*duty;
+  }
+
+  applyPWM(duty, forward);
 }
+
+
 // main =======================================================================
 int alt_main(void) {
   HAL_GPIO_WritePin(HBRIDGE_EN_GPIO_Port, HBRIDGE_EN_Pin,
@@ -540,7 +577,7 @@ int alt_main(void) {
     //controlMotor(set_pct_d);
 
     if ((last_msg_num != msg_num) || (msg_num == 0) ){ // only print unique messages except for 0
-    	myprintf("%d | R(s): %f, H(s): %f, Pot 1: %f\r\n", msg_num , set_pct_d, pct_pot1_d, pot1_d);
+    	myprintf("%d | R(s): %f, H(s): %f, PWM: %i\r\n", msg_num , set_pct_d, pct_pot1_d, PWM_test);
     	last_msg_num = msg_num;
     }
 

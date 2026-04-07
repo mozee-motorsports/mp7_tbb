@@ -37,8 +37,11 @@ H_roll   = nan(rollingN, 1);
 
 % Regex for:
 %   2512 | R(s): 1517.000000, H(s): 3401.000000
+% and also allows extra text after H(s), for example:
+%   2512 | R(s): 1517.000000, H(s): 3401.000000, PID: 12.5
+
 num = '([+-]?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)';
-pat = ['^\s*(\d+)\s*\|\s*R\(s\):\s*' num '\s*,\s*H\(s\):\s*' num '\s*$'];
+pat = ['^\s*(\d+)\s*\|\s*R\(s\):\s*' num '\s*,\s*H\(s\):\s*' num '.*$'];
 
 % Figure
 fig = figure("Name", "Live UART R(s)/H(s)", "NumberTitle", "off");
