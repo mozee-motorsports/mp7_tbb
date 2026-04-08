@@ -113,8 +113,9 @@ float D = 0.0f;
 
 // Hard ware Specifiers =========================================================
 /* way low... but will be corrected by trim pot calibrated on 3/10 */
-#define MAX_PHYSICAL_LIMIT 3415//3890 // 100% val
+#define MAX_PHYSICAL_LIMIT 3418 //3890 // 100% val
 #define MIN_PHYSICAL_LIMIT 387 // 0 % val TODO measure this exactly for precise idle
+#define ZERO_PWM_PCT 6.605020 // pct of where the valve will sit without any PWM signal
 
 // TODO: Whhat?
 #define MAX_INT_INPUT 0xFFF // MAX is 4095 = 3V3 ?
@@ -178,7 +179,7 @@ static Error handleThrottle(CANMessage *msg);
 static Error processCANMessage(CANMessage *msg, Command command);
 static void myprintf(const char *fmt, ...);
 static double getSetpointSteps(float percentage);
-static void applyPWM(uint16_t  duty, bool forward);
+static void applyPWM(uint16_t  duty, bool forward, double current_pct);
 
 // Functions ======================================================================
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
@@ -428,15 +429,40 @@ static void stopMotor(void) {
   HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1); // PWM_LOW off
 }
 
-static void applyPWM(uint16_t duty, bool forward) {
-  if (forward) {
-    HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1);           // PWM_LOW off
-    __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty); // PWM_HIGH duty
-    HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-  } else {
-    HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);             // PWM_HIGH off
-    //__HAL_TIM_SET_COMPARE(&htim17, TIM_CHANNEL_1, duty); // PWM_LOW duty
-   // HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1);
+static void applyPWM(uint16_t duty, bool forward, double current_pct) {
+
+  if (current_pct > ZERO_PWM_PCT + PID_STOP_BAND/10) {
+    if (forward) { // if trying to open and greater than idle -> use motor
+      HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1);           // PWM_LOW off
+      __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty); // PWM_HIGH duty
+      HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+    } else { // if trying to close and greater than idle -> use return spring only
+      HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);             // PWM_HIGH off
+      //__HAL_TIM_SET_COMPARE(&htim17, TIM_CHANNEL_1, duty); // PWM_LOW duty
+      //HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1);
+      PWM_test = 0;
+    }
+  } else if (current_pct < ZERO_PWM_PCT + PID_STOP_BAND/10) {
+	if (forward) { // if trying to open and lower than idle -> use return spring only
+	  HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1);           // PWM_LOW off
+	  //__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty); // PWM_HIGH duty
+	  //HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+	  PWM_test = 0;
+	} else { // if trying to open and greater than idle -> use motor
+	  HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);             // PWM_HIGH off
+	  __HAL_TIM_SET_COMPARE(&htim17, TIM_CHANNEL_1, duty); // PWM_LOW duty
+	  HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1);
+	}
+  } else { // near idle use both forward and backward motor control
+	  if (forward) {
+	  HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1);           // PWM_LOW off
+	  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty); // PWM_HIGH duty
+	  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
+	} else {
+	  HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);             // PWM_HIGH off
+	  __HAL_TIM_SET_COMPARE(&htim17, TIM_CHANNEL_1, duty); // PWM_LOW duty
+	  HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1);
+	}
   }
 }
 
@@ -497,7 +523,7 @@ static void controlMotor(double control_signal) {
 	  PWM_test = -1*duty;
   }
 
-  applyPWM(duty, forward);
+  applyPWM(duty, forward, pot1_d);
 }
 
 
@@ -573,11 +599,11 @@ int alt_main(void) {
 
     controlMotor(pid_out);
     // uncomment below and comment above for open loop
-    //set_pct_d = 61;
+    //set_pct_d = 65;
     //controlMotor(set_pct_d);
 
     if ((last_msg_num != msg_num) || (msg_num == 0) ){ // only print unique messages except for 0
-    	myprintf("%d | R(s): %f, H(s): %f, PWM: %i\r\n", msg_num , set_pct_d, pct_pot1_d, PWM_test);
+    	myprintf("%d | R(s): %f, H(s): %f, PWM: %i, \r\n", msg_num , set_pct_d, pct_pot1_d, PWM_test);
     	last_msg_num = msg_num;
     }
 

@@ -48,8 +48,8 @@ fig = figure("Name", "Live UART R(s)/H(s)", "NumberTitle", "off");
 ax = axes(fig);
 hold(ax, "on");
 grid(ax, "on");
-xlabel(ax, "CAN message number (msg_num)");
-ylabel(ax, "ADC taps");
+xlabel(ax, "CAN message number");
+ylabel(ax, "Percent open throttle");
 title(ax, "Live plot: R(s) and H(s)");
 
 hR = plot(ax, nan, nan, "LineWidth", 1.5);
