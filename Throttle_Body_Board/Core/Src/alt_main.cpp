@@ -100,11 +100,11 @@ using namespace std;
 #define CONS_KD 0.0009f
 
 //used for testing
-float P = 40.0f;
-float I = 0.0f;
-float D = 0.0f;
+float P = 250.0f;
+float I = 50.0f;
+float D = 1.0f;
 
-#define IDLE_PCT 6.7
+#define IDLE_PCT 7.44
 
 // Dead band compensation
 #define PWM_DEADBAND_OPEN   610.0
@@ -115,7 +115,7 @@ float D = 0.0f;
 /* way low... but will be corrected by trim pot calibrated on 3/10 */
 #define MAX_PHYSICAL_LIMIT 3418 //3890 // 100% val
 #define MIN_PHYSICAL_LIMIT 387 // 0 % val TODO measure this exactly for precise idle
-#define ZERO_PWM_PCT 6.605020 // pct of where the valve will sit without any PWM signal
+#define ZERO_PWM_PCT 7.433190 // pct of where the valve will sit without any PWM signal
 
 // TODO: Whhat?
 #define MAX_INT_INPUT 0xFFF // MAX is 4095 = 3V3 ?
@@ -371,10 +371,22 @@ static Error handleError(Error code) {
   }
   return ok;
 }
+
+#define NUM_SAMPLES 3000
+uint32_t samples[NUM_SAMPLES];
+uint32_t idx = 0;
+long double total = 0;
 // filter for throttle taps
 static double filterThrottleTaps(double raw_taps) {
   static double filtered_taps = MIN_PHYSICAL_LIMIT;
   const double alpha = 0.15;   // lower = smoother, slower
+
+  total -= samples[idx];
+  samples[idx] = raw_taps;
+  total += samples[idx];
+  idx = (idx + 1) % NUM_SAMPLES;
+  filtered_taps = total / NUM_SAMPLES;
+
 
   // clamp first
   if (raw_taps <= MIN_PHYSICAL_LIMIT) {
@@ -382,7 +394,7 @@ static double filterThrottleTaps(double raw_taps) {
   } else if (raw_taps >= MAX_PHYSICAL_LIMIT) {
     filtered_taps = MAX_PHYSICAL_LIMIT;
   } else {
-    filtered_taps = filtered_taps + alpha * (raw_taps - filtered_taps);
+    filtered_taps = (raw_taps * alpha) + ((1.0f - alpha) * filtered_taps);
   }
 
   return filtered_taps;
@@ -392,7 +404,7 @@ static double throttleTaps2Pct(double throttle_adc_taps) {
   double filtered_taps = filterThrottleTaps(throttle_adc_taps);
   double adc_range = (double)(MAX_PHYSICAL_LIMIT - MIN_PHYSICAL_LIMIT);
 
-  double throttle_percentage = ((filtered_taps - (double)MIN_PHYSICAL_LIMIT) / adc_range) * 100.0;
+  double throttle_percentage = ((filtered_taps - MIN_PHYSICAL_LIMIT) / adc_range) * 100.0;
 
   //myprintf("taps filtered: %f, pct: %f \r\n", filtered_taps, throttle_percentage);
   return throttle_percentage;
@@ -415,9 +427,9 @@ static Error handleThrottle(CANMessage *msg) {
   } else {
    set_point_d = IDLE_PCT
   }++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-  if (throttle_percentage<IDLE_PCT){
+  if (throttle_percentage<IDLE_PCT){ // todo needs scaling to remove dead zone in throttle
     set_pct_d = IDLE_PCT;
-  }else{
+  }else{// will not send throttle signal until throttle percent in over idle.
 	set_pct_d = throttle_percentage;
   }
   return ok;
@@ -431,7 +443,7 @@ static void stopMotor(void) {
 
 static void applyPWM(uint16_t duty, bool forward, double current_pct) {
 
-  if (current_pct > ZERO_PWM_PCT + PID_STOP_BAND/10) {
+  /*if (current_pct > ZERO_PWM_PCT + PID_STOP_BAND/10) {
     if (forward) { // if trying to open and greater than idle -> use motor
       HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1);           // PWM_LOW off
       __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty); // PWM_HIGH duty
@@ -452,9 +464,9 @@ static void applyPWM(uint16_t duty, bool forward, double current_pct) {
 	  HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);             // PWM_HIGH off
 	  __HAL_TIM_SET_COMPARE(&htim17, TIM_CHANNEL_1, duty); // PWM_LOW duty
 	  HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1);
-	}
-  } else { // near idle use both forward and backward motor control
-	  if (forward) {
+	}*/
+  //} else { // near idle use both forward and backward motor control
+	if (forward) {
 	  HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1);           // PWM_LOW off
 	  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty); // PWM_HIGH duty
 	  HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
@@ -463,7 +475,7 @@ static void applyPWM(uint16_t duty, bool forward, double current_pct) {
 	  __HAL_TIM_SET_COMPARE(&htim17, TIM_CHANNEL_1, duty); // PWM_LOW duty
 	  HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1);
 	}
-  }
+  //}
 }
 
 // PWM LOW = TIM17 CH1

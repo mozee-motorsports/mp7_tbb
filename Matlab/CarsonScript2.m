@@ -1,8 +1,8 @@
 %% Live UART logger + live plot (R(s), H(s)) with rolling last N points
 % Expects lines like:
 %   2512 | R(s): 1517.000000, H(s): 3401.000000
-% Plots the last rollingN samples live, stores everything to memory,
-% and saves to MAT/CSV when you close the figure.
+% Plots the last rollingN samples live.
+% Optionally stores full history to memory and saves MAT/CSV when you close the figure.
 
 clear; clc;
 
@@ -10,9 +10,13 @@ clear; clc;
 port = "COM4";                         % Your COM port
 baud = 115200;                         % Your baud rate
 rollingN = 300;                        % Number of live points shown
+
+enableDataLogging = false;              % true = store full history and save MAT/CSV, false = live plot only
+
 saveBaseName = "uart_log_rs_hs";       % Base name for output files
 outputDir = "C:\mozee\mp7_tbb\Matlab"; % Folder to save into
 useTimestamp = true;                   % Append timestamp to avoid overwrite
+
 printRawUart = true;                   % Print every UART line
 printParsed = false;                   % Print parsed values
 printEvery = 1;                        % If printParsed=true, print every N parsed lines
@@ -25,10 +29,17 @@ s.Timeout = 1;
 flush(s);
 
 % Full data storage
-msgNumAll = [];
-R_all     = [];
-H_all     = [];
-tAll      = [];
+if enableDataLogging
+    msgNumAll = [];
+    R_all     = [];
+    H_all     = [];
+    tAll      = [];
+else
+    msgNumAll = [];
+    R_all     = [];
+    H_all     = [];
+    tAll      = [];
+end
 
 % Rolling buffers
 msg_roll = nan(rollingN, 1);
@@ -39,7 +50,6 @@ H_roll   = nan(rollingN, 1);
 %   2512 | R(s): 1517.000000, H(s): 3401.000000
 % and also allows extra text after H(s), for example:
 %   2512 | R(s): 1517.000000, H(s): 3401.000000, PID: 12.5
-
 num = '([+-]?\d+(?:\.\d*)?(?:[eE][+-]?\d+)?)';
 pat = ['^\s*(\d+)\s*\|\s*R\(s\):\s*' num '\s*,\s*H\(s\):\s*' num '.*$'];
 
@@ -63,8 +73,13 @@ fig.CloseRequestFcn = @(~,~) setappdata(fig, 'stop', true);
 k = 0;
 startTic = tic;
 
-disp("Logging. Close the figure window to stop and save.");
-disp("Saving files to folder: " + string(outputDir));
+disp("Logging. Close the figure window to stop.");
+if enableDataLogging
+    disp("Data logging is ON.");
+    disp("Saving files to folder: " + string(outputDir));
+else
+    disp("Data logging is OFF. No MAT/CSV files will be saved.");
+end
 
 while isvalid(fig) && ~getappdata(fig, 'stop')
     if s.NumBytesAvailable == 0
@@ -97,12 +112,16 @@ while isvalid(fig) && ~getappdata(fig, 'stop')
     Rv  = str2double(tok{2});
     Hv  = str2double(tok{3});
 
-    % Store full history
+    % Count parsed points
     k = k + 1;
-    msgNumAll(k,1) = msg;
-    R_all(k,1)     = Rv;
-    H_all(k,1)     = Hv;
-    tAll(k,1)      = toc(startTic);
+
+    % Store full history only if enabled
+    if enableDataLogging
+        msgNumAll(k,1) = msg;
+        R_all(k,1)     = Rv;
+        H_all(k,1)     = Hv;
+        tAll(k,1)      = toc(startTic);
+    end
 
     % Print parsed values if enabled
     if printParsed && mod(k, printEvery) == 0
@@ -131,7 +150,7 @@ while isvalid(fig) && ~getappdata(fig, 'stop')
             xMax = xMax + 1;
         end
         xlim(ax, [xMin xMax]);
-        ylim(ax, [0 100]);
+        ylim(ax, [0 20]);
     end
 
     drawnow limitrate;
@@ -154,28 +173,33 @@ if k == 0
     warning("No parsed data points were captured. Check that the UART line exactly matches: 2512 | R(s): 1517.000000, H(s): 3401.000000");
 end
 
-% Build output table
-T = table(msgNumAll, R_all, H_all, tAll, ...
-    'VariableNames', {'msg_num', 'R_s', 'H_s', 'pc_time_s'});
+% Save files only if data logging is enabled
+if enableDataLogging
+    % Build output table
+    T = table(msgNumAll, R_all, H_all, tAll, ...
+        'VariableNames', {'msg_num', 'R_s', 'H_s', 'pc_time_s'});
 
-% Make output folder if needed
-if ~isfolder(outputDir)
-    mkdir(outputDir);
-end
+    % Make output folder if needed
+    if ~isfolder(outputDir)
+        mkdir(outputDir);
+    end
 
-% Build filename
-if useTimestamp
-    stamp = string(datetime("now", "Format", "yyyyMMdd_HHmmss"));
-    matFile = fullfile(outputDir, saveBaseName + "_" + stamp + ".mat");
-    csvFile = fullfile(outputDir, saveBaseName + "_" + stamp + ".csv");
+    % Build filename
+    if useTimestamp
+        stamp = string(datetime("now", "Format", "yyyyMMdd_HHmmss"));
+        matFile = fullfile(outputDir, saveBaseName + "_" + stamp + ".mat");
+        csvFile = fullfile(outputDir, saveBaseName + "_" + stamp + ".csv");
+    else
+        matFile = fullfile(outputDir, saveBaseName + ".mat");
+        csvFile = fullfile(outputDir, saveBaseName + ".csv");
+    end
+
+    % Save files
+    save(matFile, "T");
+    writetable(T, csvFile);
+
+    disp("Saved MAT file: " + matFile);
+    disp("Saved CSV file: " + csvFile);
 else
-    matFile = fullfile(outputDir, saveBaseName + ".mat");
-    csvFile = fullfile(outputDir, saveBaseName + ".csv");
+    disp("Run complete. Data logging was disabled, so no files were saved.");
 end
-
-% Save files
-save(matFile, "T");
-writetable(T, csvFile);
-
-disp("Saved MAT file: " + matFile);
-disp("Saved CSV file: " + csvFile);
