@@ -107,8 +107,8 @@ float D = 1.0f;
 #define IDLE_PCT 7.44
 
 // Dead band compensation
-#define PWM_DEADBAND_OPEN   610.0
-#define PWM_DEADBAND_CLOSE  600.0
+#define PWM_DEADBAND_OPEN   610.0 // minimum dudty cycle when opening
+#define PWM_DEADBAND_CLOSE  600.0 // ... when closing
 #define PID_STOP_BAND       5.0
 
 // Hard ware Specifiers =========================================================
@@ -179,7 +179,7 @@ static Error handleThrottle(CANMessage *msg);
 static Error processCANMessage(CANMessage *msg, Command command);
 static void myprintf(const char *fmt, ...);
 static double getSetpointSteps(float percentage);
-static void applyPWM(uint16_t  duty, bool forward, double current_pct);
+static void applyPWM(uint16_t  duty, bool forward);
 
 // Functions ======================================================================
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
@@ -441,31 +441,7 @@ static void stopMotor(void) {
   HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1); // PWM_LOW off
 }
 
-static void applyPWM(uint16_t duty, bool forward, double current_pct) {
-
-  /*if (current_pct > ZERO_PWM_PCT + PID_STOP_BAND/10) {
-    if (forward) { // if trying to open and greater than idle -> use motor
-      HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1);           // PWM_LOW off
-      __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty); // PWM_HIGH duty
-      HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-    } else { // if trying to close and greater than idle -> use return spring only
-      HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);             // PWM_HIGH off
-      //__HAL_TIM_SET_COMPARE(&htim17, TIM_CHANNEL_1, duty); // PWM_LOW duty
-      //HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1);
-      PWM_test = 0;
-    }
-  } else if (current_pct < ZERO_PWM_PCT + PID_STOP_BAND/10) {
-	if (forward) { // if trying to open and lower than idle -> use return spring only
-	  HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1);           // PWM_LOW off
-	  //__HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty); // PWM_HIGH duty
-	  //HAL_TIM_PWM_Start(&htim1, TIM_CHANNEL_1);
-	  PWM_test = 0;
-	} else { // if trying to open and greater than idle -> use motor
-	  HAL_TIM_PWM_Stop(&htim1, TIM_CHANNEL_1);             // PWM_HIGH off
-	  __HAL_TIM_SET_COMPARE(&htim17, TIM_CHANNEL_1, duty); // PWM_LOW duty
-	  HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1);
-	}*/
-  //} else { // near idle use both forward and backward motor control
+static void applyPWM(uint16_t duty, bool forward) {
 	if (forward) {
 	  HAL_TIM_PWM_Stop(&htim17, TIM_CHANNEL_1);           // PWM_LOW off
 	  __HAL_TIM_SET_COMPARE(&htim1, TIM_CHANNEL_1, duty); // PWM_HIGH duty
@@ -475,7 +451,6 @@ static void applyPWM(uint16_t duty, bool forward, double current_pct) {
 	  __HAL_TIM_SET_COMPARE(&htim17, TIM_CHANNEL_1, duty); // PWM_LOW duty
 	  HAL_TIM_PWM_Start(&htim17, TIM_CHANNEL_1);
 	}
-  //}
 }
 
 // PWM LOW = TIM17 CH1
@@ -535,7 +510,7 @@ static void controlMotor(double control_signal) {
 	  PWM_test = -1*duty;
   }
 
-  applyPWM(duty, forward, pot1_d);
+  applyPWM(duty, forward);
 }
 
 
