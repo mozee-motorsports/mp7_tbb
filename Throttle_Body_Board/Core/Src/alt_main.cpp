@@ -79,37 +79,32 @@
 using namespace std;
 
 // PID Tuning Constants ===========================================================
-// Aggressive tuning parameters for large error
-#define AGR_KP 0.11f
-#define AGR_KI 0.02f
-#define AGR_KD 0.003f
+// tuning parameters for Against spring System
+#define UP_P 250.0f
+#define UP_I 50.0f
+#define UP_D 1.0f
 
-// Non-adaptive tuning parameters
-#define KP AGR_KP
-#define KI AGR_KI
-#define KD AGR_KD
-
-// Medium tuning parameters for medium errors
-#define MED_KP 1.0f
-#define MED_KI 0.0f
-#define MED_KD 0.0f
-
-// Conservative tuning parameters for small errors IDLE TUNE
-#define CONS_KP 0.25f
-#define CONS_KI 0.4f
-#define CONS_KD 0.0009f
-
-//used for testing
-float P = 250.0f;
-float I = 50.0f;
-float D = 1.0f;
+// tuning parameters for with spring System
+#define DOWN_P 250.0f
+#define DOWN_I 50.0f
+#define DOWN_D 1.0f
 
 #define IDLE_PCT 7.44
 
 // Dead band compensation
-#define PWM_DEADBAND_OPEN   610.0 // minimum dudty cycle when opening
+#define PWM_DEADBAND_OPEN   610.0 // minimum duty cycle when opening
 #define PWM_DEADBAND_CLOSE  600.0 // ... when closing
 #define PID_STOP_BAND       5.0
+
+// testing =======================================================================
+//TODO: remove after testing
+static uint16_t msg_num = 0;
+static uint16_t pbb_taps = 0;
+static float throttle_pct = 0;
+int PWM_test = 0;
+int last_msg_num = 0;
+// do not remove after testing ===
+bool open_loop_testing = false; //make true to set system to open loop control
 
 // Hard ware Specifiers =========================================================
 /* way low... but will be corrected by trim pot calibrated on 3/10 */
@@ -162,14 +157,6 @@ static FDCANBuffer fdcan_queue(3); // Queue to process non-critical tasks
 
 // static std::queue<Error> error_queue;    // Queue to process errors
 
-// testing =======================================================================
-//TODO: remove after testing
-static uint16_t msg_num = 0;
-static uint16_t pbb_taps = 0;
-static float throttle_pct = 0;
-int last_msg_num = 0;
-int PWM_test = 0;
-
 // Function prototypes ============================================================
 static void controlMotor(double control_signal);
 static void stopMotor(void);
@@ -180,6 +167,7 @@ static Error processCANMessage(CANMessage *msg, Command command);
 static void myprintf(const char *fmt, ...);
 static double getSetpointSteps(float percentage);
 static void applyPWM(uint16_t  duty, bool forward);
+void setPIDupdown();
 
 // Functions ======================================================================
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
@@ -419,18 +407,22 @@ static Error handleThrottle(CANMessage *msg) {
 
   /* Uncomment when READY to DRIVE +++++++++++++++++++++++++++++++
   if(ready_to_drive) {
-    if (throttle_percentage<IDLE_PCT){
-	  set_pct_d = IDLE_PCT;
-	}else{
-	  set_point_d = throttle_percentage;
+    if (throttle_percentage <= 0.0) { // no throttle signal = idle
+      set_pct_d = IDLE_PCT;
+	} else if (throttle_percentage >= 100.0) { // clamp over 100%
+	  set_pct_d = 100.0;
+	} else { // scale from 0-100 to idle percent to 100
+	  set_pct_d = IDLE_PCT + (throttle_percentage * (100.0 - IDLE_PCT) / 100.0);
 	}
   } else {
    set_point_d = IDLE_PCT
   }++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
-  if (throttle_percentage<IDLE_PCT){ // todo needs scaling to remove dead zone in throttle
-    set_pct_d = IDLE_PCT;
-  }else{// will not send throttle signal until throttle percent in over idle.
-	set_pct_d = throttle_percentage;
+  if (throttle_percentage <= 0.0) { // no throttle signal = idle
+      set_pct_d = IDLE_PCT;
+  } else if (throttle_percentage >= 100.0) { // clamp over 100%
+      set_pct_d = 100.0;
+  } else { // scale from 0-100 to idle percent to 100
+      set_pct_d = IDLE_PCT + (throttle_percentage * (100.0 - IDLE_PCT) / 100.0);
   }
   return ok;
 }
@@ -513,6 +505,34 @@ static void controlMotor(double control_signal) {
   applyPWM(duty, forward);
 }
 
+void setPIDupdown(){
+	// calculate error
+	double dir = pct_pot1_d - set_pct_d; // TODO there could be a better way to do this
+
+	// calculate components for decision
+	bool moving_up = (dir > 0.0);
+	bool above_zero_pwm = (pct_pot1_d > ZERO_PWM_PCT);
+	bool moving_down = (dir < 0.0);
+	bool below_zero_pwm = (pct_pot1_d < ZERO_PWM_PCT);
+
+	bool against_spring = (moving_up && above_zero_pwm) ||
+						  (moving_down && below_zero_pwm);
+
+	bool last_against_spring = false;
+	bool pid_mode_initialized = false;
+
+	if (!pid_mode_initialized || (against_spring != last_against_spring)) {
+	    if (against_spring) {
+	        throttlePID.SetTunings(UP_P, UP_I, UP_D);
+	    } else {
+	        throttlePID.SetTunings(DOWN_P, DOWN_I, DOWN_D);
+	    }
+	    // set flags
+	    last_against_spring = against_spring;
+	    pid_mode_initialized = true;
+	}
+}
+
 
 // main =======================================================================
 int alt_main(void) {
@@ -540,9 +560,8 @@ int alt_main(void) {
   throttlePID.SetMode(AUTOMATIC);
   throttlePID.SetSampleTime(INTERVAL_MS);
   throttlePID.SetOutputLimits(
-      -1 * static_cast<double>(TIM1_17_ARR),
-      static_cast<double>(TIM1_17_ARR)); // Normalized limits: -100 - 100% - map
-                                         // these directly to the pwm
+      -1 * static_cast<double>(TIM1_17_ARR - PWM_DEADBAND_CLOSE),
+      static_cast<double>(TIM1_17_ARR - PWM_DEADBAND_OPEN)); // Normalized limits: to ARR limits with deadbands
 
   HAL_GPIO_WritePin(HBRIDGE_MODE2_GPIO_Port, HBRIDGE_MODE2_Pin,
                     GPIO_PIN_SET); // Set to PWM/PWM mode
@@ -554,13 +573,12 @@ int alt_main(void) {
   HAL_GPIO_WritePin(HBRIDGE_EN_GPIO_Port, HBRIDGE_EN_Pin,
                     GPIO_PIN_SET); // Enable HBridge
 
-
   /* start the CAN watchdog */
   //HAL_TIM_Base_GetState(&htim4);
   HAL_TIM_Base_Start_IT(&htim4);
 
   //set tunings before entering forever loop
-  throttlePID.SetTunings(P, I, D);
+  throttlePID.SetTunings(UP_P, UP_I, UP_D);
 
   /* Super loop */
   while (1) {
@@ -578,17 +596,21 @@ int alt_main(void) {
 	    	handleError(code);
 	    }
 	}
-	// convert output (adc) to pct
+
+	// Do PID  ====================================
+	// convert output (adc) to percentage
 	pct_pot1_d = throttleTaps2Pct(pot1_d);
+	setPIDupdown(); // determine PID up or PID down
+    throttlePID.Compute(); // compute pid_out
 
-	// compute pid_out
-    throttlePID.Compute();
+    if (open_loop_testing){
+    	set_pct_d = OPEN_LOOP_TARGET_PERCENT;
+    	controlMotor(set_pct_d);
+    } else {
+    	controlMotor(pid_out);
+    }
 
-    controlMotor(pid_out);
-    // uncomment below and comment above for open loop
-    //set_pct_d = 65;
-    //controlMotor(set_pct_d);
-
+    // logging
     if ((last_msg_num != msg_num) || (msg_num == 0) ){ // only print unique messages except for 0
     	myprintf("%d | R(s): %f, H(s): %f, PWM: %i, \r\n", msg_num , set_pct_d, pct_pot1_d, PWM_test);
     	last_msg_num = msg_num;
