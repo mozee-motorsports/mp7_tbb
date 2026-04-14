@@ -105,6 +105,7 @@ int PWM_test = 0;
 int last_msg_num = 0;
 // do not remove after testing ===
 bool open_loop_testing = false; //make true to set system to open loop control
+#define OPEN_LOOP_TARGET_PERCENT 7.4
 
 // Hard ware Specifiers =========================================================
 /* way low... but will be corrected by trim pot calibrated on 3/10 */
@@ -143,7 +144,7 @@ static double pct_pot1_d = IDLE_PCT;
 // Pointer to the pct of pot 1
 static double *pct_pot1_ptr = &pct_pot1_d;
 // Create PID controller object
-PID throttlePID(pct_pot1_ptr, &pid_out, set_pct_ptr, KP, KI, KD, DIRECT);
+PID throttlePID(pct_pot1_ptr, &pid_out, set_pct_ptr, UP_P, UP_I, UP_D, DIRECT);
 
 // CAN ===========================================================================
 // FDCAN Defines
@@ -360,7 +361,7 @@ static Error handleError(Error code) {
   return ok;
 }
 
-#define NUM_SAMPLES 3000
+#define NUM_SAMPLES 1
 uint32_t samples[NUM_SAMPLES];
 uint32_t idx = 0;
 long double total = 0;
