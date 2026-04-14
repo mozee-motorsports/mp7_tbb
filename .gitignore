@@ -39,3 +39,7 @@
 *.out
 *.app
 /.metadata/
+
+
+# something or other 
+*.xml
