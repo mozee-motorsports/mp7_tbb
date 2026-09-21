@@ -43,3 +43,6 @@
 
 # something or other 
 *.xml
+
+#vscode workspaces
+*.code*

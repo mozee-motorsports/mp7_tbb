@@ -79,22 +79,17 @@
 using namespace std;
 
 // PID Tuning Constants ===========================================================
-// tuning parameters for Against spring System
-#define UP_P 250.0f
-#define UP_I 50.0f
-#define UP_D 1.0f
+// tuning parameters
+#define P 250.0f
+#define I 50.0f
+#define D 1.0f
 
-// tuning parameters for with spring System
-#define DOWN_P 250.0f
-#define DOWN_I 50.0f
-#define DOWN_D 1.0f
-
-#define IDLE_PCT 7.44
+#define IDLE_PCT 6.5
 
 // Dead band compensation
-#define PWM_DEADBAND_OPEN   610.0 // minimum duty cycle when opening
+#define PWM_DEADBAND_OPEN   607.0 // minimum duty cycle when opening
 #define PWM_DEADBAND_CLOSE  600.0 // ... when closing
-#define PID_STOP_BAND       5.0
+#define PID_STOP_BAND       0.0
 
 // testing =======================================================================
 //TODO: remove after testing
@@ -105,13 +100,13 @@ int PWM_test = 0;
 int last_msg_num = 0;
 // do not remove after testing ===
 bool open_loop_testing = false; //make true to set system to open loop control
-#define OPEN_LOOP_TARGET_PERCENT 7.4
+#define OPEN_LOOP_TARGET_PERCENT 18
 
 // Hard ware Specifiers =========================================================
 /* way low... but will be corrected by trim pot calibrated on 3/10 */
 #define MAX_PHYSICAL_LIMIT 3418 //3890 // 100% val
 #define MIN_PHYSICAL_LIMIT 387 // 0 % val TODO measure this exactly for precise idle
-#define ZERO_PWM_PCT 7.433190 // pct of where the valve will sit without any PWM signal
+#define REST_PCT 7.433190 // pct of where the valve will sit without any PWM signal
 
 // TODO: Whhat?
 #define MAX_INT_INPUT 0xFFF // MAX is 4095 = 3V3 ?
@@ -144,7 +139,7 @@ static double pct_pot1_d = IDLE_PCT;
 // Pointer to the pct of pot 1
 static double *pct_pot1_ptr = &pct_pot1_d;
 // Create PID controller object
-PID throttlePID(pct_pot1_ptr, &pid_out, set_pct_ptr, UP_P, UP_I, UP_D, DIRECT);
+PID throttlePID(pct_pot1_ptr, &pid_out, set_pct_ptr, P, I, D, DIRECT);
 
 // CAN ===========================================================================
 // FDCAN Defines
@@ -168,7 +163,7 @@ static Error processCANMessage(CANMessage *msg, Command command);
 static void myprintf(const char *fmt, ...);
 static double getSetpointSteps(float percentage);
 static void applyPWM(uint16_t  duty, bool forward);
-void setPIDupdown();
+static double applyThrottleDeadbandComp(double control_signal);
 
 // Functions ======================================================================
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
@@ -446,6 +441,24 @@ static void applyPWM(uint16_t duty, bool forward) {
 	}
 }
 
+static double applyThrottleDeadbandComp(double control_signal) {
+    if (pct_pot1_d > REST_PCT) {
+        // Above resting point, shift output toward open deadband
+        throttlePID.SetOutputLimits(
+            -1.0 * (TIM1_17_ARR + PWM_DEADBAND_OPEN),
+             1.0 * (TIM1_17_ARR - PWM_DEADBAND_OPEN)
+        );
+            return control_signal + PWM_DEADBAND_OPEN;
+    } else {  //(pot1_d_pct < REST_PCT)
+        // Below resting point, shift output toward close deadband
+        throttlePID.SetOutputLimits(
+            -1.0 * (TIM1_17_ARR - PWM_DEADBAND_CLOSE),
+             1.0 * (TIM1_17_ARR + PWM_DEADBAND_CLOSE)
+        );
+        return control_signal - PWM_DEADBAND_CLOSE;
+    }
+}
+
 // PWM LOW = TIM17 CH1
 // PWM HIGH = TIM1 CH1
 /**
@@ -457,6 +470,7 @@ static void applyPWM(uint16_t duty, bool forward) {
 // In terms of ADC POT1 steps
 
 static void controlMotor(double control_signal) {
+	control_signal = applyThrottleDeadbandComp(control_signal);
 
   // Prevent driving beyond physical limits
   if ((pot1_d <= MIN_PHYSICAL_LIMIT && control_signal < 0.0) ||
@@ -467,30 +481,7 @@ static void controlMotor(double control_signal) {
 
   const bool forward = (control_signal >= 0.0);
   const double deadband_pwm = forward ? PWM_DEADBAND_OPEN : PWM_DEADBAND_CLOSE;
-  const double mag = fabs(control_signal);
-
-  // Small command: do not buzz the motor
-  if (mag <= PID_STOP_BAND) {
-    stopMotor();
-    return;
-  }
-
-  // Clamp PID output to expected range
-  double clipped_mag = mag;
-  if (clipped_mag > MAX_DUTY_CYCLE) {
-    clipped_mag = MAX_DUTY_CYCLE;
-  }
-
-  // Map PID output from:
-  // PID_STOP_BAND ... MAX_DUTY_CYCLE
-  // into
-  // deadband_pwm ... MAX_DUTY_CYCLE
-  const double scaled =
-      deadband_pwm +
-      ((clipped_mag - PID_STOP_BAND) / (MAX_DUTY_CYCLE - PID_STOP_BAND)) *
-      (MAX_DUTY_CYCLE - deadband_pwm);
-
-  uint16_t duty = (uint16_t)scaled;
+  double duty = fabs(control_signal);
 
   if (duty > (uint16_t)MAX_DUTY_CYCLE) {
     duty = (uint16_t)MAX_DUTY_CYCLE;
@@ -504,34 +495,6 @@ static void controlMotor(double control_signal) {
   }
 
   applyPWM(duty, forward);
-}
-
-void setPIDupdown(){
-	// calculate error
-	double dir = pct_pot1_d - set_pct_d; // TODO there could be a better way to do this
-
-	// calculate components for decision
-	bool moving_up = (dir > 0.0);
-	bool above_zero_pwm = (pct_pot1_d > ZERO_PWM_PCT);
-	bool moving_down = (dir < 0.0);
-	bool below_zero_pwm = (pct_pot1_d < ZERO_PWM_PCT);
-
-	bool against_spring = (moving_up && above_zero_pwm) ||
-						  (moving_down && below_zero_pwm);
-
-	bool last_against_spring = false;
-	bool pid_mode_initialized = false;
-
-	if (!pid_mode_initialized || (against_spring != last_against_spring)) {
-	    if (against_spring) {
-	        throttlePID.SetTunings(UP_P, UP_I, UP_D);
-	    } else {
-	        throttlePID.SetTunings(DOWN_P, DOWN_I, DOWN_D);
-	    }
-	    // set flags
-	    last_against_spring = against_spring;
-	    pid_mode_initialized = true;
-	}
 }
 
 
@@ -579,7 +542,7 @@ int alt_main(void) {
   HAL_TIM_Base_Start_IT(&htim4);
 
   //set tunings before entering forever loop
-  throttlePID.SetTunings(UP_P, UP_I, UP_D);
+  throttlePID.SetTunings(P, I, D);
 
   /* Super loop */
   while (1) {
@@ -601,7 +564,6 @@ int alt_main(void) {
 	// Do PID  ====================================
 	// convert output (adc) to percentage
 	pct_pot1_d = throttleTaps2Pct(pot1_d);
-	setPIDupdown(); // determine PID up or PID down
     throttlePID.Compute(); // compute pid_out
 
     if (open_loop_testing){

@@ -7,7 +7,7 @@
 clear; clc;
 
 %% -------- USER SETTINGS --------
-port = "COM4";                         % Your COM port
+port = "COM5";                         % Your COM port
 baud = 115200;                         % Your baud rate
 rollingN = 300;                        % Number of live points shown
 
