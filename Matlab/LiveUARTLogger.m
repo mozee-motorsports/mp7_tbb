@@ -11,10 +11,10 @@ port = "COM5";                         % Your COM port
 baud = 115200;                         % Your baud rate
 rollingN = 300;                        % Number of live points shown
 
-enableDataLogging = false;              % true = store full history and save MAT/CSV, false = live plot only
+enableDataLogging = True;              % true = store full history and save MAT/CSV, false = live plot only
 
 saveBaseName = "uart_log_rs_hs";       % Base name for output files
-outputDir = "C:\mozee\mp7_tbb\Matlab"; % Folder to save into
+outputDir = "C:\mozee\mp7_tbb\Matlab\DataLogs"; % Folder to save into
 useTimestamp = true;                   % Append timestamp to avoid overwrite
 
 printRawUart = true;                   % Print every UART line
