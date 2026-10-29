@@ -142,6 +142,15 @@ static double *pct_pot1_ptr = &pct_pot1_d;
 PID throttlePID(pct_pot1_ptr, &pid_out, set_pct_ptr, P, I, D, DIRECT);
 
 // CAN ===========================================================================
+
+#ifndef CAN_PEDAL_POS
+#define CAN_PEDAL_POS 0x7E7
+#endif
+
+#ifndef CAN_READY_TO_DRIVE
+#define CAN_READY_TO_DRIVE 0x7E6
+#endif
+
 // FDCAN Defines
 static FDCAN_TxHeaderTypeDef tx_header;
 //static FDCAN_RxHeaderTypeDef rx_header;
@@ -159,7 +168,7 @@ static void stopMotor(void);
 static Error handleError(Error code);
 static Error handleThrottle(CANMessage *msg);
 //static Error handleStatusReport(void);
-static Error processCANMessage(CANMessage *msg, Command command);
+static Error processCANMessage(CANMessage *msg);
 static void myprintf(const char *fmt, ...);
 static double getSetpointSteps(float percentage);
 static void applyPWM(uint16_t  duty, bool forward);
@@ -210,80 +219,28 @@ static void myprintf(const char *fmt, ...) {
   HAL_UART_Transmit(&hlpuart1, (uint8_t *)buffer, len, -1);
 }
 
-typedef enum {
-    SAFETY_SYSTEM = 0,
-    BROADCAST = 1,
-    THROTTLE_CONTROL_BOARD = 2,
-    PEDAL_BOX = 3,
-    STEERING_WHEEL = 4,
-    THERMO_CONTROL_BOARD = 5,
-    ISOLATION_EXPANSION_DEVICE = 6,
-} eModule;
+// Process commands sent to the throttle control board
+static Error processCANMessage(CANMessage *msg) {
 
-typedef enum {
-    TO = 0,
-    FROM = 1,
-} eDirection;
-
-typedef struct {
-    uint8_t priority;
-    eModule module;
-    eDirection direction;
-    uint8_t command;
-} sCAN_Header;
-
-
-sCAN_Header parse_id(uint32_t id) {
-    return sCAN_Header {
-        .priority = (uint8_t)((id >> 8) & 0b0111),
-        .module  = (eModule)((id >> 5) & 0b0111),
-        .direction = (eDirection) ((id >> 4) & 0b01),
-        .command = (uint8_t)(id & 0xF),
-    };
-}
-
-uint32_t header2id(sCAN_Header header) {
-    uint32_t id = 0;
-    id |= (header.priority << 8);
-    id |= (header.module << 5);
-    id |= (header.direction << 4);
-    id |= header.command;
-    return id;
-}
-// Process commands sent from the control board master to the throttle control
-// board
-static Error processCANMessage(CANMessage *msg, Command command) {
-
-  sCAN_Header id = parse_id(msg->rx_header.Identifier);
-  if (id.module == BROADCAST && command == 0) {
-	  // ready to drive heartbeat
-	  //myprintf("got heartbeat, petting watchdog\n");
-	  ready_to_drive = true;
-	  HAL_TIM_Base_Stop_IT(&htim4);
-	  __HAL_TIM_SET_COUNTER(&htim4, 0); // pet the watchdog
-	  HAL_TIM_Base_Start_IT(&htim4);
-	  return ok;
-  }
-
-  // Execute sent command
   Error code = ok;
-  switch (command) {
-  case shutdown: // Already handled in the ISR
-    // Shutdown command, exit program
-    // my_shutdown();
-    break;
-  case throttle_percentage:
-    code = handleThrottle(msg);
-    break;
-  case send_error:
-    code = handleError((Error)(msg->data[0]));
-    break;
-  case status_report:
-    // code = handleStatusReport();
-    break;
-  default: // Invalid command, return error
-    code = invalid_command;
-    break;
+
+  switch (msg->rx_header.Identifier) {
+    case CAN_READY_TO_DRIVE:
+      // ready to drive heartbeat
+      //myprintf("got heartbeat, petting watchdog\n");
+      ready_to_drive = true;
+      HAL_TIM_Base_Stop_IT(&htim4);
+      __HAL_TIM_SET_COUNTER(&htim4, 0); // pet the watchdog
+      HAL_TIM_Base_Start_IT(&htim4);
+      break;
+  
+    case CAN_PEDAL_POS:
+      code = handleThrottle(msg);
+      break;
+
+    default: // Invalid command, return error
+      code = invalid_command;
+      break;
   }
 
   // If there is an error, then add it to the queue
@@ -553,8 +510,8 @@ int alt_main(void) {
 		CANMessage msg;
 	    fdcan_queue.get(0, msg);
 
-	    Error code = processCANMessage(
-	    		&msg, static_cast<Command>((msg.rx_header.Identifier & 0x0F)));
+	    Error code = processCANMessage(&msg);
+
 	    if (code != ok) {
 	    	myprintf("Error processing CAN message: %d\r\n", code);
 	    	handleError(code);

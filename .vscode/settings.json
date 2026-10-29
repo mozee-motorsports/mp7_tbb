@@ -1,0 +1,8 @@
+{
+    "java.jdt.ls.java.home": "/home/mech/.local/share/mise/installs/java/25.0.5+8.0.LTS",
+    "java.import.gradle.java.home": "/home/mech/.local/share/mise/installs/java/25.0.5+8.0.LTS",
+    "debug.javascript.defaultRuntimeExecutable": {
+        "pwa-node": "/home/mech/.local/share/mise/shims/node"
+    },
+    "makefile.makefilePath": "Throttle_Body_Board/Release/makefile"
+}
