@@ -45,6 +45,13 @@ extern FDCAN_HandleTypeDef hfdcan1;
 
 #define DEFAULT_PRIORITY 		  ((uint8_t)0xFF)	// Default priority for CAN messages
 
+#ifndef CAN_READY_TO_DRIVE
+#define CAN_READY_TO_DRIVE        0x7E6
+#endif
+#ifndef CAN_PEDAL_POS
+#define CAN_PEDAL_POS             0x7E7
+#endif
+
 /* Enum for Module field for custom CAN packet (inside of the 11b ID) */
 typedef enum {
 	saftey_system = 0,

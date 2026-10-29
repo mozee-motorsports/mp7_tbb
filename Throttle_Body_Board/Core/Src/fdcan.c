@@ -184,23 +184,17 @@ HAL_StatusTypeDef fdcanInit(FDCAN_HandleTypeDef* hfdcan)
 
 }
 
-// CANFD macros
-#define FILTER 	0b00001000000		// What to look for i.e. id (0b10) and direction (0b0) XXX_010_X_XXXX										// Steering Wheel ID
-#define MASK 	0b00011110000		// 11b id. Look at Module bits [7..5] and direction (should be set to "to" = 0)
-
-
 HAL_StatusTypeDef fdcanFilterInit(FDCAN_HandleTypeDef* hfdcan, FDCAN_TxHeaderTypeDef* txHeader)
 {
 	FDCAN_FilterTypeDef fdcan_filter_config;
 
-	// 11b register with 11b id. We only care about bits [7..5]
-	// FDCAN1 Mask Filter
+	// Dual ID Filter for CAN_READY_TO_DRIVE (0x7E6) and CAN_PEDAL_POS (0x7E7)
 	fdcan_filter_config.IdType = FDCAN_STANDARD_ID;						// Using standard IDs, not extended IDs
 	fdcan_filter_config.FilterIndex = 0;								// We are only using 1 filter so index = 0
-	fdcan_filter_config.FilterType = FDCAN_FILTER_MASK;					// Using mask filter
+	fdcan_filter_config.FilterType = FDCAN_FILTER_DUAL;					// Dual ID filter for FilterID1 or FilterID2
 	fdcan_filter_config.FilterConfig = FDCAN_FILTER_TO_RXFIFO0;			// Messages that pass through the filter should be sent to RX FIFO 0
-	fdcan_filter_config.FilterID1 = FILTER;								// We only care about bits [7..5]
-	fdcan_filter_config.FilterID2 = MASK;								// Mask bits
+	fdcan_filter_config.FilterID1 = CAN_READY_TO_DRIVE;					// Accept ready to drive heartbeat (0x7E6)
+	fdcan_filter_config.FilterID2 = CAN_PEDAL_POS;						// Accept pedal position (0x7E7)
 	if (HAL_FDCAN_ConfigFilter(hfdcan, &fdcan_filter_config) != HAL_OK)
 	  return HAL_ERROR; // Filter configuration Error
 
